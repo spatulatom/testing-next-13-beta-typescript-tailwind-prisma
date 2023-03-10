@@ -8,7 +8,7 @@ const fetchAuthPosts = async () => {
 export default async function UserPosts() {
 
     const posts = await fetchAuthPosts()
-    console.log('POSTS HERE', posts)
+    console.log('POSTS', posts)
   return (
     <div>UserPosts</div>
   )
