@@ -1,4 +1,6 @@
 import './globals.css'
+import AuthContext from './AuthContext'
+import Nav from './Nav'
 
 export const metadata = {
   title: 'Create Next App',
@@ -12,7 +14,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+      <AuthContext>
+           {/* @ts-expect-error Server Component */}
+      <Nav />
+      {children}
+      </AuthContext>
+      </body>
     </html>
   )
 }
