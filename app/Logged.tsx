@@ -11,12 +11,12 @@ type User = {
 export default function Logged({ image }: User) {
   return (
     <li className="flex gap-8 items-center">
-      <button
-        className="bg-gray-700 text-white hover:bg-slate-600 transition-all text-sm px-1 md:px-6 py-2 rounded-md "
+      <span
+        className="bg-gray-700 cursor-pointer text-white hover:bg-slate-600 transition-all text-sm px-1 md:px-6 py-2 rounded-md "
         onClick={() => signOut()}
       >
         Sign Out
-      </button>
+      </span>
       <Link href={'/myposts'}>
         <Image
           width={64}
