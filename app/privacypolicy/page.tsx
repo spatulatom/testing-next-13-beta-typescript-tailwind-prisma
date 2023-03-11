@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function page() {
   return (
-  <div>
+  <div className="p-6">
     <strong>Privacy Policy</strong> <p>
                   https://github.com/spatulatom built thehttps://testing-next-13-beta-typescript-tailwind-prisma.vercel.app/ app as
                   an Open Source app. This SERVICE is provided by
