@@ -21,6 +21,7 @@ export default function CreatePost() {
     const data = await response.json()
     if(response){
       router.refresh()
+      setTitle('')
     }
     console.log('DATA', data)}catch(err){
       console.log(err)
@@ -49,7 +50,7 @@ console.log('CLICK')
           value={title}
           name="title"
           placeholder="What's on your mind?"
-          className="p-4 text-lg rounded-md my-2  bg-gray-200"
+          className="p-4 text-lg text-black rounded-md my-2  bg-gray-200"
         />
       </div>
       <div className=" flex items-center justify-between gap-2">
