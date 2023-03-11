@@ -7,13 +7,30 @@ import { useRouter } from 'next/navigation';
 export default function CreatePost() {
   const router = useRouter();
   const [title, setTitle] = useState('');
-  const [isDisabled, setIsDisabled] = useState(false);
+  // const [isDisabled, setIsDisabled] = useState(false);
+
+  const addPost = async(param:string) => {
+    const response = await fetch("api/hello",{
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(param),
+    })
+    const data = await response.json()
+    console.log('DATA', data)
+  
+  }
+
+    
+  
   
 
-  const submitPost = async (e: React.FormEvent) => {
+  const submitPost =  (e: React.FormEvent) => {
     e.preventDefault();
-    setIsDisabled(true);
-
+    // setIsDisabled(true);
+    addPost(title)
+console.log('CLICK')
   
   };
 
@@ -35,11 +52,11 @@ export default function CreatePost() {
           } `}
         >{`${title.length}/300`}</p>
         <button
-          disabled={isDisabled}
+          // disabled={isDisabled}
           className="text-sm bg-teal-600 text-white py-2 px-6 rounded-xl disabled:opacity-25"
           type="submit"
         >
-          Create post
+          Createe post
         </button>
       </div>
     </form>

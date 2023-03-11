@@ -17,7 +17,7 @@ export default function Logged({ image }: User) {
       >
         Sign Out
       </button>
-      <Link href={'/myposts'}>
+      <Link href={'/'}>
         <Image
           width={64}
           height={64}
