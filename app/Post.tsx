@@ -47,7 +47,7 @@ export default function Post({ id, name, avatar, postTitle, comments }: PostProp
         <h3 className="font-bold text-gray-700">{name}</h3>
       </div>
       <div className="my-8 ">
-        <p className="break-all">{postTitle}</p>
+        <p className="break-all text-black">{postTitle}</p>
       </div>
       <div className="flex gap-4 cursor-pointer items-center">
         

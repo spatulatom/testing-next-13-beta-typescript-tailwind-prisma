@@ -10,7 +10,7 @@ import { PostType } from '../types/Post';
 const inter = Inter({ subsets: ['latin'] });
 
 const allPosts = async () => {
-  const data = await fetch(process.env.URL + "/api/hello")
+  const data = await fetch(process.env.URL + "/api/hello", { cache: 'no-store' })
   const res = await data.json()
   return res.data
 }
