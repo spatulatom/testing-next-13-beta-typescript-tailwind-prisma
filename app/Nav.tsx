@@ -14,7 +14,7 @@ export default async function Nav() {
   // const { data } = useSession();
 
   return (
-    <nav className="flex justify-between items-center py-8 ">
+    <nav className="flex  justify-between items-center py-8 relative">
     
       <ul className="flex items-center gap-2 md:gap-6">
       <Link href={"/"}>
@@ -42,6 +42,7 @@ export default async function Nav() {
         )}
         {!data && <Login />}
         {data?.user && <Logged image={data.user.image || ''} />}
+       
       </ul>
     </nav>
   );

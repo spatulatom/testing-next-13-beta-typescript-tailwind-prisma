@@ -14,6 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head />
       <body>
       <AuthContext>
            {/* @ts-expect-error Server Component */}

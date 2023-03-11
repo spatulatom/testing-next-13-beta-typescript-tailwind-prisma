@@ -19,6 +19,7 @@ export default async function Home() {
 const response: PostType[] = await allPosts()
   return (
     <div>
+     
       <div className={styles.center}>
         <Image
           className={styles.logo}
@@ -32,6 +33,7 @@ const response: PostType[] = await allPosts()
           <Image src="/thirteen.svg" alt="13" width={40} height={31} priority />
         </div>
       </div>
+     <div className="text-center mb-12"><Link href={"https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma"}><i className="fa-brands fa-github fa-2xl text-white absolute md:right-4"></i></Link></div>
 
       <AddPost />
       {response?.map((post) => (
