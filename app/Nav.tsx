@@ -22,20 +22,12 @@ export default async function Nav() {
       </Link>
      
 
-        {data && (
-          <li>
-            <Link href={'/'}>
-              <h1 className="hover:text-teal-600 transition-all md:text-lg">
-                My Chats
-              </h1>
-            </Link>
-          </li>
-        )}
+        
           {data && (
           <li>
-            <Link href={'/userposts'}>
+            <Link href={'/delete-posts'}>
               <h1 className="hover:text-teal-600 transition-all md:text-lg">
-                User Posts
+                Delete Posts
               </h1>
             </Link>
           </li>
