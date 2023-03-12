@@ -19,7 +19,7 @@ export default function RootLayout({
       <body>
       <AuthContext>
         <QueryWrapper>
-           
+       {/* @ts-expect-error Async Server Component */}    
       <Nav />
       {children}
       </QueryWrapper>
