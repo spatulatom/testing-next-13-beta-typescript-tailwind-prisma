@@ -45,7 +45,7 @@ export default function EditPost({
 
   const { mutate } = useMutation(
     async (id: string) =>
-      await axios.delete("/api/posts/deletePost", { data: id }),
+      await axios.delete("/api/deletepost/" + id),
     {
       onError: (error) => {
         console.log(error)
@@ -77,7 +77,7 @@ export default function EditPost({
           <h3 className="font-bold text-gray-700">{name}</h3>
         </div>
         <div className="my-8 ">
-          <p className="break-all">{title}</p>
+          <p className="break-all text-black">{title}</p>
         </div>
         <div className="flex justify-between gap-4 ">
           <p className=" text-sm font-bold text-gray-700">

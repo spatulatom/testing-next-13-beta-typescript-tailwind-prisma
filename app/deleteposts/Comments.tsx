@@ -39,10 +39,10 @@ export default function Comments({ comments }: Props) {
               src={comment.user.image}
               alt="avatar"
             />
-            <h3 className="font-bold">{comment.user.name}</h3>
-            <h2 className="text-sm">{comment.createdAt}</h2>
+            <h3 className="font-bold  text-black">{comment.user.name}</h3>
+            <h2 className="text-sm  text-black">{comment.createdAt}</h2>
           </div>
-          <div className="py-4">{comment.title}</div>
+          <div className="py-4  text-black">{comment.title}</div>
         </motion.div>
       ))}
     </div>

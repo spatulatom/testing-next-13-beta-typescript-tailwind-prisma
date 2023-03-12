@@ -7,6 +7,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 
 export async function GET(request: NextRequest) {
+  console.log('ALL POSTS')
   const data = await prisma.post.findMany({
     include: {
       user: true,

@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useMutation, useQueryClient } from 'react-query';
-import axios, { AxiosError } from 'axios';
+
 import toast from 'react-hot-toast';
 import { PostType } from '../../types/Post';
 import { useRouter } from 'next/navigation';

@@ -33,28 +33,3 @@ export async function GET(request: NextRequest, url:URL) {
   return NextResponse.json({ data });
 }
 
-// Post a comment onto an individual post
-
-export async function POST(request: NextRequest, url:URL) {
-    const session = await getServerSession(authOptions)
-     //Get User
-  const prismaUser = await prisma.user.findUnique({
-    where: { email: session?.user?.email },
-  })
-  const body = await request.json();
-  const {title} = body
-  try {
-    const result = await prisma.comment.create({
-      data: {
-        title,
-        userId: prismaUser.id,
-        postId: url.params.post
-      },
-    })
-    return NextResponse.json({ result });
-  } catch (err) {
-    return NextResponse.json({ err: "Error has occured while making a post" })
-  }
-
-
-}

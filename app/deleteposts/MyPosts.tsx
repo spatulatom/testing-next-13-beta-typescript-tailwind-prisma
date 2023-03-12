@@ -9,7 +9,7 @@ import Comments from "./Comments"
   
 
 const fetchAuthPosts = async () => {
-  const response = await axios.get("/api/posts/authPosts")
+  const response = await axios.get("/api/userposts")
   return response.data
 }
 
