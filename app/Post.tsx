@@ -33,7 +33,7 @@ export default function Post({ id, name, avatar, postTitle, comments }: PostProp
     >
        <Link
           href={{
-            pathname: `/addcomments/${id}`,
+            pathname: `/${id}`,
           }}
         >
       <div className="flex items-center gap-2">
