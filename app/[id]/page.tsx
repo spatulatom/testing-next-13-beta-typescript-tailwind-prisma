@@ -17,7 +17,7 @@ type URL = {
 type Post = {data:PostType}
 
 const fetchDetails = async (id: string) => {
-  const data  = await fetch(`${process.env.URL}/${id}/api/${id}`, { cache: 'no-store' })
+  const data  = await fetch(`${process.env.URL}/api/${id}`, { cache: 'no-store' })
   const response = await data.json()
   return response.data
 }

@@ -11,7 +11,7 @@ export default function CreatePost() {
 
   const addPost = async(param:string) => {
     try{
-    const response = await fetch("/api/hello",{
+    const response = await fetch("/api/allposts",{
       method: "POST",
       headers: {
         "Content-Type": "application/json",
