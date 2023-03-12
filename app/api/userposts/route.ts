@@ -7,13 +7,10 @@ import { getServerSession } from 'next-auth/next';
 
 export async function GET(request: NextRequest) {
   console.log('USER POSTS');
-  let session;
-  try {
-    session = await getServerSession(authOptions);
-  } catch (err) {
-    console.log('ERROR', err);
-  }
-  console.log('SESSION SLUG', session);
+
+const session = await getServerSession(authOptions);
+
+  
 
   const data = await prisma.user.findUnique({
     where: {
