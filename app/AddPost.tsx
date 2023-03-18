@@ -1,6 +1,6 @@
 'use client';
 
-
+import toast from 'react-hot-toast';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -8,6 +8,8 @@ export default function CreatePost() {
   const router = useRouter();
   const [title, setTitle] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
+
+  let toastPostID: string;
 
   const addPost = async(param:string) => {
     try{
@@ -22,6 +24,7 @@ export default function CreatePost() {
     if(response){
       router.refresh()
       setTitle('')
+      toast.success('Post has been made 🔥',{ id: toastPostID });
     }
     console.log('DATA', data)}catch(err){
       console.log(err)
@@ -38,6 +41,7 @@ export default function CreatePost() {
     setIsDisabled(false);
     addPost(title)
 console.log('CLICK')
+toastPostID = toast.loading('Creating your post', { id: toastPostID });
 
   
   };
