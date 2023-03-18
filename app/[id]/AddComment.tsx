@@ -20,32 +20,31 @@ export default function AddComment({ id }: PostProps) {
   const [title, setTitle] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
 
-  const addComment = async(arg1:string, arg2:string)=>{
+  const addComment = async (arg1: string, arg2: string) => {
     const param = {
       title: arg1,
-      id: arg2
-    }
-    try{
-      const response = await fetch("/api/addcomment",{
-        method: "POST",
+      id: arg2,
+    };
+    try {
+      const response = await fetch('/api/addcomment', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(param),
-      })
-      const data = await response.json()
-      if(response){
-        router.refresh()
-        setTitle('')
-        setIsDisabled(false)
+      });
+      const data = await response.json();
+      if (response) {
+        router.refresh();
+        setTitle('');
+        setIsDisabled(false);
         toast.success('Added your comment', { id: commentToastId });
       }
-      console.log('DATA', data)}catch(err){
-        console.log(err)
-      }
-  }
-
-
+      console.log('DATA', data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const submitPost = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,8 +52,7 @@ export default function AddComment({ id }: PostProps) {
     commentToastId = toast.loading('Adding your comment', {
       id: commentToastId,
     });
-    addComment( title, id);
-    
+    addComment(title, id);
   };
   return (
     <form onSubmit={submitPost} className="my-8">
