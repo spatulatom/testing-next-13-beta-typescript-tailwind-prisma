@@ -10,11 +10,19 @@ import { PostType } from '../types/Post';
 const inter = Inter({ subsets: ['latin'] });
 
 const allPosts = async () => {
-  const data = await fetch(process.env.URL + '/api/allposts', {
-    cache: 'no-store'
-  });
-  const res = await data.json();
-  return res.data;
+  
+    const data = await fetch(process.env.URL + '/api/allposts', {
+      cache: 'no-store',
+    });
+    if (data.ok) {   const res = await data.json();
+      console.log('RESPONSE', res)
+      return res.data;
+     
+    }
+    const message = `An error has occured: ${data.status}`;
+    console.log('MESSAGE:' + data)
+    throw new Error(message)
+  
 };
 
 export default async function Home() {

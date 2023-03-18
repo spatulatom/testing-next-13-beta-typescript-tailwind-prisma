@@ -7,19 +7,33 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 
 export async function GET(request: NextRequest) {
-  console.log('ALL POSTS')
-  const data = await prisma.post.findMany({
-    include: {
-      user: true,
-      comments: true,
-      hearts: true,
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  });
+  console.log('ALL POSTS');
+  try {
+    const data = await prisma.post.findMany({
+      include: {
+        user: true,
+        comments: true,
+        hearts: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
 
-  return NextResponse.json({ data });
+    return NextResponse.json(
+      { data },
+      {
+        status: 200,
+      }
+    );
+  } catch (err) {
+    return NextResponse.json(
+      { message: 'Error has occured while getting your post!' },
+      {
+        status: 403,
+      }
+    );
+  }
 }
 
 export async function POST(request: NextRequest) {
@@ -31,7 +45,7 @@ export async function POST(request: NextRequest) {
   }
   const body = await request.json();
   console.log('BODY', body);
-  const title: string = body
+  const title: string = body;
 
   //Get User
 
@@ -50,7 +64,7 @@ export async function POST(request: NextRequest) {
     prismaUser = await prisma.user.findUnique({
       where: { email: session?.user?.email },
     });
-    console.log('PRISMA', prismaUser)
+    console.log('PRISMA', prismaUser);
   } catch (err) {
     console.log('ERROR', err);
   }
