@@ -5,7 +5,7 @@ import { useState } from 'react';
 import Toggle from './Toggle';
 import { useMutation, useQueryClient } from 'react-query';
 import toast from 'react-hot-toast';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 
@@ -42,10 +42,13 @@ export default function EditPost({
   const router = useRouter();
 
   const { mutate } = useMutation(
-    async (id: string) => await axios.delete('/api/deletepost/' + id),
+    async (id: string) => await axios.delete('/api/deleteposts'),
     {
       onError: (error) => {
         console.log(error);
+        if (error instanceof AxiosError) {
+          toast.error(error?.response?.data.message, { id: deleteToastID });
+        }
       },
       onSuccess: (data) => {
         console.log(data);

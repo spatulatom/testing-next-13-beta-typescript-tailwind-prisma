@@ -20,15 +20,23 @@ export async function DELETE(request: NextRequest, url:URL) {
     console.log('ERROR', err);
   }
 
-  //Get User
-//   let prismaUser;
-//   try {
-//     prismaUser = await prisma.user.findUnique({
-//       where: { email: session?.user?.email },
-//     });
-//   } catch (err) {
-//     console.log('PRISMA', err);
-//   }
+  // Get User
+  let prismaUser;
+  try {
+    prismaUser = await prisma.user.findUnique({
+      where: { email: session?.user?.email },
+    });
+  } catch (err) {
+    console.log('PRISMA', err);
+  }
+  if(!prismaUser){
+    return NextResponse.json(
+      { message: 'Error has occured while getting your session' },
+      {
+        status: 403,
+      }
+    );
+  }
 //   let body;
 //   try {
 //     body = await request.json()
@@ -47,6 +55,10 @@ export async function DELETE(request: NextRequest, url:URL) {
     return NextResponse.json({ result });
   } catch (err) {
     console.log('ERROR', err);
-    return NextResponse.json({ err: 'Error has occured while deleting the post' });
-  }
-}
+    return NextResponse.json(
+      { message: 'Error has occured while deleting your session' },
+      {
+        status: 403,
+      }
+    )
+}}

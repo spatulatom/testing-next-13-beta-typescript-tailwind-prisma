@@ -16,6 +16,15 @@ export async function DELETE(request: NextRequest) {
   } catch (err) {
     console.log('ERROR', err);
   }
+  if(!session){
+    console.log('ERROR deleteposts 1');
+    return NextResponse.json(
+      { message: 'Error has occured while getting your session' },
+      {
+        status: 403,
+      }
+    )};
+  
 
   //Get User
   let prismaUser;
@@ -25,6 +34,16 @@ export async function DELETE(request: NextRequest) {
     });
   } catch (err) {
     console.log('PRISMA', err);
+  }
+
+  if(!prismaUser){
+    console.log('ERROR deleteposts 2');
+    return NextResponse.json(
+      { message: 'Error has occured while getting your name' },
+      {
+        status: 403,
+      }
+    );
   }
   let body;
   try {
@@ -40,7 +59,7 @@ export async function DELETE(request: NextRequest) {
         id: body.data.id
       },
     })
-    console.log('RESULT', result);
+    console.log('RESULTtt', result);
     return NextResponse.json({ result });
   } catch (err) {
     console.log('ERROR', err);
