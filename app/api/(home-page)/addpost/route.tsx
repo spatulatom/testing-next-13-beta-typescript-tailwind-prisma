@@ -1,4 +1,4 @@
-import prisma from '../../../prisma/client';
+import prisma from '../../../../prisma/client';
 
 import { NextRequest } from 'next/server';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';

@@ -24,9 +24,9 @@ export default async function Nav() {
         
           {data && (
           <li>
-            <Link href={'/deleteposts'}>
+            <Link href={'/userposts'}>
               <h2 className="hover:text-teal-600 transition-all md:text-lg">
-                Delete Posts
+                User Posts
               </h2>
             </Link>
           </li>

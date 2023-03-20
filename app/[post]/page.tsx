@@ -5,12 +5,13 @@ import AddComment from "./AddComment"
 import Image from "next/image"
 
 import { PostType } from '../../types/Post';
+import { notFound } from 'next/navigation';
 
 
 
 type URL = {
   params: {
-    id: string
+    post: string
   }
   // searchParams: string
 }
@@ -25,7 +26,10 @@ const fetchDetails = async (id: string) => {
 // url below equals to router().query.parans
 export default async function PostDetail(url: URL) {
  
-  const response: PostType  = await fetchDetails(url.params.id)
+  const response: PostType  = await fetchDetails(url.params.post)
+  if(!response){
+    notFound()
+  }
   return (
     <div>
       <Post

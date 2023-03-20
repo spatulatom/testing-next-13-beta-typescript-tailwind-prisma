@@ -1,6 +1,6 @@
 "use client"
 
-import EditPost from "./EditPost"
+import EditPost from "./DeletePost"
 import { useQuery } from "react-query"
 import axios from "axios"
 import { 
@@ -13,12 +13,12 @@ const fetchAuthPosts = async () => {
   return response.data
 }
 
-export default function MyPosts(): JSX.Element {
+export default function UserOwnPosts(): JSX.Element {
   const { data, isLoading } = useQuery({
     queryKey: ["getAuthPosts"],
     queryFn: fetchAuthPosts}
   )
-  if (isLoading) return <h1>Posts are loading...</h1>
+  // if (isLoading) return <h1>Posts are loading...</h1>
   if (data) console.log(data)
   const response: UserPosts = data; 
   return (

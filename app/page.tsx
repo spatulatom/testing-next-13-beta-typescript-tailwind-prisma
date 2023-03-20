@@ -10,19 +10,23 @@ import { PostType } from '../types/Post';
 const inter = Inter({ subsets: ['latin'] });
 
 const allPosts = async () => {
-  
-    const data = await fetch(process.env.URL + '/api/allposts', {
-      cache: 'no-store',
-    });
-    if (data.ok) {   const res = await data.json();
-      console.log('RESPONSE', res)
-      return res.data;
-     
-    }
-    const message = `An error has occured: ${data.status}`;
-    console.log('MESSAGE:' + data)
-    throw new Error(message)
-  
+  // when fetching in server component to own backend the full url is needed
+  const data = await fetch(process.env.URL + '/api/allposts', {
+    cache: 'no-store',
+  });
+  if (data.ok) {
+    const res = await data.json();
+    console.log('RESPONSE', res);
+    return res.data;
+  }
+  // these are errors if incoming data is not ok and 
+  // by throwing them we are enabling error.tsx to catch them
+  const message = `An error has occured: ${data.status}`;
+  console.log('MESSAGE:' + data);
+  throw new Error(message);
+
+  // any other errors that are usally cought in catch(err) block
+  // are by default caught by error.tsx - no need to catch&throw them
 };
 
 export default async function Home() {
@@ -42,14 +46,14 @@ export default async function Home() {
           <Image src="/thirteen.svg" alt="13" width={40} height={31} priority />
         </div>
       </div>
-      <div className="text-center mb-12 relative z-20">
+      {/* <div className="text-center mb-12 relative z-20">
         <a
           href="https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma"
           target="_blank"
         >
           <i className="fa-brands fa-github fa-2xl text-white "></i>
         </a>
-      </div>
+      </div> */}
 
       <AddPost />
       {response?.map((post) => (

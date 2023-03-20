@@ -42,10 +42,10 @@ export default function EditPost({
   const router = useRouter();
 
   const { mutate } = useMutation(
-    async (id: string) => await axios.delete('/api/deleteposts'),
+    async (id: string) => await axios.delete('/api/deletepost/'+id),
     {
       onError: (error) => {
-        console.log(error);
+        console.log('DELETE ERROR', error);
         if (error instanceof AxiosError) {
           toast.error(error?.response?.data.message, { id: deleteToastID });
         }
