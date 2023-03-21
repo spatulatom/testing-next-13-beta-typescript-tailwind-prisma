@@ -16,7 +16,7 @@ const allPosts = async () => {
   });
   if (data.ok) {
     const res = await data.json();
-    console.log('RESPONSE', res);
+    
     return res.data;
   }
   // these are errors if incoming data is not ok and 

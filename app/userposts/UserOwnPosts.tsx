@@ -1,6 +1,6 @@
 "use client"
 
-import EditPost from "./DeletePost"
+import DeletePost from "./DeletePost"
 import { useQuery } from "react-query"
 import axios from "axios"
 import { 
@@ -14,18 +14,19 @@ const fetchAuthPosts = async () => {
 }
 
 export default function UserOwnPosts(): JSX.Element {
-  const { data, isLoading } = useQuery({
+  const { data, error, isLoading } = useQuery({
     queryKey: ["getAuthPosts"],
     queryFn: fetchAuthPosts}
   )
   // if (isLoading) return <h1>Posts are loading...</h1>
-  if (data) console.log(data)
+  if (error) {console.log('Error', error)}
+  if (error) throw new Error('Error UserOwnPost')
   const response: UserPosts = data; 
   return (
     <div>
       {response?.posts?.map((post) => (
         <>
-        <EditPost
+        <DeletePost
           id={post.id}
           key={post.id}
           avatar={response.image}

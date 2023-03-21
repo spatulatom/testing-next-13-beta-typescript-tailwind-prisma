@@ -51,7 +51,7 @@ export async function DELETE(request: NextRequest, url:URL) {
         id: url.params.id
       },
     })
-    console.log('RESULT', result);
+    
     return NextResponse.json({ result });
   } catch (err) {
     console.log('ERROR', err);

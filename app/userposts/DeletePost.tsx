@@ -29,7 +29,7 @@ type EditProps = {
   }[];
 };
 
-export default function EditPost({
+export default function DeletePost({
   avatar,
   name,
   title,

@@ -6,35 +6,7 @@ import { NextResponse } from 'next/server';
 
 import { getServerSession } from 'next-auth/next';
 
-export async function GET(request: NextRequest) {
-  console.log('ALL POSTS');
-  try {
-    const data = await prisma.post.findMany({
-      include: {
-        user: true,
-        comments: true,
-        hearts: true,
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    });
 
-    return NextResponse.json(
-      { data },
-      {
-        status: 200,
-      }
-    );
-  } catch (err) {
-    return NextResponse.json(
-      { message: 'Error has occured while getting your post!' },
-      {
-        status: 403,
-      }
-    );
-  }
-}
 
 export async function POST(request: NextRequest) {
   let session;
@@ -44,7 +16,7 @@ export async function POST(request: NextRequest) {
     console.log('err', err);
   }
   const body = await request.json();
-  console.log('BODY', body);
+
   const title: string = body;
 
   //Get User

@@ -40,7 +40,7 @@ export default function AddComment({ id }: PostProps) {
         setIsDisabled(false);
         toast.success('Added your comment', { id: commentToastId });
       }
-      console.log('DATA', data);
+      
     } catch (err) {
       console.log(err);
     }

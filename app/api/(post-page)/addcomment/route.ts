@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
         postId: body.id,
       },
     });
-    console.log('RESULT', result);
+    
     return NextResponse.json({ result });
   } catch (err) {
     return NextResponse.json({ err: 'Error has occured while making a post' });

@@ -34,6 +34,6 @@ const session = await getServerSession(authOptions);
       },
     },
   });
-  console.log('USER POSTS DATA');
+  
   return NextResponse.json(data);
 }
