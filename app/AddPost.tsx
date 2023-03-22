@@ -41,7 +41,7 @@ export default function CreatePost() {
     setIsDisabled(false);
     addPost(title)
 console.log('CLICK')
-toastPostID = toast.loading('Creating your post', { id: toastPostID });
+toastPostID = toast.loading('Creating your post!', { id: toastPostID });
 
   
   };
