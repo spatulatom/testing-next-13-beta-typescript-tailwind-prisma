@@ -16,4 +16,4 @@ export default function Head() {
     </>
   )
 }
-// head component
+// head component fdfw
