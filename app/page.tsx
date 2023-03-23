@@ -11,7 +11,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 const allPosts = async () => {
   // when fetching in server component to own backend the full url is needed
-  const data = await fetch(process.env.URL + '/api/allposts', {
+  const data = await fetch(process.env.URL + '/api/addpost', {
     cache: 'no-store',
   });
   if (data.ok) {
