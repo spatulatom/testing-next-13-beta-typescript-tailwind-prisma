@@ -8,12 +8,22 @@ import { getServerSession } from 'next-auth/next';
 // Post a comment onto an individual post
 
 export async function POST(request: NextRequest) {
-  // console.log('REQUEST', request.json())
+  console.log('ADDING A COMMENT');
+
+  // Get session
   let session;
   try {
     session = await getServerSession(authOptions);
   } catch (err) {
     console.log('ERROR', err);
+  }
+  if (!session) {
+    return NextResponse.json(
+      { error: 'Please signin to post a comment.' },
+      {
+        status: 403,
+      }
+    );
   }
 
   //Get User
@@ -25,11 +35,21 @@ export async function POST(request: NextRequest) {
   } catch (err) {
     console.log('PRISMA', err);
   }
+
+  // Get title and id from the body
   let body;
   try {
     body = await request.json();
   } catch (err) {
     console.log('BODY', err);
+  }
+  if (!body.title?.length) {
+    return NextResponse.json(
+      { error: 'Please write something before we can post it.' },
+      {
+        status: 403,
+      }
+    );
   }
 
   try {
@@ -40,24 +60,19 @@ export async function POST(request: NextRequest) {
         postId: body.id,
       },
     });
-    
-    return NextResponse.json({ result });
+
+    return NextResponse.json(
+      { result },
+      {
+        status: 200,
+      }
+    );
   } catch (err) {
-    return NextResponse.json({ err: 'Error has occured while making a post' });
+    return NextResponse.json(
+      { error: 'Sorry, an error has occured while adding your comment!' },
+      {
+        status: 403,
+      }
+    );
   }
 }
-
-// export async function GET(request: NextRequest) {
-//   const data = await prisma.post.findMany({
-//     include: {
-//       user: true,
-//       comments: true,
-//       hearts: true,
-//     },
-//     orderBy: {
-//       createdAt: 'desc',
-//     },
-//   });
-
-//   return NextResponse.json({ data });
-// }

@@ -34,13 +34,14 @@ export default function AddComment({ id }: PostProps) {
         body: JSON.stringify(param),
       });
       const data = await response.json();
-      if (response) {
+      if (response.ok) {
         router.refresh();
         setTitle('');
         setIsDisabled(false);
-        toast.success('Added your comment', { id: commentToastId });
+       return toast.success('Added your comment', { id: commentToastId });
       }
-      
+      toast.error(data.error, { id: commentToastId });
+      setIsDisabled(false);
     } catch (err) {
       console.log(err);
     }
