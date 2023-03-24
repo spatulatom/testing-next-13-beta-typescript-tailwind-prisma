@@ -9,24 +9,22 @@ import { PostType } from '../types/Post';
 
 const inter = Inter({ subsets: ['latin'] });
 
+// NOT making Prisma calls here what is possible since this is a server
+// componet since we want to have more control over has this page is rendered
+//  - when Prisma call made here this page will be defult SSG
 const allPosts = async () => {
-  // when fetching in server component to own backend the full url is needed
+  // FETCH from server components to our own backend requries full URL as oppose to partial
+  // form client components for example in AddPost.tsx
   const data = await fetch(process.env.URL + '/api/addpost', {
     cache: 'no-store',
   });
   if (data.ok) {
     const res = await data.json();
-    
     return res.data;
   }
-  // these are errors if incoming data is not ok and 
-  // by throwing them we are enabling error.tsx to catch them
-  const message = `An error has occured: ${data.status}`;
-  console.log('MESSAGE:' + data);
-  throw new Error(message);
-
-  // any other errors that are usally cought in catch(err) block
-  // are by default caught by error.tsx - no need to catch&throw them
+  const error = await data.json();
+  console.log('MESSAGE:', error);
+  throw new Error(error.error);
 };
 
 export default async function Home() {

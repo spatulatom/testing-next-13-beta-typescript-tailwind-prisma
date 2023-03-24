@@ -11,40 +11,33 @@ export default function CreatePost() {
 
   let toastPostID: string;
 
-  const addPost = async(param:string) => {
-    try{
-    const response = await fetch("/api/addpost",{
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(param),
-    })
-    const data = await response.json()
-    router.refresh()
-    if(response){
-     
-      setTitle('')
-      toast.success('Post has been made 🔥',{ id: toastPostID });
+  const addPost = async (param: string) => {
+    try {
+      const response = await fetch('/api/addpost', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(param),
+      });
+      const data = await response.json();
+      router.refresh();
+      if (response.ok) {
+        setTitle('');
+        toast.success('Post has been made 🔥', { id: toastPostID });
+      }
+      toast.error(data.error, { id: toastPostID });
+    } catch (err) {
+      console.log(err);
     }
-    console.log('DATA', data)}catch(err){
-      console.log(err)
-    }
-  
-  }
+  };
 
-    
-  
-  
-
-  const submitPost =  (e: React.FormEvent) => {
+  const submitPost = (e: React.FormEvent) => {
     e.preventDefault();
     setIsDisabled(false);
-    addPost(title)
-console.log('CLICK')
-toastPostID = toast.loading('Creating your post', { id: toastPostID });
-
-  
+    addPost(title);
+    console.log('CLICK');
+    toastPostID = toast.loading('Creating your post', { id: toastPostID });
   };
 
   return (
@@ -61,7 +54,7 @@ toastPostID = toast.loading('Creating your post', { id: toastPostID });
       <div className=" flex items-center justify-between gap-2">
         <p
           className={`font-bold text-sm ${
-            title.length > 300 ? 'text-red-700' : 'text-gray-700'
+            title.length > 30 ? 'text-red-700' : 'text-gray-700'
           } `}
         >{`${title.length}/300`}</p>
         <button
