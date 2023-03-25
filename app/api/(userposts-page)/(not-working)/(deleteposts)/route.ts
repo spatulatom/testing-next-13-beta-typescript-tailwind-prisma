@@ -8,7 +8,7 @@ import { getServerSession } from 'next-auth/next';
 // normally when retrivieng data from axios requsts on the backend its 
 // straightforward for ex: const {id} = req.body;
 // yet with those new next 13 beta routes it dosent work, seems to be working
-// for now with fetch API for now like its done in addcomment route, 
+// for now with fetch API for now like its done in api/addcomment route, 
 // so for now I will use deletepost\[id] and still use axios on the front but 
 // retrieve id from the dynamic route
 

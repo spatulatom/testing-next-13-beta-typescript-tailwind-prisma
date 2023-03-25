@@ -42,14 +42,14 @@ export default function DeletePost({
   const router = useRouter();
 
   const { mutate } = useMutation(
-    async (id: string) => await axios.delete('/api/deletepost/'+id),
+     async (id: string) => await axios.delete('/api/deletepost/'+id),
     {
       onError: (error) => {
         console.log('DELETE ERROR', error);
         if (error instanceof AxiosError) {
           toast.error(error?.response?.data.message, { id: deleteToastID });
-        }
-        toast.error('Connection error, check your url.', { id: deleteToastID });
+        }else{
+        toast.error('Connection error, check your url.', { id: deleteToastID });}
       },
       onSuccess: (data) => {
         console.log(data);

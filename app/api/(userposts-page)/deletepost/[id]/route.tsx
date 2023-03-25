@@ -17,10 +17,10 @@ export async function DELETE(request: NextRequest, url: URL) {
   // GET session
   let session;
   try {
-    session = await getServerSesion(authOptions);
+    session = await getServerSession(authOptions);
   } catch (err) {
     return NextResponse.json(
-      { message: 'Database connection error.' },
+      { message: 'Database connection error 1.' },
       {
         status: 403,
       }
@@ -38,12 +38,12 @@ export async function DELETE(request: NextRequest, url: URL) {
   // Get User
   let prismaUser;
   try {
-    prismaUser = await prisma.user.finUnique({
+    prismaUser = await prisma.user.findUnique({
       where: { email: session?.user?.email },
     });
   } catch (err) {
     return NextResponse.json(
-      { message: 'Database connection error.' },
+      { message: 'Database connection error 2.' },
       {
         status: 403,
       }
@@ -51,14 +51,13 @@ export async function DELETE(request: NextRequest, url: URL) {
   }
   if (!prismaUser) {
     return NextResponse.json(
-      {
-        message: 'Error has occured while checking your details in a database.',
-      },
+      { message: 'Error has occured while checking your details in a database.' },
       {
         status: 403,
       }
     );
   }
+ 
 
   try {
     const result = await prisma.post.delete({
