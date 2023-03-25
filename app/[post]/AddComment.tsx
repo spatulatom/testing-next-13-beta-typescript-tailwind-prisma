@@ -27,7 +27,7 @@ export default function AddComment({ id }: PostProps) {
     };
 
     try {
-      const response = await fetch('/api/addcommscsent', {
+      const response = await fetch('/api/addcomment', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
