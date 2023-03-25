@@ -51,6 +51,14 @@ export async function POST(request: NextRequest) {
       }
     );
   }
+  if (body.title?.length>30) {
+    return NextResponse.json(
+      { error: 'Please write shorter comment.' },
+      {
+        status: 403,
+      }
+    );
+  }
 
   try {
     const result = await prisma.comment.create({

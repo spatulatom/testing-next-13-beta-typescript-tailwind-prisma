@@ -13,7 +13,7 @@ export default function CreatePost() {
 
   const addPost = async (param: string) => {
     try {
-      const response = await fetch('/api/addpost', {
+      const response = await fetch('/apiaddpost', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -24,11 +24,11 @@ export default function CreatePost() {
       router.refresh();
       if (response.ok) {
         setTitle('');
-        toast.success('Post has been made 🔥', { id: toastPostID });
+       return toast.success('Post has been made 🔥', { id: toastPostID });
       }
       toast.error(data.error, { id: toastPostID });
     } catch (err) {
-      console.log(err);
+      return toast.error('Database connection error. Try again in minute!', { id: toastPostID });
     }
   };
 

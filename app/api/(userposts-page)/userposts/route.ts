@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
 
 const session = await getServerSession(authOptions);
 
-  
+  try{
 
   const data = await prisma.user.findUnique({
     where: {
@@ -34,6 +34,14 @@ const session = await getServerSession(authOptions);
       },
     },
   });
-  
-  return NextResponse.json(data);
+  // no need for curly braces here around data
+  return NextResponse.json(data,
+    {status:200});}catch(err){
+      return NextResponse.json(
+        { error: 'Sorry, an error has occured while getting user posts.' },
+        {
+          status: 403,
+        }
+      );
+    }
 }

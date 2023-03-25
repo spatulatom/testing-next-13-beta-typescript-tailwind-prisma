@@ -28,6 +28,7 @@ const fetchDetails = async (id: string) => {
 export default async function PostDetail(url: URL) {
   const response: PostType = await fetchDetails(url.params.post);
   if (!response) {
+    // for http.../random number - we can use:
     notFound();
   }
   return (

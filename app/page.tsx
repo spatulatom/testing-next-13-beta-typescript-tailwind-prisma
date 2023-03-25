@@ -44,14 +44,14 @@ export default async function Home() {
           <Image src="/thirteen.svg" alt="13" width={40} height={31} priority />
         </div>
       </div>
-      {/* <div className="text-center mb-12 relative z-20">
+      <div className="text-center mb-12 relative z-20">
         <a
           href="https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma"
           target="_blank"
         >
           <i className="fa-brands fa-github fa-2xl text-white "></i>
         </a>
-      </div> */}
+      </div>
 
       <AddPost />
       {response?.map((post) => (

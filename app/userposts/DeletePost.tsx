@@ -49,12 +49,13 @@ export default function DeletePost({
         if (error instanceof AxiosError) {
           toast.error(error?.response?.data.message, { id: deleteToastID });
         }
+        toast.error('Connection error, check your url.', { id: deleteToastID });
       },
       onSuccess: (data) => {
         console.log(data);
         queryClient.invalidateQueries('getAuthPosts');
         toast.success('Post has been deleted.', { id: deleteToastID });
-        // router.refresh()
+        
       },
     }
   );

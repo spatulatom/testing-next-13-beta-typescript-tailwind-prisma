@@ -25,8 +25,9 @@ export default function AddComment({ id }: PostProps) {
       title: arg1,
       id: arg2,
     };
+
     try {
-      const response = await fetch('/api/addcomment', {
+      const response = await fetch('/api/addcommscsent', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -38,12 +39,13 @@ export default function AddComment({ id }: PostProps) {
         router.refresh();
         setTitle('');
         setIsDisabled(false);
-       return toast.success('Added your comment', { id: commentToastId });
+        return toast.success('Added your comment', { id: commentToastId });
       }
       toast.error(data.error, { id: commentToastId });
       setIsDisabled(false);
     } catch (err) {
-      console.log(err);
+      toast.error('Database connection error.', { id: commentToastId });
+      setIsDisabled(false);
     }
   };
 
@@ -78,9 +80,9 @@ export default function AddComment({ id }: PostProps) {
         </button>
         <p
           className={`font-bold  ${
-            title.length > 300 ? 'text-red-700' : 'text-gray-700'
+            title.length > 30 ? 'text-red-700' : 'text-gray-700'
           } `}
-        >{`${title.length}/300`}</p>
+        >{`${title.length}/30`}</p>
       </div>
     </form>
   );

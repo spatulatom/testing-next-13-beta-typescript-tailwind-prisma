@@ -18,9 +18,9 @@ export default function UserOwnPosts(): JSX.Element {
     queryKey: ["getAuthPosts"],
     queryFn: fetchAuthPosts}
   )
-  // if (isLoading) return <h1>Posts are loading...</h1>
+  if (isLoading) return <h1 className="m-4 text-center">Posts are loading...</h1>
   if (error) {console.log('Error', error)}
-  if (error) throw new Error('Error UserOwnPost')
+  if (error) throw new Error('Error while getting user posts. We are sorry!')
   const response: UserPosts = data; 
   return (
     <div>

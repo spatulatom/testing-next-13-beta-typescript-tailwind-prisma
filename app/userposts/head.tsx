@@ -1,8 +1,9 @@
-import React from 'react'
+import React from 'react';
 
 export default function Head() {
   return (
     <>
-    <title>Delete Posts</title></>
-  )
+      <title>Delete Posts</title>
+    </>
+  );
 }
