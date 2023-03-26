@@ -6,6 +6,7 @@ import axios from "axios"
 import { 
   UserPosts } from "../../types/UserPosts"
 import Comments from "./Comments"
+import Image from 'next/image';
   
 
 const fetchAuthPosts = async () => {
@@ -34,7 +35,23 @@ export default function UserOwnPosts(): JSX.Element {
           title={post.title}
           comments={post.comments}
         />
-        <Comments comments={post.comments}/>
+        <h2>Comments:</h2>
+          {post?.comments?.map((comment) => (
+        <div className='bg-gray-300 rounded-md text-black p-2 mt-2'>
+          <div className="flex items-center gap-2">
+            <Image
+              width={24}
+              height={24}
+              src={comment.user?.image}
+              alt="avatar"
+              className="rounded-full"
+            />
+            <h3 className="font-bold">{comment?.user?.name}</h3>
+            <h2 className="text-sm">{comment.createdAt}</h2>
+          </div>
+          <div className='italic'> - {comment.title}</div>
+        </div>
+      ))}
         </>
       ))}
      

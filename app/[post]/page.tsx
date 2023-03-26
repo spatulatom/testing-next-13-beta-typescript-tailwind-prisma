@@ -41,19 +41,21 @@ export default async function PostDetail(url: URL) {
         comments={response?.comments}
       />
       <AddComment id={response?.id} />
+      <h2>Comments:</h2>
       {response?.comments?.map((comment) => (
-        <div>
+        <div className='bg-gray-300 rounded-md text-black p-2 mt-2'>
           <div className="flex items-center gap-2">
             <Image
               width={24}
               height={24}
               src={comment.user?.image}
               alt="avatar"
+              className="rounded-full"
             />
             <h3 className="font-bold">{comment?.user?.name}</h3>
             <h2 className="text-sm">{comment.createdAt}</h2>
           </div>
-          <div className="py-4">{comment.title}</div>
+          <div className='italic'> - {comment.title}</div>
         </div>
       ))}
     </div>
