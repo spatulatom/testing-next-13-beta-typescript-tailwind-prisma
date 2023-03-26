@@ -17,7 +17,7 @@ export default async function Nav() {
   return (
     <nav className="flex justify-between items-center px-2 md:px-0 py-8">
     
-      <ul className="flex w-full md:w-1/2 justify-around items-center gap-2 md:gap-6 relative z-10">
+      <ul className="flex w-full items-center gap-2 md:gap-6 relative z-10">
      
      <HomeButtonMenu/>
 
@@ -31,8 +31,10 @@ export default async function Nav() {
             </Link>
           </li>
         )}
+        <span className='absolute right-2'>
         {!data && <Login />}
         {data?.user && <Logged image={data.user.image || ''} />}
+        </span>
        
       </ul>
     </nav>
