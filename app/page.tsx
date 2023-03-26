@@ -46,7 +46,7 @@ export default async function Home() {
       </div>
 
       <AddPost />
-      <h2 className="ml-2 font-bold">All posts: {response.length}</h2>
+      <h2 className="ml-2">All posts: {response.length}</h2>
       {response?.map((post) => (
         <Post
           key={post.id}
