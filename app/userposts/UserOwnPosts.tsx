@@ -24,6 +24,7 @@ export default function UserOwnPosts() {
   const response: UserPosts = data; 
   return (
     <div>
+      <h2 className="m-3">You have {response.posts.length} posts.</h2>
       {response?.posts?.map((post) => (
         <>
         <DeletePost
