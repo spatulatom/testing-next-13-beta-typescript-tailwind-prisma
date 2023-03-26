@@ -16,7 +16,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head />
-      <body className='mx-4'>
+      <body className='md:mx-4'>
       <AuthContext>
         <QueryWrapper>
        {/* @ts-expect-error Async Server Component */}    
