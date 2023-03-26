@@ -14,7 +14,7 @@ export default async function Nav() {
   // const { data } = useSession();
 
   return (
-    <nav className="flex justify-between items-center px-2 md:px-0 py-8">
+    <nav className="flex justify-between items-center px-1 md:px-0 py-8">
       <ul className="flex w-full items-center gap-2 md:gap-6 relative z-10">
         <HomeButtonMenu />
 
