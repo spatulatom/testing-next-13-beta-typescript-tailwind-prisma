@@ -56,7 +56,7 @@ export default function CreatePost() {
           className={`font-bold text-sm ${
             title.length > 30 ? 'text-red-700' : 'text-gray-700'
           } `}
-        >{`${title.length}/300`}</p>
+        >{`${title.length}/30`}</p>
         <button
           disabled={isDisabled}
           className="text-sm bg-teal-600 text-white py-2 px-6 rounded-xl disabled:opacity-25"
