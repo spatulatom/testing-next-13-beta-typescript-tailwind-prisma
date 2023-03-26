@@ -5,7 +5,6 @@ import { useQuery } from "react-query"
 import axios from "axios"
 import { 
   UserPosts } from "../../types/UserPosts"
-import Comments from "./Comments"
 import Image from 'next/image';
   
 
