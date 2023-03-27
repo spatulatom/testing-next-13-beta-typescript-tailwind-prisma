@@ -59,9 +59,11 @@ export async function POST(request: NextRequest) {
       }
     );
   }
+
+  // Get title from the BODY
   const body = await request.json();
 
-  const title: string = body;
+  const title = body;
 
   //Check title
   if (!title?.length) {

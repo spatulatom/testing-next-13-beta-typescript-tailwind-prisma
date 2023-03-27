@@ -1,8 +1,6 @@
 import Image from 'next/image';
 import { Inter } from 'next/font/google';
 import styles from './page.module.css';
-import Link from 'next/link';
-
 import Post from './Post';
 import AddPost from './AddPost';
 import { PostType } from '../types/Post';
@@ -11,10 +9,11 @@ const inter = Inter({ subsets: ['latin'] });
 
 // NOT making Prisma calls here what is possible since this is a server
 // componet since we want to have more control over has this page is rendered
-//  - when Prisma call made here this page will be defult SSG
-const allPosts = async () => {
-  // FETCH from server components to our own backend requries full URL as oppose to partial
-  // form client components for example in AddPost.tsx
+//  - when Prisma call made here this page will be defult SSG.
+// FETCH from server components to our own backend requries full URL as oppose to partial
+// form client components for example in AddPost.tsx
+
+const allPosts = async (): Promise<PostType[]> => {
   const data = await fetch(process.env.URL + '/api/addpost', {
     cache: 'no-store',
   });
@@ -28,7 +27,7 @@ const allPosts = async () => {
 };
 
 export default async function Home() {
-  const response: PostType[] = await allPosts();
+  const response = await allPosts();
   return (
     <div>
       <div className={styles.center}>

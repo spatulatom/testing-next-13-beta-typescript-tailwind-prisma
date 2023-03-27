@@ -82,7 +82,7 @@ export default function DeletePost({
         </div>
         <div className="flex justify-between gap-4 ">
           <p className=" text-sm font-bold text-gray-700">
-            {comments?.length} Comments
+            {comments?.length} Comments:
           </p>
           {/* <Comment comments={comments}/> */}
           <button
