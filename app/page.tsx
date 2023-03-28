@@ -13,7 +13,7 @@ const inter = Inter({ subsets: ['latin'] });
 // FETCH from server components to our own backend requries full URL as oppose to partial
 // form client components for example in AddPost.tsx
 
-const allPosts = async (): Promise<PostType[]> => {
+const allPosts = async ()=> {
   const data = await fetch(process.env.URL + '/api/addpost', {
     cache: 'no-store',
   });
@@ -27,7 +27,7 @@ const allPosts = async (): Promise<PostType[]> => {
 };
 
 export default async function Home() {
-  const response = await allPosts();
+  const response:PostType[] = await allPosts();
   return (
     <div>
       <div className={styles.center}>
