@@ -25,6 +25,8 @@ const allPosts = async ()=> {
   console.log('MESSAGE:', error);
   throw new Error(error.error);
 };
+let bla: Array<string>;
+bla=['fasad']
 
 export default async function Home() {
   const response:PostType[] = await allPosts();
@@ -45,7 +47,7 @@ export default async function Home() {
       </div>
 
       <AddPost />
-      <h2 className="ml-2">All posts: {response.length}</h2>
+      <h2 className="ml-2">All posts: {response.length}{bla}</h2>
       {response?.map((post) => (
         <Post
           key={post.id}
