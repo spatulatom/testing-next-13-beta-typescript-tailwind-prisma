@@ -13,7 +13,7 @@ const inter = Inter({ subsets: ['latin'] });
 // FETCH from server components to our own backend requries full URL as oppose to partial
 // form client components for example in AddPost.tsx
 
-const allPosts = async ()=> {
+const allPosts = async () => {
   const data = await fetch(process.env.URL + '/api/addpost', {
     cache: 'no-store',
   });
@@ -26,10 +26,10 @@ const allPosts = async ()=> {
   throw new Error(error.error);
 };
 let bla: Array<string>;
-bla=['fasad']
+bla = ['fasad'];
 
-export default async function Home() {
-  const response:PostType[] = await allPosts();
+const Home = async () => {
+  const response: PostType[] = await allPosts();
   return (
     <div>
       <div className={styles.center}>
@@ -47,7 +47,10 @@ export default async function Home() {
       </div>
 
       <AddPost />
-      <h2 className="ml-2">All posts: {response.length}{bla}</h2>
+      <h2 className="ml-2">
+        All posts: {response.length}
+        {bla}
+      </h2>
       {response?.map((post) => (
         <Post
           key={post.id}
@@ -60,4 +63,6 @@ export default async function Home() {
       ))}
     </div>
   );
-}
+};
+
+export default Home;
