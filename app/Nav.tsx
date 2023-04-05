@@ -29,7 +29,7 @@ export default async function Nav() {
         )}
         <li>
           <a
-            href="https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma"
+            href="https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma#readme"
             target="_blank"
           >
             <i className="fa-brands fa-github fa-xl text-white transition-all hover:text-teal-600 "></i>
