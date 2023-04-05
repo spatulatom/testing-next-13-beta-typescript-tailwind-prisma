@@ -1,11 +1,12 @@
 import Image from 'next/image';
-import { Inter } from 'next/font/google';
+import { Inter, Moon_Dance } from 'next/font/google';
 import styles from './page.module.css';
 import Post from './Post';
 import AddPost from './AddPost';
 import { PostType } from '../types/Post';
 
 const inter = Inter({ subsets: ['latin'] });
+
 
 // NOT making Prisma calls here what is possible since this is a server
 // componet since we want to have more control over has this page is rendered
