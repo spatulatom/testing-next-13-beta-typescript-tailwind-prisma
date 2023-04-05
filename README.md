@@ -1,21 +1,20 @@
-This is a [Next.js 13 beta](https://beta.nextjs.org/docs/getting-started) project bootstrapped with [`npx create-next-app@latest`](https://beta.nextjs.org/docs/installation) that now ships with TypeScript by default. See ['TypeScript'](https://beta.nextjs.org/docs/configuring/typescript) for more information
+'Chat room' is a [Next.js 13 beta](https://beta.nextjs.org/docs/getting-started) project bootstrapped with [`npx create-next-app@latest`](https://beta.nextjs.org/docs/installation) that now ships with TypeScript by default. See ['TypeScript'](https://beta.nextjs.org/docs/configuring/typescript) for more information
 
 <a name="readme-top"></a>
 
-[![LinkedIn][linkedin-shield]][linkedin-url]
 
 <!-- PROJECT LOGO -->
 <br />
-<div align="center">
+<div align="left">
 
   <p>
-    'projects-online' is a portfolio website, it consists of the frontend and the backend sections - this repository contains its frontend source code.
+    'Chat room' is a fullstack CRUD app, it consists of the frontend and the backend sections. Line between frontend/backend in case of Next.js 13 beta is blurred  but files that are strictly 'backend'
+    can be found in pages/api and in app/api.
        <br />
        <br />
-    <a href="https://github.com/spatulatom/my-porfolio-backend"><strong>See also the backend source code of this website right here »</strong></a>
+  <br />
     <br />
-    <br />
-     <a href="https://spatulatom.github.io/projects-online/"><strong>View the deployed website »</strong></a>
+     <a href="https://testing-next-13-beta-typescript-tailwind-prisma.vercel.app/"><strong>View the deployed app on Vercel »</strong></a>
     <br />
    
   </p>
