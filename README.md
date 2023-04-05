@@ -1,21 +1,15 @@
-'Chat room' is a [Next.js 13 beta](https://beta.nextjs.org/docs/getting-started) project bootstrapped with [`npx create-next-app@latest`](https://beta.nextjs.org/docs/installation) that now ships with TypeScript by default. See ['TypeScript'](https://beta.nextjs.org/docs/configuring/typescript) for more information
+This is a [Next.js 13 beta](https://beta.nextjs.org/docs/getting-started) project bootstrapped with [`npx create-next-app@latest`](https://beta.nextjs.org/docs/installation) that now ships with TypeScript by default. See ['TypeScript'](https://beta.nextjs.org/docs/configuring/typescript) for more information. The app is called 'Chat room'
 
 <a name="readme-top"></a>
-
-
-<!-- PROJECT LOGO -->
-<br />
 <div align="left">
-
-  <p>
+<p>
     'Chat room' is a fullstack CRUD app, it consists of the frontend and the backend sections. Line between frontend/backend in case of Next.js 13 beta is blurred  but files that are strictly 'backend'
     can be found in pages/api and in app/api.
        <br />
-       <br />
-  <br />
     <br />
      <a href="https://testing-next-13-beta-typescript-tailwind-prisma.vercel.app/"><strong>View the deployed app on Vercel »</strong></a>
     <br />
+        <br />
    
   </p>
 </div>
@@ -45,8 +39,6 @@
 
 ### Built With
 
-
-
 - Tailwind,
 - JavaScript,
 - GitHub pages for deployment and remote repository,
@@ -69,8 +61,7 @@
 - https://balsamiq.com/ for wireframing.
 
 - Contact page of this project is using backend built wit Node and Express.js,
-SendGrid API is used for sending emails. The server is running on render.com. GitHub repository of the backend is stored <a href="https://github.com/spatulatom/my-porfolio-backend"><strong>right here »</strong></a>
-
+  SendGrid API is used for sending emails. The server is running on render.com. GitHub repository of the backend is stored <a href="https://github.com/spatulatom/my-porfolio-backend"><strong>right here »</strong></a>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -124,7 +115,6 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/tomasz-s-069249244/
