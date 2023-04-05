@@ -28,6 +28,9 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
     <li><a href="#about-the-project">About The Project</a></li>
     <li><a href="#built-with">Built With</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
+     <li><a href="#getting-started">About The Project</a></li>
+    <li><a href="#learn-more">Built With</a></li>
+    <li><a href="#deploy-on-vercel">Acknowledgments</a></li>
   </ol>
 </details>
 
