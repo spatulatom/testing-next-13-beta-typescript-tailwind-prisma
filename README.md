@@ -74,10 +74,12 @@ we are only using it on the backend
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Error Handling and Loading UI
-For error handling in server components Next.js 13 beta we have implemented:
-- <a href='https://beta.nextjs.org/docs/routing/error-handling'>new error.tsx</a>
+For error handling in server components we have implemented:
+- <a href='https://beta.nextjs.org/docs/routing/error-handling'>new error.tsx file</a>
 For handling loading state in server components we have implemented:
-- <a href='https://beta.nextjs.org/docs/routing/loading-ui'>loading.tsx</a>
+- <a href='https://beta.nextjs.org/docs/routing/loading-ui'>new loading.tsx file</a>
+( For error handling and loading UI on the clint side we are using:
+- <a href='https://react-hot-toast.com/'>React Hot Toast</a>)
 
 
 
