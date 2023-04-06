@@ -19,6 +19,7 @@ This is a [Next.js 13 beta](https://beta.nextjs.org/docs/getting-started) projec
   <summary>Table of Contents</summary>
   <ol>
     <li><a href="#about-the-project">About The Project</a></li>
+    <li><a href="#mutating-data">Mutating Data</a></li>
     <li><a href="#built-with">Built With</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
      <li><a href="#getting-started">Getting Started</a></li>
@@ -40,6 +41,20 @@ Users can log in using their Google accounts (thanks to NextAuth.js)
 ![Product Name Screen Shot](public/next13beta.png)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Mutating Data
+
+The app is divided into three sections where users can: 
+- create a post 
+- add a comment 
+- delete a post (with comments).  
+Users can log in using their Google accounts (thanks to NextAuth.js)
+
+![Product Name Screen Shot](public/next13beta.png)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
 
 ### Built With
 
