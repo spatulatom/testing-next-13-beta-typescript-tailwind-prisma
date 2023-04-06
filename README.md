@@ -88,10 +88,10 @@ For handling loading state in server components we have implemented:
 
 ## New Features
 As for other new features introduced in Next.js 13 we have implemented:
-- <a href='https://beta.nextjs.org/docs/routing/error-handling'>new error.tsx</a> and loading.tsx pages for handling data fetching on the server side
-- New next/image: Faster with native browser lazy loading in app/Logged.tsx
-- new @next/font: Automatic self-hosted fonts with zero layout shift in app/page.tsx
-- new next/link : Simplified API with automatic in app/Nav.tsx
+
+- New next/image: Faster with native browser lazy loading in <strong>app/Logged.tsx</strong>
+- new @next/font: Automatic self-hosted fonts with zero layout shift in <strong>app/page.tsx</strong>
+- new next/link : Simplified API with automatic in <strong>app/Nav.tsx</strong>
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
