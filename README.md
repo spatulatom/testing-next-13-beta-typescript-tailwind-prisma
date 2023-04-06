@@ -1,4 +1,4 @@
-This is a [Next.js 13 beta](https://beta.nextjs.org/docs/getting-started) project bootstrapped with [`npx create-next-app@latest`](https://beta.nextjs.org/docs/installation) that now ships with TypeScript by default. See ['TypeScript'](https://beta.nextjs.org/docs/configuring/typescript) for more information. The app is called 'Chat room'
+This is a [Next.js 13 beta](https://beta.nextjs.org/docs/getting-started) project bootstrapped with [`npx create-next-app@latest`](https://beta.nextjs.org/docs/installation) that now ships with TypeScript by default. See ['TypeScript'](https://beta.nextjs.org/docs/configuring/typescript) for more information. The app is called 'Chat room'. 
 
 <a name="readme-top"></a>
 <div align="left">
@@ -15,8 +15,10 @@ This is a [Next.js 13 beta](https://beta.nextjs.org/docs/getting-started) projec
   <summary>Table of Contents</summary>
   <ol>
     <li><a href="#about-the-project">About The Project</a></li>
-    <li><a href="#mutating-data">Mutating Data</a></li>
-    <li><a href="#backend">Backend</a></li>
+    <li><a href="#mutating-data">Mutating Data with new Server Components</a></li>
+    <li><a href="#backend">Backend an new Route Handlers</a></li>
+       <li><a href="#error-handling-and loading-ui">Error handling and Loading UI</a></li>
+     <li><a href="#new-features">Other new features used in the app</a></li>
     <li><a href="#built-with">Built With</a></li>
      <li><a href="#getting-started">Getting Started</a></li>
    
@@ -26,7 +28,7 @@ This is a [Next.js 13 beta](https://beta.nextjs.org/docs/getting-started) projec
 <!-- ABOUT THE PROJECT -->
 
 ## About The Project
-
+I am trying in this app many different features introduced by the Next.js team, some of them are not recommended for production just yet as Next version 13 beta is still being developed and worked on. 
  'Chat room' is a fullstack CRUD app, it consists of the frontend and the backend sections. Line between frontend/backend in case of Next.js 13 beta is blurred  but files that are strictly 'backend'
     can be found in pages/api and in app/api. As for the frontend we are using new app directory.
        <br />
@@ -49,7 +51,7 @@ Users can log in using their Google accounts (thanks to NextAuth.js)
 -  <a href='https://beta.nextjs.org/docs/data-fetching/fetching#asyncawait-in-server-components'>async/await in those server componets (which is completly new approach)</a> and <a href ='https://beta.nextjs.org/docs/data-fetching/fetching'>new fetch() API</a> that allows for SSG (static site generation) and SSR (server side rendering)
 -  <a href='https://beta.nextjs.org/docs/data-fetching/mutating'>MUTATING DATA  with useRouter</a> (solution temporarly recommended by Next.js team until a better one is found) imported from next/navigation (not form next/router) and a new router.refresh()  method.
 
-REVIEW: Given the dynamic nature of this app we CAN NOT  use in this approach SSG (and fetch the data ONLY AT BUILT TOME) as we need to fetch fresh data every time data is mutated somewhere in the app, therefore we use SSR. The DOWNSIDE here is that we have NO WAY OF KNOWING WHEN DATA GOT MUTATED so every time we go to a page that uses data (just in case if it  was mutated) we need to use <a href='https://beta.nextjs.org/docs/routing/linking-and-navigating#hard-navigation'>hard navigation</a> and perform SSG (and router.refresh() triggers SSG).
+REVIEW: Given the dynamic nature of this app we CAN NOT  use in this approach SSG (and fetch the data ONLY AT BUILT TiME) as we need to fetch fresh data every time data is mutated somewhere in the app, therefore we use SSR. The DOWNSIDE of that approach is that we have NO WAY OF KNOWING WHEN DATA GOT MUTATED in the app so every time we go to a page that uses data (just in case if it  was mutated) we need to use <a href='https://beta.nextjs.org/docs/routing/linking-and-navigating#hard-navigation'>hard navigation</a> and perform SSG (and router.refresh() triggers SSG).
 
 2. DELETING  a post (with comments) is built for contrast with client components, Axios for data fetching and <a href='https://tanstack.com/query/v3/'>React Query for mutating data.</a>
 
@@ -71,8 +73,25 @@ we are only using it on the backend
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## Error Handling and Loading UI
+For error handling in server components Next.js 13 beta we have implemented:
+- <a href='https://beta.nextjs.org/docs/routing/error-handling'>new error.tsx</a>
+For handling loading state in server components we have implemented:
+- <a href='https://beta.nextjs.org/docs/routing/loading-ui'>loading.tsx</a>
 
 
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## New Features
+As for other new features introduced in Next.js 13 we have implemented:
+- <a href='https://beta.nextjs.org/docs/routing/error-handling'>new error.tsx</a> and loading.tsx pages for handling data fetching on the server side
+- New next/image: Faster with native browser lazy loading in app/Logged.tsx
+- new @next/font: Automatic self-hosted fonts with zero layout shift in app/page.tsx
+- new next/link : Simplified API with automatic in app/Nav.tsx
+
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 ### Built With
