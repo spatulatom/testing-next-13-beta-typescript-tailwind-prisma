@@ -32,7 +32,7 @@ This is a [Next.js 13 beta](https://beta.nextjs.org/docs/getting-started) projec
 I am trying in this app many different features introduced by the Next.js team, some of them are not recommended for production just yet as Next version 13 beta is still being developed and worked on. 
 </br>
  'Chat room' is a fullstack CRUD app, it consists of the frontend and the backend sections. Line between frontend/backend in case of Next.js 13 beta is blurred wit introduction on server components but files that are strictly 'backend'
-    can be found in pages/api and in app/api. As for the frontend we are using new app directory with new server components.
+    can be found in pages/api and in app/api. As for the frontend I am using new app directory with new server components.
        <br />
    
      
@@ -67,16 +67,16 @@ OPINION: For those reasons mentioned above (until Next.js team finds a better wa
 ## Backend
 - Next.js 13 beta introduces <a href='https://beta.nextjs.org/docs/routing/route-handlers'>Route Handlers </a>( they can only be used inside of the app directory in app/api ) as a replacement for <a href='https://beta.nextjs.org/docs/data-fetching/api-routes'>API routes (only used in pages/api)</a>
 - <a href='https://next-auth.js.org/getting-started/example'>NextAuth.js doesn't yet support new app/api directory so routes related to authentication will still have to be placed in pages/api</a>
-- As for the rest of the API routes in this app we are using new approach placing the routes in the new app directory.
+- As for the rest of the API routes in this app I am using new approach placing the routes in the new app directory.
 - <a href='https://beta.nextjs.org/docs/routing/defining-routes#route-groups'>Route Groups</a> - new approach can be used for both front/backend routes, 
-we are only using it on the backend, for example, in <strong>app/api/(homepage)/...</strong>
+I am only using it on the backend, for example, in <strong>app/api/(homepage)/...</strong>
 
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Error Handling and Loading UI
-For error handling in server components we have implemented:
+For error handling in server components I have implemented:
 - <a href='https://beta.nextjs.org/docs/routing/error-handling'>new error.tsx file</a> </br>
 For handling loading state in server components we have implemented:
 - <a href='https://beta.nextjs.org/docs/routing/loading-ui'>new loading.tsx file</a> </br>
@@ -88,7 +88,7 @@ For handling loading state in server components we have implemented:
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## New Features
-As for other new features introduced in Next.js 13 we have implemented:
+As for other new features introduced in Next.js 13 I have implemented:
 
 - New next/image: Faster with native browser lazy loading in <strong>app/Logged.tsx</strong>
 - new @next/font: Automatic self-hosted fonts with zero layout shift in <strong>app/page.tsx</strong>
@@ -115,7 +115,7 @@ While implementing TypeScript into Next 13 beta I have been following these guid
 - <a href='https://tanstack.com/query/v3/'>React Query</a>
 - <a href='https://react-hot-toast.com/'>React Hot Toast</a> for notifications,
 - NextAuth.js for users authentificaton,
- - for data modeling and storage we are using <a href='https://www.prisma.io/'>Prisma</a> && <a href='https://www.postgresql.org/'>PostgreSQL</a> stored in <a href='https://supabase.com/'>supabase</a>
+ - for data modeling and storage <a href='https://www.prisma.io/'>Prisma</a> && <a href='https://www.postgresql.org/'>PostgreSQL</a> stored in <a href='https://supabase.com/'>supabase</a>
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
