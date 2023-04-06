@@ -17,7 +17,7 @@ This is a [Next.js 13 beta](https://beta.nextjs.org/docs/getting-started) projec
     <li><a href="#about-the-project">About The Project</a></li>
     <li><a href="#mutating-data">Mutating Data with new Server Components</a></li>
     <li><a href="#backend">Backend an new Route Handlers</a></li>
-       <li><a href="#error-handling-and loading-ui">Error handling and Loading UI</a></li>
+       <li><a href="#error-handling-and-loading-ui">Error handling and Loading UI</a></li>
      <li><a href="#new-features">Other new features used in the app</a></li>
     <li><a href="#built-with">Built With</a></li>
      <li><a href="#getting-started">Getting Started</a></li>
