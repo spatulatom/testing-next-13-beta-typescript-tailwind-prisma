@@ -32,9 +32,9 @@ This is a [Next.js 13 beta](https://beta.nextjs.org/docs/getting-started) projec
 
 ## About The Project
 
-The app is divided into three sections where users can: 
-- create a post 
-- add a comment 
+The app has distinct three 'sections' where users can:
+- create a post, 
+- add a comment, 
 - delete a post (with comments).  
 Users can log in using their Google accounts (thanks to NextAuth.js)
 
@@ -44,13 +44,12 @@ Users can log in using their Google accounts (thanks to NextAuth.js)
 
 ## Mutating Data
 
-The app is divided into three sections where users can: 
-- create a post 
-- add a comment 
-- delete a post (with comments).  
-Users can log in using their Google accounts (thanks to NextAuth.js)
+1. CREATING a post/ADDING a comment are built with a combination of
+- <a href = 'https://beta.nextjs.org/docs/rendering/server-and-client-components'>new server components</a> and client components
+-  <a href='https://beta.nextjs.org/docs/data-fetching/fetching#asyncawait-in-server-components'>async/await in those server componets (which is completly new approach)</a> and <a href ='https://beta.nextjs.org/docs/data-fetching/fetching'>new fetch() API</a> that allows for SSG (static site generation) and SSR (server side rendering)
+-  <a href='https://beta.nextjs.org/docs/data-fetching/mutating'>MUTATING DATA  with useRouter</a> (solution temporarly recommended by Next.js team until a better one is found) imported from next/navigation (not form next/router) and a new router.refresh()  method.
 
-![Product Name Screen Shot](public/next13beta.png)
+2. DELETING  a post (with comments) is built for contrast with client components, Axios for data fetching and React Query for mutating data.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
