@@ -3,11 +3,7 @@ This is a [Next.js 13 beta](https://beta.nextjs.org/docs/getting-started) projec
 <a name="readme-top"></a>
 <div align="left">
 <p>
-    'Chat room' is a fullstack CRUD app, it consists of the frontend and the backend sections. Line between frontend/backend in case of Next.js 13 beta is blurred  but files that are strictly 'backend'
-    can be found in pages/api and in app/api.
-       <br />
-    <br />
-     <a href="https://testing-next-13-beta-typescript-tailwind-prisma.vercel.app/"><strong>View the deployed app on Vercel »</strong></a>
+   <a href="https://testing-next-13-beta-typescript-tailwind-prisma.vercel.app/"><strong>View the deployed app on Vercel »</strong></a>
     <br />
         <br />
    
@@ -32,6 +28,11 @@ This is a [Next.js 13 beta](https://beta.nextjs.org/docs/getting-started) projec
 
 ## About The Project
 
+ 'Chat room' is a fullstack CRUD app, it consists of the frontend and the backend sections. Line between frontend/backend in case of Next.js 13 beta is blurred  but files that are strictly 'backend'
+    can be found in pages/api and in app/api.
+       <br />
+   
+     
 The app has distinct three 'sections' where users can:
 - create a post, 
 - add a comment, 
