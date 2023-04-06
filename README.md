@@ -18,10 +18,8 @@ This is a [Next.js 13 beta](https://beta.nextjs.org/docs/getting-started) projec
     <li><a href="#mutating-data">Mutating Data</a></li>
     <li><a href="#backend">Backend</a></li>
     <li><a href="#built-with">Built With</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
      <li><a href="#getting-started">Getting Started</a></li>
-    <li><a href="#learn-more">Learn More</a></li>
-    <li><a href="#deploy-on-vercel">Deploy on Vercel</a></li>
+   
   </ol>
 </details>
 
@@ -30,7 +28,7 @@ This is a [Next.js 13 beta](https://beta.nextjs.org/docs/getting-started) projec
 ## About The Project
 
  'Chat room' is a fullstack CRUD app, it consists of the frontend and the backend sections. Line between frontend/backend in case of Next.js 13 beta is blurred  but files that are strictly 'backend'
-    can be found in pages/api and in app/api.
+    can be found in pages/api and in app/api. As for the frontend we are using new app directory.
        <br />
    
      
@@ -68,6 +66,7 @@ VERDICT: For those reasons mentioned above (until Next.js team finds a better wa
 - As for the rest of the API routes in this app we are using new approach placing the routes in the new app directory.
 - <a href='https://beta.nextjs.org/docs/routing/defining-routes#route-groups'>Route Groups</a> - new approach can be used for both front/backend routes, 
 we are only using it on the backend
+- for data modeling and storage we are using Prisma && PostgreSQL stored in <a href='https://supabase.com/'>supabase</a>
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -78,39 +77,17 @@ we are only using it on the backend
 
 ### Built With
 
-- Tailwind,
-- JavaScript,
-- GitHub pages for deployment and remote repository,
-- Git for version control,
-- render.com for server deployment,
-- fullpage.js library for vertical and horizontal scroll,
-- Node.js, Express.js for the backend server,
-- MongoDB for contact form data storage,
-- SendGrid API for sending emails,
-- Visual Studio Code as a local IDE & repository,
-- Chrome Developer Tools for testing screen sizes and using Lighthouse,
-- Chrome, Firefox, Brave Browser, Edge and Opera for browser testing the responsiveness,
-- https://ui.dev/amiresponsive for testing and to make responsive image,
-- https://favicon.io/favicon-generator/ to create a favicon,
-- https://fontawesome.com/ for icons,
-- https://tinypng.com/ to optimize images,
-- https://www.remove.bg/ for removing images backgrounds,
-- https://chrome.google.com/webstore/detail/pesticide-for-chrome-with/neonnmencpneifkhlmhmfhfiklgjmloi during development,
-- https://wave.webaim.org/ to check web accessibility,
-- https://balsamiq.com/ for wireframing.
+- <a href='https://beta.nextjs.org/docs/getting-started'>Next.js 13 beta</a>,
+- TypeScript,
+- Tailwind CSS for styling
+- <a href='https://tanstack.com/query/v3/'>React Query</a>
+- <a href='https://react-hot-toast.com/'>React Hot Toast</a> for notifications,
+- NextAuth.js for users authentificaton,
+- for data modeling and storage we are using Prisma && PostgreSQL stored in <a href='https://supabase.com/'>supabase</a>
 
-- Contact page of this project is using backend built wit Node and Express.js,
-  SendGrid API is used for sending emails. The server is running on render.com. GitHub repository of the backend is stored <a href="https://github.com/spatulatom/my-porfolio-backend"><strong>right here »</strong></a>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- ACKNOWLEDGMENTS -->
-
-## Acknowledgments
-
-- https://alvarotrigo.com/fullPage/ for vertical and horizontal scrolling effect.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Getting Started
 
@@ -136,24 +113,7 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/tomasz-s-069249244/
