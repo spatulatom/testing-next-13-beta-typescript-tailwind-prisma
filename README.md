@@ -1,4 +1,4 @@
-This is a [Next.js 13 beta](https://beta.nextjs.org/docs/getting-started) project bootstrapped with [`npx create-next-app@latest`](https://beta.nextjs.org/docs/installation) that now ships with TypeScript by default. See ['TypeScript'](https://beta.nextjs.org/docs/configuring/typescript) for more information. The app is called 'Chat room'. 
+This is a [Next.js 13 beta](https://beta.nextjs.org/docs/getting-started) project bootstrapped with [`npx create-next-app@latest`](https://beta.nextjs.org/docs/installation). The app is called 'Chat room'. 
 
 <a name="readme-top"></a>
 <div align="left">
@@ -19,6 +19,7 @@ This is a [Next.js 13 beta](https://beta.nextjs.org/docs/getting-started) projec
     <li><a href="#backend">Backend an new Route Handlers</a></li>
        <li><a href="#error-handling-and-loading-ui">Error handling and Loading UI</a></li>
      <li><a href="#new-features">Other new features used in the app</a></li>
+      <li><a href="#typescript">TypeScript</a></li>
     <li><a href="#built-with">Built With</a></li>
      <li><a href="#getting-started">Getting Started</a></li>
    
@@ -92,6 +93,15 @@ As for other new features introduced in Next.js 13 we have implemented:
 - New next/image: Faster with native browser lazy loading in <strong>app/Logged.tsx</strong>
 - new @next/font: Automatic self-hosted fonts with zero layout shift in <strong>app/page.tsx</strong>
 - new next/link : Simplified API with automatic in <strong>app/Nav.tsx</strong>
+
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## TypeScript
+[`npx create-next-app@latest`](https://beta.nextjs.org/docs/installation)  now ships with TypeScript by default. See ['TypeScript'](https://beta.nextjs.org/docs/configuring/typescript) for more information.
+While implementing TypeScript into Next 13 beta I have been following these guidlines:
+- <a href='https://nextjs.org/docs/basic-features/typescript'>TypeSript for Next.js (BEFORE version 13 beta) </a>
+- TypeScript for new Next.js 13 beta features: <a href='https://beta.nextjs.org/docs/configuring/typescript'> here </a> and <a href='https://beta.nextjs.org/docs/routing/route-handlers#extended-nextrequest-and-nextresponse-apis'> here regarding new backend Route Handlers</a> 
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
