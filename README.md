@@ -69,7 +69,7 @@ OPINION: For those reasons mentioned above (until Next.js team finds a better wa
 - <a href='https://next-auth.js.org/getting-started/example'>NextAuth.js doesn't yet support new app/api directory so routes related to authentication will still have to be placed in pages/api</a>
 - As for the rest of the API routes in this app we are using new approach placing the routes in the new app directory.
 - <a href='https://beta.nextjs.org/docs/routing/defining-routes#route-groups'>Route Groups</a> - new approach can be used for both front/backend routes, 
-we are only using it on the backend in, for example app/api/(homepage)/...
+we are only using it on the backend, for example, in app/api/(homepage)/...
 
 
 
