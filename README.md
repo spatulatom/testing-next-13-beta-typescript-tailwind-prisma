@@ -16,6 +16,7 @@ This is a [Next.js 13 beta](https://beta.nextjs.org/docs/getting-started) projec
   <ol>
     <li><a href="#about-the-project">About The Project</a></li>
     <li><a href="#mutating-data">Mutating Data</a></li>
+    <li><a href="#backend">Backend</a></li>
     <li><a href="#built-with">Built With</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
      <li><a href="#getting-started">Getting Started</a></li>
@@ -57,6 +58,12 @@ REVIEW: Given the dynamic nature of this app we CAN NOT  use in this approach S
 REVIEW: In this approach when using React Query  WE KNOW EXACTLY WHEN DATA WAS MUTATED in the app so only then we perform a fresh data fetch, otherwise we can use our data stored in the cache and (and perform only soft navigation). 
 
 VERDICT: For that reason thus far (until Next.js team finds a better way to mutate data in server components) using React Query gives a much smoother user experience.
+
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Backend
+
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
