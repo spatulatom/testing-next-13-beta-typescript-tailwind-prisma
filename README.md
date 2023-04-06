@@ -69,7 +69,7 @@ VERDICT: For those reasons mentioned above (until Next.js team finds a better wa
 - As for the rest of the API routes in this app we are using new approach placing the routes in the new app directory.
 - <a href='https://beta.nextjs.org/docs/routing/defining-routes#route-groups'>Route Groups</a> - new approach can be used for both front/backend routes, 
 we are only using it on the backend
-- for data modeling and storage we are using Prisma && PostgreSQL stored in <a href='https://supabase.com/'>supabase</a>
+
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -105,7 +105,7 @@ As for other new features introduced in Next.js 13 we have implemented:
 - <a href='https://tanstack.com/query/v3/'>React Query</a>
 - <a href='https://react-hot-toast.com/'>React Hot Toast</a> for notifications,
 - NextAuth.js for users authentificaton,
-- for data modeling and storage we are using Prisma && PostgreSQL stored in <a href='https://supabase.com/'>supabase</a>
+ - for data modeling and storage we are using <a href='https://www.prisma.io/'>Prisma</a> && <a href='https://www.postgresql.org/'>PostgreSQL</a> stored in <a href='https://supabase.com/'>supabase</a>
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
