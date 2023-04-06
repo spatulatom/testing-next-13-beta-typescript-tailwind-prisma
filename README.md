@@ -55,7 +55,7 @@ REVIEW: Given the dynamic nature of this app we CAN NOT  use in this approach S
 
 REVIEW: In this approach when using React Query  WE KNOW EXACTLY WHEN DATA WAS MUTATED in the app so only then we perform a fresh data fetch, otherwise we can use our data stored in the cache and (and perform only soft navigation). 
 
-VERDICT: For that reason using React Query gives a much smoother user experience.
+VERDICT: For that reason thus far (until Next.js team finds a better way to mutate data in server components) using React Query gives a much smoother user experience.
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
