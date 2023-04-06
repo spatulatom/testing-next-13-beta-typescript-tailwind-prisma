@@ -63,8 +63,8 @@ VERDICT: For those reasons mentioned above (until Next.js team finds a better wa
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Backend
-- Next.js 13 beta introduces <a href='https://beta.nextjs.org/docs/routing/route-handlers'>Route Handlers </a>( they can only be used inside of the app directory in app/api ) as a replacement for <a href='https://beta.nextjs.org/docs/data-fetching/api-routes'>API routes </a>(only used in pages/api)
-- NextAuth.js doesn't yet support new app/api directory so routes related to authentication will still have to be placed in pages/api
+- Next.js 13 beta introduces <a href='https://beta.nextjs.org/docs/routing/route-handlers'>Route Handlers </a>( they can only be used inside of the app directory in app/api ) as a replacement for <a href='https://beta.nextjs.org/docs/data-fetching/api-routes'>API routes (only used in pages/api)</a>
+- <a href='https://next-auth.js.org/getting-started/example'>NextAuth.js doesn't yet support new app/api directory so routes related to authentication will still have to be placed in pages/api</a>
 - As for the rest of the API routes in this app we are using new approach placing the routes in the new app directory.
 - <a href='https://beta.nextjs.org/docs/routing/defining-routes#route-groups'>Route Groups</a> - new approach can be used for both front/backend routes, 
 we are only using it on the backend
