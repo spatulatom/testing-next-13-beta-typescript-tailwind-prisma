@@ -31,7 +31,11 @@ This is a [Next.js 13 beta](https://beta.nextjs.org/docs/getting-started) projec
 
 ## About The Project
 
-- This website contains several ongoing and completed projects:
+The app is divided into three sections where users can: 
+- 1. create a post 
+- 2. add a comment 
+- 3. delete a post (with comments).  
+Users can log in using their Google accounts (thanks to NextAuth.js)
 
 ![Product Name Screen Shot](public/next13beta.png)
 
