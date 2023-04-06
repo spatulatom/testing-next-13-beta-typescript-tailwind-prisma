@@ -51,22 +51,28 @@ Users can log in using their Google accounts (thanks to NextAuth.js)
 -  <a href='https://beta.nextjs.org/docs/data-fetching/fetching#asyncawait-in-server-components'>async/await in those server componets (which is completly new approach)</a> and <a href ='https://beta.nextjs.org/docs/data-fetching/fetching'>new fetch() API</a> that allows for SSG (static site generation) and SSR (server side rendering)
 -  <a href='https://beta.nextjs.org/docs/data-fetching/mutating'>MUTATING DATA  with useRouter</a> (solution temporarly recommended by Next.js team until a better one is found) imported from next/navigation (not form next/router) and a new router.refresh()  method.
 
-REVIEW: Given the dynamic nature of this app we CAN NOT  use in this approach SSG (and fetch the data ONLY AT BUILT TOME) as we need to fetch fresh data every time data is mutated somewhere in the app, therefore we use SSR. The DOWNSIDE here is that we have NO WAY OF KNOWING WHEN DATA GOT MUTATED so every time we go to a page that uses data (just in case if it  was mutated) we need to perform SSG (and router.refresh() triggers it).
+REVIEW: Given the dynamic nature of this app we CAN NOT  use in this approach SSG (and fetch the data ONLY AT BUILT TOME) as we need to fetch fresh data every time data is mutated somewhere in the app, therefore we use SSR. The DOWNSIDE here is that we have NO WAY OF KNOWING WHEN DATA GOT MUTATED so every time we go to a page that uses data (just in case if it  was mutated) we need to use <a href='https://beta.nextjs.org/docs/routing/linking-and-navigating#hard-navigation'>hard navigation</a> and perform SSG (and router.refresh() triggers SSG).
 
 2. DELETING  a post (with comments) is built for contrast with client components, Axios for data fetching and <a href='https://tanstack.com/query/v3/'>React Query for mutating data.</a>
 
-REVIEW: In this approach when using React Query  WE KNOW EXACTLY WHEN DATA WAS MUTATED in the app so only then we perform a fresh data fetch, otherwise we can use our data stored in the cache and (and perform only soft navigation). 
+REVIEW: In this approach when using React Query  WE KNOW EXACTLY WHEN DATA WAS MUTATED in the app so only then we perform a fresh data fetch, otherwise WE CAN USE DATA STORED IN THE CACHE and (and perform only <a href='https://beta.nextjs.org/docs/routing/linking-and-navigating#conditions-for-soft-navigation'>soft navigation</a>).  
 
-VERDICT: For that reason thus far (until Next.js team finds a better way to mutate data in server components) using React Query gives a much smoother user experience.
+VERDICT: For those reasons mentioned above (until Next.js team finds a better way to mutate data in server components) using React Query gives a much smoother user experience.
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Backend
-
+- Next.js 13 beta introduces <a href='https://beta.nextjs.org/docs/routing/route-handlers'>Route Handlers </a>( they can only be used inside of the app directory in app/api ) as a replacement for <a href='https://beta.nextjs.org/docs/data-fetching/api-routes'>API routes </a>(only used in pages/api)
+- NextAuth.js doesn't yet support new app/api directory so routes related to authentication will still have to be placed in pages/api
+- As for the rest of the API routes in this app we are using new approach placing the routes in the new app directory.
+- <a href='https://beta.nextjs.org/docs/routing/defining-routes#route-groups'>Route Groups</a> - new approach can be used for both front/backend routes, 
+we are only using it on the backend
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
 
 
 
