@@ -36,7 +36,7 @@ I am trying in this app many different features introduced by the Next.js team,
        <br />
    
      
-The app has distinct three 'sections' where users can:
+The app has three main functionalities allowing users to:
 - create a post, 
 - add a comment, 
 - delete a post (with comments).  
