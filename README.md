@@ -32,7 +32,7 @@ This is a [Next.js 13 beta](https://beta.nextjs.org/docs/getting-started) projec
 I am trying in this app many different features introduced by the Next.js team, some of them are not recommended for production just yet as Next version 13 beta is still being developed and worked on. 
 </br>
  'Chat room' is a fullstack CRUD app, it consists of the frontend and the backend sections. Line between frontend/backend in case of Next.js 13 beta is blurred  but files that are strictly 'backend'
-    can be found in pages/api and in app/api. As for the frontend we are using new app directory.
+    can be found in pages/api and in app/api. As for the frontend we are using new app directory with server components.
        <br />
    
      
