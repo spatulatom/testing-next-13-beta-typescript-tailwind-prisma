@@ -100,7 +100,7 @@ As for other new features introduced in Next.js 13 we have implemented:
 ## TypeScript
 [`npx create-next-app@latest`](https://beta.nextjs.org/docs/installation)  now ships with TypeScript by default. See ['TypeScript'](https://beta.nextjs.org/docs/configuring/typescript) for more information.
 While implementing TypeScript into Next 13 beta I have been following these guidlines:
-- <a href='https://nextjs.org/docs/basic-features/typescript'>TypeSript for Next.js (BEFORE version 13 beta) </a>
+- <a href='https://nextjs.org/docs/basic-features/typescript'>TypeSript for Next.js </a> (BEFORE version 13 beta),
 - TypeScript for new Next.js 13 beta features: <a href='https://beta.nextjs.org/docs/configuring/typescript'> here </a> and <a href='https://beta.nextjs.org/docs/routing/route-handlers#extended-nextrequest-and-nextresponse-apis'> here regarding new backend Route Handlers</a> 
 
 
