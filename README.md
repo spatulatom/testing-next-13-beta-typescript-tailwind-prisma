@@ -59,7 +59,7 @@ Users can log into the app using their Google accounts (NextAuth.js)
 
 
 REVIEW: This app has many components thats uses fetched data, some of those components only display that data, other components are mutating that data. There is no globally managed state that would hold that fetched data (like it usually happens in apps built with React.js) instead each componets that uses the data fetches it directly from the databse or uses <a href='https://beta.nextjs.org/docs/data-fetching/caching'>default built in caching</a> and grabs the data from the cache. 
-</br> 
+</br> </br>
 The problem is that we dont know when Next.js should use catch storage for getting the data or when it should freshy fetch a data from database as there is no communication between components in the app on that matter. When one component mutates the data - let's say deletes an item, other componets dont know about it, so where they are in use they have to fetch data from database just in case it was possibly mutated somwhere,  even though very often grabbing data from the cache storage would be enough.  
 </br>
 For that reason we can not use SSG (and fetch data only at a buil time in this app) but more importantly we have to perform a lot of fetching. When we click links in navigation whenever a clicked componets uses data we need to perform a fresh data fetch. By defult in Next.js navigation is <a href='https://beta.nextjs.org/docs/data-fetching/caching'>soft </a>- it uses catching storage, so we need to modify it and make it a, so called, <a href='https://beta.nextjs.org/docs/routing/linking-and-navigating#hard-navigation'>hard navigation</a> to make sure data is grabbed not from the catche but fetched from database.
