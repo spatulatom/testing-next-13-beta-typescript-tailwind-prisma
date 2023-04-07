@@ -48,7 +48,7 @@ Users can log into the app using their Google accounts (NextAuth.js)
 
 ## Mutating Data
 
- The aproach described below is <a href='https://beta.nextjs.org/docs/data-fetching/mutating'>temporarly recommended by Next.js </a> team until a better one is developed.
+ The aproach  nr 1 described below is <a href='https://beta.nextjs.org/docs/data-fetching/mutating'>temporarly recommended by Next.js </a> team until a better one is developed.
  </br>
 
 1. CREATING a post && ADDING a comment are built with a combination of
