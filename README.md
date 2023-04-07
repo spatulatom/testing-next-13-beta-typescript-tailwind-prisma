@@ -29,18 +29,18 @@ This is a [Next.js 13 beta](https://beta.nextjs.org/docs/getting-started) projec
 <!-- ABOUT THE PROJECT -->
 
 ## About The Project
-I am trying in this app many different features introduced by the Next.js team, some of them are not recommended for production just yet as Next version 13 beta is still being developed and worked on. 
+I am trying in this project many different features introduced by the Next.js team, some of them are not recommended for production just yet as Next.js version 13 beta is still being developed and worked on. 
 </br>
- 'Chat room' is a fullstack CRUD app, it consists of the frontend and the backend sections. Line between frontend/backend in case of Next.js 13 beta is blurred wit introduction on server components but files that are strictly 'backend'
-    can be found in pages/api and in app/api. As for the frontend I am using new app directory with new server components.
+ 'Chat room' is a fullstack CRUD app, it consists of the frontend and the backend sections. Lines between frontend/backend in case of Next.js 13 beta are blurred with introduction server components yet files that are strictly 'backend'
+    can be found in pages/api and in app/api. As for the frontend I am using new app directory with new server components in it.
        <br />
    
      
 The app has three main functionalities allowing users to:
-- create a post, 
-- add a comment, 
-- delete a post (with comments).  
-Users can log in using their Google accounts (thanks to NextAuth.js)
+- CREATE a post, 
+- ADD a comment, 
+- DELETE a post (with comments).  
+Users can log into the app using their Google accounts (NextAuth.js)
 
 ![Product Name Screen Shot](public/next13beta.png)
 
@@ -48,12 +48,12 @@ Users can log in using their Google accounts (thanks to NextAuth.js)
 
 ## Mutating Data
 
-1. CREATING a post/ADDING a comment are built with a combination of
+1. CREATING a post && ADDING a comment are built with a combination of
 - <a href = 'https://beta.nextjs.org/docs/rendering/server-and-client-components'>new server components</a> and client components
--  <a href='https://beta.nextjs.org/docs/data-fetching/fetching#asyncawait-in-server-components'>async/await in those server componets (new approach not allowed in previous versions of Next.js or in React.js)</a> and <a href ='https://beta.nextjs.org/docs/data-fetching/fetching'>new fetch() API</a> that allows for SSG (static site generation) and SSR (server side rendering) - no need for extra functions like getStaticProps or getServerSideProps.
--  <a href='https://beta.nextjs.org/docs/data-fetching/mutating'>MUTATING DATA  with useRouter imported from next/navigation (not form next/router) and a new router.refresh()  method.</a> - solution temporarly recommended by Next.js team until a better one is found.
+-  <a href='https://beta.nextjs.org/docs/data-fetching/fetching#asyncawait-in-server-components'>async/await sytnax in those server componets (new approach not allowed in previous versions of Next.js or in React.js)</a> and <a href ='https://beta.nextjs.org/docs/data-fetching/fetching'>new fetch() API</a> that allows for SSG (static site generation) and SSR (server side rendering) - no need for extra functions like getStaticProps or getServerSideProps,
+-  <a href='https://beta.nextjs.org/docs/data-fetching/mutating'> with new useRouter Hook imported from next/navigation (not form next/router) and a new router.refresh()  method for DATA MUTATION</a> - solution temporarly recommended by Next.js team until a better one is found.
 
-REVIEW: Given the dynamic nature of this app we CAN NOT use in this approach SSG (and fetch the data ONLY AT BUILT TIME) as we need to fetch fresh data every time data is mutated somewhere in the app, therefore we use SSR. The DOWNSIDE of that approach is that we have NO WAY OF KNOWING WHEN DATA GOT MUTATED in the app, why? Because there is no globallly managed data (state) - data is fetched direclty to each components that needs it. Therefore every time we go to a page that uses data - just in case if it  was mutated we need to use <a href='https://beta.nextjs.org/docs/routing/linking-and-navigating#hard-navigation'>hard navigation</a> and not use a <a href='https://beta.nextjs.org/docs/data-fetching/caching'>default in built caching</a> and perform SSG - router.refresh() is used for it as it triggers SSG.
+REVIEW: Given the dynamic nature of this app we CAN NOT use in this approach SSG (and fetch the data ONLY AT BUILT TIME) as we need to fetch fresh data every time data is mutated somewhere in the app, therefore we use SSR. The DOWNSIDE of that approach is that we have NO WAY OF KNOWING WHEN DATA GOT MUTATED in the app, why? Because there is no globallly managed data (state) - data is fetched direclty to each components that needs it. Therefore every time we go to a page that uses data - just in case the data was mutated somwhere in the app we need to use <a href='https://beta.nextjs.org/docs/routing/linking-and-navigating#hard-navigation'>hard navigation</a> and not use a <a href='https://beta.nextjs.org/docs/data-fetching/caching'>default in built caching</a> and perform SSG - router.refresh() is used for it as it triggers SSG.
 
 2. DELETING  a post (with comments) is built for contrast with client components, Axios for data fetching and <a href='https://tanstack.com/query/v3/'>React Query for mutating data.</a> React Query has a way of comunicating between components whether there was a mutation and therfore a need for a fresh data fetch or whether cached data is ok to be used.
 
