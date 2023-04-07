@@ -53,7 +53,8 @@ Users can log into the app using their Google accounts (NextAuth.js)
 
 1. CREATING a post && ADDING a comment are built with a combination of
 - <a href = 'https://beta.nextjs.org/docs/rendering/server-and-client-components'>new server components</a> and client components
--  <a href='https://beta.nextjs.org/docs/data-fetching/fetching#asyncawait-in-server-components'>async/await sytnax in those server componets </a> (new approach not allowed in previous versions of Next.js or in React.js) and <a href ='https://beta.nextjs.org/docs/data-fetching/fetching'>  new fetch() API</a> that allows configuration for SSG (static site generation) and SSR (server side rendering) - NO NEED for extra functions like getStaticProps or getServerSideProps,
+-  <a href='https://beta.nextjs.org/docs/data-fetching/fetching#asyncawait-in-server-components'>async/await sytnax wrapping  those server componets </a> (new approach not allowed in previous versions of Next.js or in React.js) and <a href ='https://beta.nextjs.org/docs/data-fetching/fetching'>  
+- new fetch() API</a> in those server components that allows configuration for SSG (static site generation) and SSR (server side rendering) - NO NEED for extra functions like getStaticProps or getServerSideProps,
 -  <a href='https://beta.nextjs.org/docs/data-fetching/mutating'>new useRouter Hook </a> imported from next/navigation (not form next/router like up until now) and a new router.refresh()  method on it.
 
 
