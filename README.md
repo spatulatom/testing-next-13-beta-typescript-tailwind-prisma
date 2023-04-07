@@ -60,9 +60,9 @@ Users can log into the app using their Google accounts (NextAuth.js)
 
 REVIEW: This app has many components thats uses fetched data, some of those components only display that data, other components are mutating that data. There is no globally managed state that would hold that fetched data (like it usually happens in apps built with React.js) instead each componets that uses the data fetches it directly from the databse or uses <a href='https://beta.nextjs.org/docs/data-fetching/caching'>default built in caching</a> and grabs the data from the cache. 
 </br> </br>
-The problem is that we DONT KNOW know when Next.js should use catch storage for getting the data or when it should freshy fetch a data from database as there is NO COMMUNICATION BETWEEN COMPONETS in the app on that matter. When one component mutates the data - let's say deletes an item, other componets dont know about it, so where they are in use they have to fetch data from database just in case it was possibly mutated somwhere,  even though very often grabbing data from the cache storage would be enough.  
+The problem is that we DONT KNOW know when Next.js should use catch storage for getting the data or when it should freshy fetch a data from database as there is NO COMMUNICATION BETWEEN COMPONETS in the app on that matter. When one component mutates the data - let's say deletes an item, other componets DON NOT KNOW  about it, so where they are in use, they need to fetch fresh data from the database JUST IN CASE the data was possibly mutated somewher in the app,  even though very often grabbing data from the cache storage would be sufficient.  
 </br>
-For that reason we can not obviously use SSG (and fetch data only at a built time in this app), we use SSR,  but more importantly we have to perform A LOT of data fetching. When we click links in navigation whenever a clicked componets uses data we need to perform a fresh data fetch. By default in Next.js navigation is <a href='https://beta.nextjs.org/docs/data-fetching/caching'>soft </a>- it makes components use catching storage, so we need to modify it and make it a, so called, <a href='https://beta.nextjs.org/docs/routing/linking-and-navigating#hard-navigation'>hard navigation</a> to make sure data is grabbed not from the catche but fetched from database. That makes navigation between componets  that use fetched data obviously much slower.
+For that reason we can not obviously use SSG (and fetch data only at a built time in this app), we use SSR,  but more importantly we have to perform A LOT of data fetching. When we click links in navigation whenever those 'clicked' componets use data, they need to perform a fresh data fetch. By default in Next.js navigation is <a href='https://beta.nextjs.org/docs/data-fetching/caching'>soft </a>- it makes components use catching storage, so we need to modify it and make it a, so called, <a href='https://beta.nextjs.org/docs/routing/linking-and-navigating#hard-navigation'>hard navigation</a> to make sure data is grabbed not from the catche but fetched from database every time. That makes navigation between componets  that use fetched data obviously much slower.
 
 
 2. DELETING  a post (with comments) is built for contrast with 
@@ -72,7 +72,7 @@ For that reason we can not obviously use SSG (and fetch data only at a built tim
 
 
 REVIEW: 
-React Query HAS A WAY OF COMMUNICATING BETWEEN COMPONETS whether there was a data mutation in the app. If that's the case it performs a fresh data fetch, OTHERWISE it uses data stored in the catch. React Query KNOWs EXACTLY IF DATA WAS MUTATED in the app.
+React Query HAS A WAY OF COMMUNICATING BETWEEN COMPONETS whether there was a data mutation in the app. If that's the case it performs a fresh data fetch, OTHERWISE it uses data stored in the catch. React Query KNOWS EXACTLY IF DATA WAS MUTATED in the app.
 </br>Since we can leave 'fetching decision to React Query, we can go back to a default <a href='https://beta.nextjs.org/docs/routing/linking-and-navigating#conditions-for-soft-navigation'>soft navigation</a> between components in our app.
 </br>
 For those reasons mentioned above (until Next.js team finds a better way to mutate data in server components) using React Query gives a much smoother user experience.
@@ -82,7 +82,7 @@ For those reasons mentioned above (until Next.js team finds a better way to muta
 
 ## Backend
 - Next.js 13 beta introduces <a href='https://beta.nextjs.org/docs/routing/route-handlers'>Route Handlers </a>( they can only be used inside of the app directory in app/api ) as a replacement for <a href='https://beta.nextjs.org/docs/data-fetching/api-routes'>API routes (only used in pages/api)</a>
-- <a href='https://next-auth.js.org/getting-started/example'>NextAuth.js doesn't yet support new app/api directory so routes related to authentication will still have to be placed in pages/api</a>
+- <a href='https://next-auth.js.org/getting-started/example'>NextAuth.js doesn't yet support new app/api directory</a> so routes related to authentication will still have to be placed in pages/api
 - As for the rest of the API routes in this app I am using new approach placing the routes in the new app directory.
 - <a href='https://beta.nextjs.org/docs/routing/defining-routes#route-groups'>Route Groups</a> - new approach can be used for both front/backend routes, 
 I am only using it on the backend, for example, in <strong>app/api/(homepage)/...</strong>
