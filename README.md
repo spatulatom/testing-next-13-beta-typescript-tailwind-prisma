@@ -82,8 +82,9 @@ For those reasons mentioned above (until Next.js team finds a better way to muta
 
 ## Backend
 - Next.js 13 beta introduces <a href='https://beta.nextjs.org/docs/routing/route-handlers'>Route Handlers </a>, they can only be used inside of the new app directory in <strong>app/api </strong>as a replacement for <a href='https://beta.nextjs.org/docs/data-fetching/api-routes'>API routes </a> only used in <strong>pages/api</strong>
-- <a href='https://next-auth.js.org/getting-started/example'>NextAuth.js doesn't yet support new app/api directory</a> so routes related to authentication will still have to be placed in pages/api
-- As for the rest of the API routes in this app I am using new approach placing the routes in the new app directory.
+- for most of the API routes in this app I am using new approach placing the routes in the new app directory in <strong>app/api </strong>
+- <a href='https://next-auth.js.org/getting-started/example'>but since NextAuth.js doesn't yet support new directory convention</a> all routes related to authentication will still have to be placed in <strong>pages/api</strong>
+
 - <a href='https://beta.nextjs.org/docs/routing/defining-routes#route-groups'>Route Groups</a> - new approach can be used for both front/backend routes, 
 I am only using it on the backend, for example, in <strong>app/api/(homepage)/...</strong>
 
