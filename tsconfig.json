@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -17,14 +21,24 @@
     "plugins": [
       {
         "name": "next"
-      },
-      
-      
+      }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": [
+        "./*"
+      ]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/api/deletepost/route.ts", "app/userposts/page.tsx"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "app/api/deletepost/route.ts",
+    "app/userposts/page.tsx",
+    "C:\\Users\\spatu\\Desktop\\projects\\testing-next-13-beta-typescript-tailwind-prisma\\.next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
