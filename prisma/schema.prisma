@@ -11,7 +11,8 @@ datasource db {
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
-// User get created by NextAuth
+// The properties of a model are called fields:
+// id,type, type modifier(?,[]), attrbutes
 model User {
   id            String    @id @default(cuid())
   name          String?
