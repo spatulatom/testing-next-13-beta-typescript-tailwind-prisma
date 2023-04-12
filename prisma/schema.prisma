@@ -12,7 +12,7 @@ datasource db {
 }
 
 // The properties of a model are called fields:
-// id,type, type modifier(?,[]), attrbutes
+// id,type, scalar valurs, type modifier(?,[]), attrbutes
 model User {
   id            String    @id @default(cuid())
   name          String?
