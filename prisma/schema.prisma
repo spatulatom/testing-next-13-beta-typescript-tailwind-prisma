@@ -11,7 +11,7 @@ datasource db {
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
-// The properties of a model are called fields:
+// The properties of a model are called fields
 // id,type, scalar valurs, type modifier(?,[]), attrbutes
 model User {
   id            String    @id @default(cuid())
