@@ -48,6 +48,9 @@ export default function AddComment({ id }: PostProps) {
       setIsDisabled(false);
     }
   };
+  // we can set title like this - not recommended - but only in clinet component
+  // we shloud never update out dom using pure javaScript 
+document.title = "JavaScript DOM Update"
 
   const submitPost = async (e: React.FormEvent) => {
     e.preventDefault();

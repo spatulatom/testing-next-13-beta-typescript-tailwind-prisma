@@ -44,7 +44,8 @@ const Home = async () => {
   if (!response) {
     notFound();
   }
-
+  // we can set title like this - not recommended - but only in clinet component
+  // document.title = "JavaScript DOM update"
   return (
     <div>
       <div className={styles.center}>
