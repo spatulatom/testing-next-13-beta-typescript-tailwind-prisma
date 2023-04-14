@@ -6,6 +6,7 @@ import AddPost from './AddPost';
 import { PostType } from '../types/Post';
 
 const inter = Inter({ subsets: ['latin'] });
+import { notFound } from 'next/navigation';
 
 
 // NOT making Prisma calls here what is possible since this is a server
@@ -32,6 +33,10 @@ bla = ['fasad'];
 const Home = async () => {
   // const response: PostType[] = await allPosts(); //you can also set return data type here
   const response= await allPosts();
+  if (!response) {
+    
+    notFound();
+  }
   return (
     <div>
       <div className={styles.center}>
