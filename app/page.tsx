@@ -8,14 +8,13 @@ import { PostType } from '../types/Post';
 const inter = Inter({ subsets: ['latin'] });
 import { notFound } from 'next/navigation';
 
-
 // NOT making Prisma calls here what is possible since this is a server
 // componet since we want to have more control over has this page is rendered
 //  - when Prisma call made here this page will be defult SSG.
 // FETCH from server components to our own backend requries full URL as oppose to partial
 // form client components for example in AddPost.tsx
 
-const allPosts = async ():Promise<PostType[]>=> {
+const allPosts = async (): Promise<PostType[]> => {
   const data = await fetch(process.env.URL + '/api/addpost', {
     cache: 'no-store',
   });
@@ -32,11 +31,15 @@ bla = ['fasad'];
 
 const Home = async () => {
   // const response: PostType[] = await allPosts(); //you can also set return data type here
-  const response= await allPosts();
+  const response = await allPosts();
+
+// when using state in client components we can do a check like this:
+// response <= 0 && some JSX, can we do that here as well? Tes, we could but we wil use
+// notFound instead
   if (!response) {
-    
     notFound();
   }
+
   return (
     <div>
       <div className={styles.center}>
@@ -54,9 +57,7 @@ const Home = async () => {
       </div>
 
       <AddPost />
-      <h2 className="ml-2">
-        All posts: {response.length}
-      </h2>
+      <h2 className="ml-2">All posts: {response.length}</h2>
       {response?.map((post) => (
         <Post
           key={post.id}

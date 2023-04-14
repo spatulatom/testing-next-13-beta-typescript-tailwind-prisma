@@ -24,8 +24,10 @@ export default function UserOwnPosts() {
   const response: UserPosts = data; 
   return (
     <div>
+     
       <h2 className="m-3">You have {response.posts.length} posts.</h2>
-      {response?.posts?.map((post) => (
+      {response.posts.length <= 0 && <h1 className="m-3">Go back to 'Chat Room' and create you first post!</h1>}
+      {response.posts.map((post) => (
         <>
         <DeletePost
           id={post.id}
