@@ -34,8 +34,10 @@ const Home = async () => {
   const response = await allPosts();
 
 // when using state in client components we can do a check like this:
-// response <= 0 && some JSX, can we do that here as well? Tes, we could but we wil use
+// response.length <= 0 && some JSX, can we do that here as well? Tes, we could but we wil use
 // notFound instead
+// side note: response.length && some JSX wont prevent rendering JSX when response = [] becuse
+// event though response.length of empty array in JSX is 0, that is still A VALID VALUE in JSX 
   if (!response) {
     notFound();
   }
