@@ -7,6 +7,7 @@ import { PostType } from '../types/Post';
 
 const inter = Inter({ subsets: ['latin'] });
 import { notFound } from 'next/navigation';
+import Counter from './Counter';
 
 // NOT making Prisma calls here what is possible since this is a server
 // componet since we want to have more control over has this page is rendered
@@ -26,6 +27,8 @@ const allPosts = async (): Promise<PostType[]> => {
   console.log('MESSAGE:', error);
   throw new Error(error.error);
 };
+// practicing ts syntax, what below equlas to string[]'
+// similarly Promise<Postype[]> equals to ...
 let bla: Array<string>;
 bla = ['fasad'];
 
@@ -59,7 +62,8 @@ const Home = async () => {
       </div>
 
       <AddPost />
-      <h2 className="ml-2">All posts: {response.length}</h2>
+      <Counter count={response} />
+ 
       {response?.map((post) => (
         <Post
           key={post.id}

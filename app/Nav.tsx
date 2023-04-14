@@ -35,6 +35,7 @@ export default async function Nav() {
             <i className="fa-brands fa-github fa-xl text-white transition-all hover:text-teal-600 "></i>
           </a>
         </li>
+     
         <span className="absolute right-2">
           {!data && <Login />}
           {data?.user && <Logged image={data.user.image || ''} />}
