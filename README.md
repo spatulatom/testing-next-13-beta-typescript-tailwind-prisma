@@ -37,6 +37,7 @@ This project explores many different features introduced by the Next.js team in
    
      
 The app has three main functionalities allowing users to:
+- login in with your Google account through NextAuth.js
 - CREATE a post, 
 - ADD a comment, 
 - DELETE a post (with comments).  
