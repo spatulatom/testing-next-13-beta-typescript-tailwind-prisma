@@ -29,10 +29,10 @@ This is a [Next.js 13 beta](https://beta.nextjs.org/docs/getting-started) projec
 <!-- ABOUT THE PROJECT -->
 
 ## About The Project
-I am trying in this project many different features introduced by the Next.js team, some of them are not recommended for production just yet as Next.js version 13 beta is still being developed and worked on. 
+This project explores many different features introduced by the Next.js team in 13.0 update, some of them are not recommended for production just yet as Next.js version 13 beta is still being developed and worked on. 
 </br>
  'Chat room' is a fullstack CRUD app, it consists of the frontend and the backend sections. Lines between frontend/backend in case of Next.js 13 beta are blurred with introduction of server components, yet files that are strictly 'backend'
-    can be found in pages/api and in app/api. As for the frontend I am using new app directory with new server components in it.
+    can be found in pages/api and in app/api. As for the frontend I am using the new app directory with new server components in it.
        <br />
    
      
@@ -60,7 +60,7 @@ Users can log into the app using their Google accounts (NextAuth.js)
 
 REVIEW: This app has many components thats use fetched data, some of those components only display that data, other components are mutating that data. There is no globally managed state that would hold that fetched data (like it usually happens in apps built with 'pure' React.js) instead each componets that uses the data fetches it directly from the databse or uses <a href='https://beta.nextjs.org/docs/data-fetching/caching'>default built in caching</a> and grabs the data from the cache. 
 </br> </br>
-The problem is that we DONT KNOW when Next.js should use catch storage for getting the data or when it should freshy fetch a data from database, as there is NO COMMUNICATION BETWEEN COMPONETS in the app on that matter. When one component mutates the data - let's say deletes an item, other componets DON NOT KNOW  about it, so when they are in use, they need to fetch fresh data from the database JUST IN CASE the data was possibly mutated somewhere in the app,  even though very often grabbing data from the cache storage would be completly sufficient.  
+The problem is that we DONT KNOW when Next.js should use catch storage for getting the data or when it should freshy fetch the data from the database, as there is NO COMMUNICATION BETWEEN COMPONETS in the app on that matter. When one component mutates the data - let's say deletes an item, other componets DON NOT KNOW  about it, so when they are in use, they need to fetch fresh data from the database JUST IN CASE the data was possibly mutated somewhere in the app,  even though very often grabbing data from the cache storage would be completly sufficient.  
 </br>
 For that reason we can not obviously use SSG (and fetch data only at a built time in this app), (we have to use SSR instead),  but more importantly we have to perform A LOT of data fetching. When we click links in navigation whenever those 'clicked' componets use data, they need to perform a fresh data fetch. By default in Next.js navigation is <a href='https://beta.nextjs.org/docs/data-fetching/caching'>soft </a>- it makes components use catching storage, so we need to modify it and make it a, so called, <a href='https://beta.nextjs.org/docs/routing/linking-and-navigating#hard-navigation'>hard navigation</a> to make sure data is grabbed not from the catche but fetched from database every time. That makes navigation between componets  that use fetched data obviously much slower.
 
