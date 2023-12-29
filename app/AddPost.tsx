@@ -54,9 +54,9 @@ export default function CreatePost() {
       <div className=" flex items-center justify-between gap-2">
         <p
           className={`font-bold text-sm ${
-            title.length > 30 ? 'text-red-700' : 'text-gray-700'
+            title.length > 50 ? 'text-red-700' : 'text-gray-700'
           } `}
-        >{`${title.length}/30`}</p>
+        >{`${title.length}/50`}</p>
         <button
           disabled={isDisabled}
           className="text-sm bg-teal-600 text-white py-2 px-6 rounded-xl disabled:opacity-25"

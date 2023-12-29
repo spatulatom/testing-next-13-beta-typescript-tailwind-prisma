@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  if (title?.length > 30) {
+  if (title?.length > 50) {
     return NextResponse.json(
       { error: 'Please write a shorter post.' },
       {
