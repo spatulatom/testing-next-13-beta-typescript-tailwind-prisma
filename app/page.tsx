@@ -1,11 +1,11 @@
 import Image from 'next/image';
-import { Inter, Moon_Dance } from 'next/font/google';
+// import { Inter, Moon_Dance } from 'next/font/google';
 import styles from './page.module.css';
 import Post from './Post';
 import AddPost from './AddPost';
 import { PostType } from '../types/Post';
 
-const inter = Inter({ subsets: ['latin'] });
+// const inter = Inter({ subsets: ['latin'] });
 import { notFound } from 'next/navigation';
 import Counter from './Counter';
 

@@ -2,6 +2,12 @@ import './globals.css'
 import AuthContext from './AuthContext'
 import Nav from './Nav'
 import QueryWrapper from './QueryWrapper';
+import { Inter, Moon_Dance } from 'next/font/google';
+const inter = Inter({ subsets: ['latin'] });
+// By adding Inter to the <body> element, the font will be applied 
+// throughout your application. Here, you're also adding the Tailwind 
+// antialiased class which smooths out the font. It's not 
+// necessary to use this class, but it adds a nice touch.
 
 export const metadata = {
   title: 'Create Next App',
@@ -16,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head />
-      <body className='md:w-3/5 md:m-auto m-4'>
+      <body className={`${inter.className} antialiased md:w-3/5 md:m-auto m-4`}>
       <AuthContext>
         <QueryWrapper>
        {/* @ts-expect-error Async Server Component */}    
