@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
     });
     if (!prismaUser) {
       return NextResponse.json(
-        { error: 'No such user, login with google to creare an account.' },
+        { error: 'No such user, login with Google to create an account.' },
         {
           status: 403,
         }
