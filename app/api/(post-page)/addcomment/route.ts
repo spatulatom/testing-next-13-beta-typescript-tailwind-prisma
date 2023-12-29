@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
   }
   if (!session) {
     return NextResponse.json(
-      { error: 'Please signin to post a comment.' },
+      { error: 'Please sign in to post a comment.' },
       {
         status: 403,
       }
