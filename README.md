@@ -15,6 +15,7 @@ This is a [Next.js 13 beta](https://beta.nextjs.org/docs/getting-started) projec
   <summary>Table of Contents</summary>
   <ol>
     <li><a href="#about-the-project">About The Project</a></li>
+      <li><a href="#sidenote">Sidenote</a></li>
     <li><a href="#mutating-data">Mutating Data with new Server Components</a></li>
     <li><a href="#backend">Backend an new Route Handlers</a></li>
        <li><a href="#error-handling-and-loading-ui">Error handling and Loading UI</a></li>
@@ -29,9 +30,12 @@ This is a [Next.js 13 beta](https://beta.nextjs.org/docs/getting-started) projec
 <!-- ABOUT THE PROJECT -->
 
 ## About The Project
-This project explores many different features introduced by the Next.js 13.0 Beta update, some of them features are not recommended for full scale production just yet, as Next.js version 13 Beta is still being developed and worked on.
+This project explores many different features introduced by the Next.js 13 Beta update, some of them features are not recommended for full scale production just yet, as this version of Next.js is still being developed and worked on.
+
+## SideNote:
+The project was built a few months ago, around the middle of 2023. Since then, the Beta version of Next has transitioned to full production, and numerous features tested in this app have been recognized and incorporated by Next.js. These improvements include enhancements to data mutation processes, among others. Notably, as of October 26th, Next.js 14 has been released.
 </br>
- 'Chat room' is a fullstack CRUD app, it consists of the frontend and the backend sections. Lines between frontend/backend in case of Next.js 13 beta are blurred with introduction of server components, yet files that are strictly 'backend'
+ I called it a 'Chat room', it isa  fullstack CRUD app, it consists of the frontend and the backend sections. Lines between frontend/backend in case of Next.js 13 Beta are blurred with introduction of server components, yet files that are strictly 'backend'
     can be found in pages/api and in app/api. As for the frontend I am using the new app directory with new server components in it.
        <br />
    
