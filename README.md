@@ -38,8 +38,7 @@ The project was built a few months ago, around the middle of 2023. Since then, t
 
 This project explores many different features introduced by the Next.js 13 Beta update, some of them features are not recommended for full scale production just yet, as this version of Next.js is still being developed and worked on.
 
-</br>
- I called it a 'Chat room', it is a fullstack CRUD app, it consists of the frontend and the backend sections. Lines between frontend/backend in case of Next.js 13 Beta are blurred with introduction of server components, yet files that are strictly 'backend'
+ 'Chat room' is a fullstack CRUD app, it consists of the frontend and the backend sections. Lines between frontend/backend in case of Next.js 13 Beta are blurred with introduction of server components, yet files that are strictly 'backend'
     can be found in pages/api and in app/api. As for the frontend I am using the new app directory with new server components in it.
        <br />
    
