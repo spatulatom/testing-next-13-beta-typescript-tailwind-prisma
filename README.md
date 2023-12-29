@@ -129,7 +129,8 @@ While implementing TypeScript into Next 13 beta I have been following these guid
 
 - <a href='https://beta.nextjs.org/docs/getting-started'>Next.js 13 beta</a>,
 - TypeScript,
-- Tailwind CSS for styling
+- Tailwind CSS - for majority of styling, 
+ CSS modules - fading background of Next.js 13 logo,
 - <a href='https://tanstack.com/query/v3/'>React Query</a>
 - <a href='https://react-hot-toast.com/'>React Hot Toast</a> for notifications,
 - NextAuth.js for users authentificaton,
