@@ -29,7 +29,7 @@ This is a [Next.js 13 beta](https://beta.nextjs.org/docs/getting-started) projec
 <!-- ABOUT THE PROJECT -->
 
 ## About The Project
-This project explores many different features introduced by the Next.js team in 13.0 update, some of them are not recommended for production just yet as Next.js version 13 beta is still being developed and worked on. 
+This project explores many different features introduced by the Next.js 13.0 Beta update, some of them features are not recommended for full scale production just yet, as Next.js version 13 Beta is still being developed and worked on.
 </br>
  'Chat room' is a fullstack CRUD app, it consists of the frontend and the backend sections. Lines between frontend/backend in case of Next.js 13 beta are blurred with introduction of server components, yet files that are strictly 'backend'
     can be found in pages/api and in app/api. As for the frontend I am using the new app directory with new server components in it.
@@ -37,11 +37,10 @@ This project explores many different features introduced by the Next.js team in
    
      
 The app has three main functionalities allowing users to:
-- login in with your Google account through NextAuth.js
+- login in with your Google account through NextAuth.js,
 - CREATE a post, 
-- ADD a comment, 
+- CREATE a comment, 
 - DELETE a post (with comments).  
-Users can log into the app using their Google accounts (NextAuth.js)
 
 ![Product Name Screen Shot](public/next13beta.png)
 
