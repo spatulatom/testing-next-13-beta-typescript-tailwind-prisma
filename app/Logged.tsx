@@ -23,7 +23,7 @@ export default function Logged({ image }: User) {
           height={64}
           className="w-14 rounded-full"
           src={image}
-          alt=""
+          alt="Google Aviator image"
           priority
         />
       </Link>
