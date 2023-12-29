@@ -1,5 +1,4 @@
-This is a [Next.js 13 beta](https://beta.nextjs.org/docs/getting-started) project bootstrapped with [`npx create-next-app@latest`](https://beta.nextjs.org/docs/installation). The app is called 'Chat room'.
-
+This is a Next.js 13 Beta project integrated with TypeScript, and the application is named 'Chat Room'.
 <a name="readme-top"></a>
 
 <div align="left">
