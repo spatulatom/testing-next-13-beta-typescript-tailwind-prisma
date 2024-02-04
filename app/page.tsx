@@ -76,7 +76,7 @@ const Home = async () => {
       </div>
     );
   } finally {
-    await prisma.$disconnect();
+    // await prisma.$disconnect();
   }
 };
 
