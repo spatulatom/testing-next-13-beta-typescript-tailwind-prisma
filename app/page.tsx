@@ -24,7 +24,7 @@ const Home = async () => {
       },
     });
 
-    console.log('foundddddd', data);
+    // console.log('foundddddd', data);
 
     if (!data || data.length === 0) {
       notFound();
