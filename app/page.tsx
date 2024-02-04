@@ -42,7 +42,13 @@ const Home = async () => {
             priority
           />
           <div className={styles.thirteen}>
-            <Image src="/thirteen.svg" alt="13" width={40} height={31} priority />
+            <Image
+              src="/thirteen.svg"
+              alt="13"
+              width={40}
+              height={31}
+              priority
+            />
           </div>
         </div>
 
