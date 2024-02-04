@@ -29,7 +29,7 @@ export default function Post({
   avatar,
   postTitle,
   comments,
-}: PostProps) {
+}: any) {
 
   console.log('POSTTTTTTTT')
   return (

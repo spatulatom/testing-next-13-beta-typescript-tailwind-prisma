@@ -6,7 +6,7 @@ type count = {
   count: PostType[];
 };
 
-const Counter = ({ count }: count) => {
+const Counter = ({ count }: any) => {
   return <h2 className="ml-2">All posts: {count.length}</h2>;
 }
 
