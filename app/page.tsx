@@ -18,26 +18,37 @@ import Counter from './Counter';
 // form client components for example in AddPost.tsx
 
 const allPosts = async (): Promise<PostType[]> => {
-  const data = await fetch(process.env.URL + '/api/addpost', {
-    cache: 'no-store',
-  });
-  if (data.ok) {
-    const res = await data.json();
-    return res.data;
+  try {
+    const data = await fetch(process.env.NEXT_PUBLIC_URL + '/api/addpost', {
+      cache: 'no-store',
+    });
+    if (data.ok) {
+      const res = await data.json();
+      console.log('DATTTTAAA', res)
+      return res.data;
+     
+    }
+    console.log('DATTTTAAA', data)
+    const error = await data.json();
+    throw new Error(error.error);
+  } catch (error) {
+    console.error('ERRRRRROR fetching posts:', error);
+    throw error; // re-throw the error if you want it to propagate
   }
-  const error = await data.json();
-  console.log('MESSAGE:', error);
-  throw new Error(error.error);
 };
+
+
 // practicing ts syntax, what below equlas to string[]'
 // similarly Promise<Postype[]> equals to ...
 let bla: Array<string>;
 bla = ['fasad'];
 
 const Home = async () => {
+  console.log('HERRRRRRRRRRRRRR not LOGGED')
   // const response: PostType[] = await allPosts(); //you can also
   // set return data type here
   const response = await allPosts();
+  console.log('foundddddd', response)
 
   // when using state in client components we can do a check like this:
   // response.length <= 0 && some JSX, can we do that here as well?
@@ -48,6 +59,7 @@ const Home = async () => {
   // event though response.length of empty array in JSX is 0, that
   // is still A VALID VALUE in JSX
   if (!response) {
+    // console.log('not foundddddd')
     notFound();
   }
   // we can set title like this - not recommended -
@@ -55,7 +67,7 @@ const Home = async () => {
   // document.title = "JavaScript DOM update"
   return (
     <div>
-      <div className={styles.center}>
+      {/* <div className={styles.center}>
         <Image
           className={styles.logo}
           src="/next.svg"
@@ -70,7 +82,7 @@ const Home = async () => {
       </div>
 
       <AddPost />
-      <Counter count={response} />
+      <Counter count={response} /> */}
 
       {response?.map((post) => (
         <Post
@@ -82,6 +94,7 @@ const Home = async () => {
           comments={post.comments}
         />
       ))}
+      <h2>kjhlkjhlhljh;lhlk</h2>
     </div>
   );
 };

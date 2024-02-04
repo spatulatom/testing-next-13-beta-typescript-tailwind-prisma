@@ -30,6 +30,8 @@ export default function Post({
   postTitle,
   comments,
 }: PostProps) {
+
+  console.log('POSTTTTTTTT')
   return (
     <motion.div
       animate={{ opacity: 1, scale: 1 }}

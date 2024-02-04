@@ -15,8 +15,34 @@ import { getServerSession } from 'next-auth/next';
 // get reneder as static page - but it need the id of the post ) and 
 // therefore dosent refetch any fresh data.
 
+// export async function GET() {
+//   try {
+//     console.log('ALL POSTS');
+
+//     const data = await prisma.post.findMany({
+//       include: {
+//         user: true,
+//         comments: true,
+//         hearts: true,
+//       },
+//       orderBy: {
+//         createdAt: 'desc',
+//       },
+//     });
+
+//     return NextResponse.json({ data });
+//   } catch (error) {
+//     console.error('Error fetching posts:', error);
+//     return NextResponse.json({ error: 'Error fetching posts' });
+//   }
+// }
+
+
+
+
+
 export async function GET() {
-  console.log('ALL POSTS');
+  console.log('ALL POSTS seecondddddd');
 
   const data = await prisma.post.findMany({
     include: {

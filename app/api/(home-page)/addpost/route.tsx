@@ -18,13 +18,16 @@ export async function GET() {
         createdAt: 'desc',
       },
     });
+    console.log('ALL POST PRISMA,')
     return NextResponse.json(
       { data },
       {
         status: 200,
       }
     );
-  } catch (err) {}
+  } catch (err) {
+    console.log('ALL POST PRISMA ERROR,', err)
+  }
 
   return NextResponse.json(
     { error: 'An error has occured while getting your posts!' },
