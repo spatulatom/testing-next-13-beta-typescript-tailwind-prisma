@@ -65,14 +65,15 @@ const Home = async () => {
             comments={post.comments}
           />
         ))}
-        <h2>kjhlkjhlhljh;lhlk</h2>
+      
       </div>
     );
   } catch (error) {
     console.error('Error fetching posts:', error);
     return (
       <div>
-        <h2>Error fetching posts</h2>
+         <AddPost />
+      
       </div>
     );
   } finally {
