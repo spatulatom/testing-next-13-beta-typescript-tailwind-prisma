@@ -92,7 +92,7 @@ For those reasons mentioned above (until Next.js team finds a better way to muta
 - <a href='https://beta.nextjs.org/docs/routing/defining-routes#route-groups'>Route Groups</a> - new approach can be used for both front/backend routes,
   I am only using it on the backend, for example, in <strong>app/api/(homepage)/...</strong>
 
-- <a href='https://www.prisma.io/'>Prisma</a> is used for data modeling and data is stored as PostgreSQL in Supabase. The connection to Supabase is through Supavisor, a scalable, cloud-native Postgres connection pooler developed by Supabase (only available since January 2024 - before the connection was through PGBouncer, which together with IPv4 protocols connections got deprecated on Supabase as of the end of Jan 2024)
+- <a href='https://www.prisma.io/'>Prisma</a> is used for data modeling and data is stored as PostgreSQL on <a href='https://supabase.com/'>Supabase</a>. The connection to Supabase is through Supavisor, a scalable, cloud-native Postgres connection pooler developed by Supabase (only available since January 2024 - before the connection was through PGBouncer, which together with IPv4 protocols connections got deprecated on Supabase as of the end of Jan 2024)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
