@@ -32,7 +32,7 @@ This is a Next.js 13 Beta project integrated with TypeScript, and the applicatio
 
 ## Next 13 Beta and later versions:
 
-The project was built a few months ago, around the middle of 2023. Since then, the Beta version of Next has transitioned to full production, and numerous features tested in this app have been recognized and incorporated by Next.js. These improvements include enhancements to data mutation processes, among others. Notably, as of October 26th, Next.js 14 has been released.
+The project was built a few months ago, around the middle of 2023. Since then, the Beta version of Next.js 13 has transitioned to full production, and numerous features tested in this app have been recognized and incorporated by Next.js. These improvements include enhancements to data mutation processes, among others. Notably, as of October 26th, Next.js 14 has been released.
 
 ## About The Project
 
