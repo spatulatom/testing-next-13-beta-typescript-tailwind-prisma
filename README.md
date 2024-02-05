@@ -19,7 +19,7 @@ This is a Next.js 13 Beta project integrated with TypeScript, and the applicatio
     <li><a href="#mutating-data">Mutating Data with new Server Components</a></li>
     <li><a href="#backend">Backend an new Route Handlers</a></li>
        <li><a href="#error-handling-and-loading-ui">Error handling and Loading UI</a></li>
-         <li><a href="#authentication">Authentication with NextAuth</a></li>
+         <li><a href="#authentication">Authentication with NextAuth.js</a></li>
      <li><a href="#new-features">Other new features used in the app</a></li>
       <li><a href="#typescript">TypeScript</a></li>
     <li><a href="#built-with">Built With</a></li>
@@ -117,6 +117,8 @@ For error handling in server components I have implemented:
   supporetd in Next.js that was using the app directory, and for that only reason in this app I also use pages folder (that up until
   now was the main folder for component composition and routing). Therfore this app is a hybrid between two was of files structuring
   in Next.js: uses experimenatl app direcory for everything else, and pages directory for authentication.
+
+  <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## New Features
 
