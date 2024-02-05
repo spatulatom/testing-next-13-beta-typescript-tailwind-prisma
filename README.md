@@ -114,9 +114,9 @@ For error handling in server components I have implemented:
 ## Authentication
 
 - NextAuth.js is used for user authenication through their Google accounts. At the point the app was being built NextAuth.js was not
-  supporetd in Next.js that was using the new App directory, and for that only reason in this app I also use pages folder (that up until
+  supporetd in Next.js 13 Beta that is using the new App directory, and for that only reason in this app I also use pages folder (that up until
   now was the main folder for component composition and routing). Therfore this app is a hybrid between two ways of files structuring
-  in Next.js: uses experimenatl App directory for everything else, and pages directory for authentication.
+  in Next.js: uses experimenatl App directory for everything else, and all routes related to authentication are still being placed in <strong>pages/api folder</strong>
 
   <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
