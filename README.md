@@ -36,10 +36,9 @@ The project was built a few months ago, around the middle of 2023. Since then, t
 
 ## About The Project
 
-This project explores many different features introduced by the Next.js 13 Beta update, some of them features were not recommended for full scale production just yet (when the app was built in 2023), as this version of Next.js is still being developed and worked on.
+This project explores many different features introduced by the Next.js 13 Beta update. Some of these features were not recommended for full-scale production just yet (when the app was built in 2023), as this version of Next.js is still being developed and worked on.
 
-'Chat room' is a fullstack CRUD app, it consists of the frontend and the backend sections. Lines between frontend/backend in case of Next.js 13 Beta are blurred with introduction of server components, yet files that are strictly 'backend'
-can be found in pages/api and in app/api. As for the frontend I am using the new app directory with new server components in it.
+'Chat room' is a fullstack CRUD app, consisting of the frontend and the backend sections. Lines between frontend/backend in the case of Next.js 13 Beta are blurred with the introduction of server components, yet files that are strictly 'backend' can be found in pages/api and in app/api. As for the frontend, I am using the new app directory with new server components in it.
 <br />
 
 The app has three main functionalities allowing users to:
@@ -93,8 +92,7 @@ For those reasons mentioned above (until Next.js team finds a better way to muta
 - <a href='https://beta.nextjs.org/docs/routing/defining-routes#route-groups'>Route Groups</a> - new approach can be used for both front/backend routes,
   I am only using it on the backend, for example, in <strong>app/api/(homepage)/...</strong>
 
-- Prisma is used for data modeling and data is stored as PostgreeSQL in supabase, the connection to supabase is
-  through Supavisor, a scalable, cloud-native Postgres connection pooler developed by Supabase (only avaliable since January 2024 - before the connection was through PGBouncer, which together with IPv4 protocols connections got deprecated on supabase as of end of Jan 2024)
+- Prisma is used for data modeling and data is stored as PostgreSQL in Supabase. The connection to Supabase is through Supavisor, a scalable, cloud-native Postgres connection pooler developed by Supabase (only available since January 2024 - before the connection was through PGBouncer, which together with IPv4 protocols connections got deprecated on Supabase as of the end of Jan 2024)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -112,10 +110,10 @@ For error handling in server components I have implemented:
 
 ## Authentication
 
-- NextAuth.js is used for user authenication through their Google accounts. At the point the app was being built NextAuth.js was not
-  supporetd in Next.js 13 Beta that is using the new App directory, and for that only reason in this app I also use pages folder (that up until
-  now was the main folder for component composition and routing). Therfore this app is a hybrid between two ways of files structuring
-  in Next.js: uses experimenatl App directory for everything else, and all routes related to authentication are still being placed in <strong>pages/api folder</strong>
+- NextAuth.js is used for user authentication through their Google accounts. At the point the app was being built, NextAuth.js was not
+supported in Next.js 13 Beta that is using the new App directory, and for that only reason in this app I also use the pages folder (that up until
+now was the main folder for component composition and routing). Therefore this app is a hybrid between two ways of files structuring
+in Next.js: uses experimental App directory for everything else, and all routes related to authentication are still being placed in <strong>pages/api folder</strong>
 
   <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
