@@ -14,7 +14,7 @@ This is a Next.js 13 Beta project integrated with TypeScript, and the applicatio
 <details>
   <summary>Table of Contents</summary>
   <ol>
-  <li><a href="#next.js-13-beta-and-later-versions">Next.js 13 Beta and later versions</a></li>
+  <li><a href="#next-13-beta-and-later-versions">Next.js 13 Beta and later versions</a></li>
     <li><a href="#about-the-project">About The Project</a></li>
     <li><a href="#mutating-data">Mutating Data with new Server Components</a></li>
     <li><a href="#backend">Backend an new Route Handlers</a></li>
@@ -30,7 +30,7 @@ This is a Next.js 13 Beta project integrated with TypeScript, and the applicatio
 
 <!-- ABOUT THE PROJECT -->
 
-## Next.js 13 Beta and later versions:
+## Next 13 Beta and later versions:
 
 The project was built a few months ago, around the middle of 2023. Since then, the Beta version of Next has transitioned to full production, and numerous features tested in this app have been recognized and incorporated by Next.js. These improvements include enhancements to data mutation processes, among others. Notably, as of October 26th, Next.js 14 has been released.
 
