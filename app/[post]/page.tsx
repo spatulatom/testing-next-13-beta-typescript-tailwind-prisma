@@ -14,7 +14,7 @@ type URL = {
 type Post = { data: PostType };
 
 const fetchDetails = async (id: string) => {
-  const data = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/${id}`, {
+  const data = await fetch(`${process.env.NEXT_URL}/api/${id}`, {
     cache: 'no-store',
   });
   const response = await data.json();
