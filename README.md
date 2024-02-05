@@ -95,7 +95,7 @@ For those reasons mentioned above (until Next.js team finds a better way to muta
   I am only using it on the backend, for example, in <strong>app/api/(homepage)/...</strong>
 
 - Prisma is used for data modeling and data is stored as PostgreeSQL in supabase, the connection to supabase is
-  through Supavisor, a scalable, cloud-native Postgres connection pooler developed by Supabase (only avaliable since January 2024 - before the connection was through PGBouncer, which together with IPv4 protocols as of end of Jan 2024, got deprecated on supabase)
+  through Supavisor, a scalable, cloud-native Postgres connection pooler developed by Supabase (only avaliable since January 2024 - before the connection was through PGBouncer, which together with IPv4 protocols connections  got deprecated on supabase as of end of Jan 2024)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -113,10 +113,10 @@ For error handling in server components I have implemented:
 
 ## Authentication
 
-- NextAuth.js is used for user authenication through their Google accounts. At the p0int the app was built NextAuth was not
-  supporetd in Next.js that was using the app directory, and for that only reason in this app I also use pages folder (that up until
-  now was the main folder for component composition and routing). Therfore this app is a hybrid between two was of files structuring
-  in Next.js: uses experimenatl app direcory for everything else, and pages directory for authentication.
+- NextAuth.js is used for user authenication through their Google accounts. At the point the app was being built NextAuth.js was not
+  supporetd in Next.js that was using the new App directory, and for that only reason in this app I also use pages folder (that up until
+  now was the main folder for component composition and routing). Therfore this app is a hybrid between two ways of files structuring
+  in Next.js: uses experimenatl App directory for everything else, and pages directory for authentication.
 
   <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
