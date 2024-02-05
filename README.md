@@ -14,7 +14,7 @@ This is a Next.js 13 Beta project integrated with TypeScript, and the applicatio
 <details>
   <summary>Table of Contents</summary>
   <ol>
-  <li><a href="#next.js-beta-and-later-versions">Next.js 13 Beta and later versions</a></li>
+  <li><a href="#next.js-13-beta-and-later-versions">Next.js 13 Beta and later versions</a></li>
     <li><a href="#about-the-project">About The Project</a></li>
     <li><a href="#mutating-data">Mutating Data with new Server Components</a></li>
     <li><a href="#backend">Backend an new Route Handlers</a></li>
