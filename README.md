@@ -19,6 +19,7 @@ This is a Next.js 13 Beta project integrated with TypeScript, and the applicatio
     <li><a href="#mutating-data">Mutating Data with new Server Components</a></li>
     <li><a href="#backend">Backend an new Route Handlers</a></li>
        <li><a href="#error-handling-and-loading-ui">Error handling and Loading UI</a></li>
+         <li><a href="#authentication">Authentication with NextAuth</a></li>
      <li><a href="#new-features">Other new features used in the app</a></li>
       <li><a href="#typescript">TypeScript</a></li>
     <li><a href="#built-with">Built With</a></li>
@@ -35,17 +36,17 @@ The project was built a few months ago, around the middle of 2023. Since then, t
 
 ## About The Project
 
-This project explores many different features introduced by the Next.js 13 Beta update, some of them features are not recommended for full scale production just yet, as this version of Next.js is still being developed and worked on.
+This project explores many different features introduced by the Next.js 13 Beta update, some of them features were not recommended for full scale production just yet (when the app was built in 2023), as this version of Next.js is still being developed and worked on.
 
- 'Chat room' is a fullstack CRUD app, it consists of the frontend and the backend sections. Lines between frontend/backend in case of Next.js 13 Beta are blurred with introduction of server components, yet files that are strictly 'backend'
-    can be found in pages/api and in app/api. As for the frontend I am using the new app directory with new server components in it.
-       <br />
-   
-     
+'Chat room' is a fullstack CRUD app, it consists of the frontend and the backend sections. Lines between frontend/backend in case of Next.js 13 Beta are blurred with introduction of server components, yet files that are strictly 'backend'
+can be found in pages/api and in app/api. As for the frontend I am using the new app directory with new server components in it.
+<br />
+
 The app has three main functionalities allowing users to:
+
 - login in with your Google account through NextAuth.js,
-- CREATE a post, 
-- CREATE a comment, 
+- CREATE a post,
+- CREATE a comment,
 - DELETE a post (with comments).
 
 ![Product Name Screen Shot](public/next13beta.png)
@@ -59,16 +60,16 @@ The aproach nr 1 described below is <a href='https://beta.nextjs.org/docs/data-f
 
 1. CREATING a post && ADDING a comment are built with a combination of
 
-- <a href = 'https://beta.nextjs.org/docs/rendering/server-and-client-components'>new server components</a> and client components
+- <a href = 'https://beta.nextjs.org/docs/rendering/server-and-client-components'>SERVER components</a>
 - <a href='https://beta.nextjs.org/docs/data-fetching/fetching#asyncawait-in-server-components'>async/await sytnax wrapping those server componets </a> (new approach not allowed in previous versions of Next.js or in React.js),
 - <a href ='https://beta.nextjs.org/docs/data-fetching/fetching'> new fetch() API</a> in those server components that allows configuration for SSG (static site generation) and SSR (server side rendering) - NO NEED for extra functions like getStaticProps or getServerSideProps,
 - <a href='https://beta.nextjs.org/docs/data-fetching/mutating'>new useRouter Hook </a> imported from next/navigation (not form next/router like up until now) and a new router.refresh() method on it.
 
 REVIEW: This app has many components thats use fetched data, some of those components only display that data, other components are mutating that data. There is no globally managed state that would hold that fetched data (like it usually happens in apps built with 'pure' React.js) instead each componets that uses the data fetches it directly from the databse or uses <a href='https://beta.nextjs.org/docs/data-fetching/caching'>default built in caching</a> and grabs the data from the cache.
 </br> </br>
-The problem is that we DONT KNOW when Next.js should use catch storage for getting the data or when it should freshy fetch the data from the database, as there is NO COMMUNICATION BETWEEN COMPONETS in the app on that matter. When one component mutates the data - let's say deletes an item, other componets DON NOT KNOW about it, so when they are in use, they need to fetch fresh data from the database JUST IN CASE the data was possibly mutated somewhere in the app, even though very often grabbing data from the cache storage would be completly sufficient.  
+The problem is that we DONT KNOW when Next.js should use catch storage for getting the data or when it should freshy fetch the data from the database, as there is NO COMMUNICATION BETWEEN SERVER COMPONETS in the app on that matter. When one component mutates the data - let's say deletes an item, other componets DOES NOT KNOW about it, so when those other components are renderede, they need to fetch fresh data from the database JUST IN CASE the data was possibly mutated somewhere in the app, even though very often grabbing data from the cache storage would be completly sufficient.  
 </br>
-For that reason we can not obviously use SSG (and fetch data only at a built time in this app), (we have to use SSR instead), but more importantly we have to perform A LOT of data fetching. When we click links in navigation whenever those 'clicked' componets use data, they need to perform a fresh data fetch. By default in Next.js navigation is <a href='https://beta.nextjs.org/docs/data-fetching/caching'>soft </a>- it makes components use catching storage, so we need to modify it and make it a, so called, <a href='https://beta.nextjs.org/docs/routing/linking-and-navigating#hard-navigation'>hard navigation</a> to make sure data is grabbed not from the catche but fetched from database every time. That makes navigation between componets that use fetched data obviously much slower.
+For that reason we can not obviously use SSG (and fetch data only at a built time in this app), (we have to use SSR instead), but more importantly we have to perform A LOT of data fetching. When we click links in navigation whenever those 'clicked' componets use data, they need to perform a fresh data fetch. By default in Next.js navigation is <a href='https://beta.nextjs.org/docs/data-fetching/caching'>soft </a>- it makes components use catching storage, so we need to modify it and make it a, so called, <a href='https://beta.nextjs.org/docs/routing/linking-and-navigating#hard-navigation'>hard navigation</a> to make sure data is grabbed not from the catche but fetched from database every time (this is where the useRouter refresh() method comes into play). That makes navigation between componets that use fetched data obviously much slower but ensures that every navigated page-to has a freshly feteched data.
 
 2. DELETING  a post (with comments) is built for contrast with
 
@@ -93,6 +94,9 @@ For those reasons mentioned above (until Next.js team finds a better way to muta
 - <a href='https://beta.nextjs.org/docs/routing/defining-routes#route-groups'>Route Groups</a> - new approach can be used for both front/backend routes,
   I am only using it on the backend, for example, in <strong>app/api/(homepage)/...</strong>
 
+- Prisma is used for data modeling and data is stored as PostgreeSQL in supabase, the connection to supabase is
+  through Supavisor, a scalable, cloud-native Postgres connection pooler developed by Supabase (only avaliable since January 2024 - before the connection was through PGBouncer, which together with IPv4 protocols as of end of Jan 2024, got deprecated on supabase)
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Error Handling and Loading UI
@@ -106,6 +110,13 @@ For error handling in server components I have implemented:
 - <a href='https://react-hot-toast.com/'>React Hot Toast</a>)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Authentication
+
+- NextAuth.js is used for user authenication through their Google accounts. At the p0int the app was built NextAuth was not
+  supporetd in Next.js that was using the app directory, and for that only reason in this app I also use pages folder (that up until
+  now was the main folder for component composition and routing). Therfore this app is a hybrid between two was of files structuring
+  in Next.js: uses experimenatl app direcory for everything else, and pages directory for authentication.
 
 ## New Features
 
