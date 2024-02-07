@@ -38,7 +38,7 @@ export default async function PostDetail(url: URL) {
         name={response?.user.name}
         avatar={response?.user.image}
         postTitle={response?.title}
-        comments={response?.comments}
+        comments={response?.comments.length}
       />
       <AddComment id={response?.id} />
       <h2>Comments:</h2>

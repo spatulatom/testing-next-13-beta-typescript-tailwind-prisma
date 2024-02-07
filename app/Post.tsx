@@ -5,22 +5,10 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 interface PostProps {
   id: string;
-  name: string;
-  avatar: string;
+  name: string | null;
+  avatar: string | null;
   postTitle: string;
-  comments: {
-    createdAt?: string;
-    id: string;
-    postId: string;
-    title: string;
-    userId: string;
-    user: {
-      email: string;
-      id: string;
-      image: string;
-      name: string;
-    };
-  }[];
+  comments: number;
 }
 
 export default function Post({
@@ -29,9 +17,23 @@ export default function Post({
   avatar,
   postTitle,
   comments,
-}: any) {
+}: PostProps) {
+  let whenNull;
+  if (avatar === null) {
+    whenNull = '';
+  } else {
+    whenNull = (
+      <Image
+        className="rounded-full"
+        width={32}
+        height={32}
+        src={avatar}
+        alt="avatar"
+      />
+    );
+  }
 
-  console.log('POSTTTTTTTT')
+  // console.log('POSTTTTTTTT');
   return (
     <motion.div
       animate={{ opacity: 1, scale: 1 }}
@@ -45,13 +47,8 @@ export default function Post({
         }}
       >
         <div className="flex items-center gap-2">
-          <Image
-            className="rounded-full"
-            width={32}
-            height={32}
-            src={avatar}
-            alt="avatar"
-          />
+          {whenNull}
+
           <h3 className="font-bold text-gray-700">{name}</h3>
         </div>
         <div className="my-8 ">
@@ -59,7 +56,7 @@ export default function Post({
         </div>
         <div className="flex gap-4 cursor-pointer items-center">
           <p className=" text-sm font-bold text-gray-700">
-            {comments?.length} Comments
+            {comments} Comments
           </p>
         </div>
       </Link>

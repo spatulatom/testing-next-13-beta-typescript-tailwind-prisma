@@ -29,6 +29,7 @@ const Home = async () => {
     if (!data || data.length === 0) {
       notFound();
     }
+    // console.log('DATAAAAAA', data)
 
     return (
       <div>
@@ -53,7 +54,7 @@ const Home = async () => {
         </div>
 
         <AddPost />
-        <Counter count={data} />
+        <Counter count={data.length} />
 
         {data.map((post) => (
           <Post
@@ -62,7 +63,7 @@ const Home = async () => {
             name={post.user.name}
             avatar={post.user.image}
             postTitle={post.title}
-            comments={post.comments}
+            comments={post.comments.length}
           />
         ))}
       
