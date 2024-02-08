@@ -7,6 +7,11 @@ import Link from 'next/link';
 // import { useRouter } from 'next/navigation';
 // import { useSession } from 'next-auth/react';
 import HomeButtonMenu from './HomeButtonMenu';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTwitter, faFontAwesome } from '@fortawesome/free-brands-svg-icons';
+
+import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 export default async function Nav() {
   const data = await getServerSession(authOptions);
@@ -22,7 +27,7 @@ export default async function Nav() {
           <li>
             <Link href={'/userposts'}>
               <h2 className="hover:text-teal-600 transition-all md:text-lg">
-                Your Posts
+                User's Posts
               </h2>
             </Link>
           </li>
@@ -32,7 +37,7 @@ export default async function Nav() {
             href="https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma#readme"
             target="_blank"
           >
-            <i className="fa-brands fa-github fa-xl text-white transition-all hover:text-teal-600 "></i>
+          <FontAwesomeIcon icon={faGithub} style={{ fontSize: '25px', color: 'white', width: '25px' }} />
           </a>
         </li>
 
