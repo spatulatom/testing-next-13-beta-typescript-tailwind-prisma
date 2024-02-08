@@ -11,7 +11,7 @@ type URL = {
   };
   // searchParams: string
 };
-type Post = { data: PostType };
+// type Post = { data: PostType };
 
 const fetchDetails = async (id: string) => {
   const data = await fetch(`${process.env.NEXT_URL}/api/${id}`, {
@@ -26,7 +26,7 @@ const fetchDetails = async (id: string) => {
 
 // URL below equals to router().query.parans
 export default async function PostDetail(url: URL) {
-  const response: PostType = await fetchDetails(url.params.post);
+  const response: PostType= await fetchDetails(url.params.post);
   if (!response) {
     // for http.../random number - we can use:
     notFound();
@@ -34,6 +34,7 @@ export default async function PostDetail(url: URL) {
   return (
     <div>
       <Post
+      date= {response.createdAt}
         id={response?.id}
         name={response?.user.name}
         avatar={response?.user.image}
@@ -42,7 +43,7 @@ export default async function PostDetail(url: URL) {
       />
       <AddComment id={response?.id} />
       <h2>Comments:</h2>
-      {response?.comments?.map((comment) => (
+      {response.comments?.map((comment) => (
         <div className='bg-gray-300 rounded-md text-black p-2 mt-2'>
           <div className="flex items-center gap-2">
             <Image
@@ -52,8 +53,8 @@ export default async function PostDetail(url: URL) {
               alt="avatar"
               className="rounded-full"
             />
-            <h3 className="font-bold">{comment?.user?.name}</h3>
-            <h2 className="text-sm">{comment.createdAt}</h2>
+            <h3 className="font-bold">{comment?.user?.name},</h3>
+            {/* <h2 className="text-sm">commented at {comment.createdAt?.substring(11, 19)}, {comment.createdAt?.substring(0,10)}</h2> */}
           </div>
           <div className='italic'> - {comment.title}</div>
         </div>

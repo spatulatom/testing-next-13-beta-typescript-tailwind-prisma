@@ -60,6 +60,7 @@ const Home = async () => {
           <Post
             key={post.id}
             id={post.id}
+            date={post.createdAt}
             name={post.user.name}
             avatar={post.user.image}
             postTitle={post.title}

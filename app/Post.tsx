@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 interface PostProps {
   id: string;
+  date: Date;
   name: string | null;
   avatar: string | null;
   postTitle: string;
@@ -13,6 +14,7 @@ interface PostProps {
 
 export default function Post({
   id,
+  date,
   name,
   avatar,
   postTitle,
@@ -32,8 +34,15 @@ export default function Post({
       />
     );
   }
+  const d = new Date(date).toLocaleString().toString()
 
-  // console.log('POSTTTTTTTT');
+  console.log(
+    'POSTTTTTTTT',
+    date,
+    typeof date,
+    date instanceof Date,
+    // d.toLocaleString()
+  );
   return (
     <motion.div
       animate={{ opacity: 1, scale: 1 }}
@@ -48,15 +57,18 @@ export default function Post({
       >
         <div className="flex items-center gap-2">
           {whenNull}
-
-          <h3 className="font-bold text-gray-700">{name}</h3>
+          <div className=''>
+            {' '}
+            <h3 className="font-bold text-gray-700">{name}</h3>
+            <h4 className="text-gray-600 text-sm">posted on: {d}</h4>
+          </div>
         </div>
-        <div className="my-8 ">
-          <p className="break-all text-black">{postTitle}</p>
+        <div className="py-6 my-2 bg-teal-600 rounded-lg">
+          <p className="break-all text-white px-4">{postTitle}</p>
         </div>
         <div className="flex gap-4 cursor-pointer items-center">
-          <p className=" text-sm font-bold text-gray-700">
-            {comments} Comments
+          <p className=" text-sm text-gray-700">
+            Comments: {comments}
           </p>
         </div>
       </Link>

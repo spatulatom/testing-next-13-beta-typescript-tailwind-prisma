@@ -1,7 +1,7 @@
 export type PostType = {
   id: string
   title: string
-  createdAt: string
+  createdAt: Date
   updatedAt?: string
   published: Boolean
   userId: string
@@ -12,7 +12,7 @@ export type PostType = {
     name: string
   }
   comments: {
-    createdAt?: string
+    createdAt?: Date
     id: string
     postId: string
     title: string
