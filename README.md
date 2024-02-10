@@ -1,4 +1,4 @@
-This is a Next.js 13 Beta project integrated with TypeScript, and the application is named 'Chat Room'.
+This is a Next.js 13 Beta project integrated with TypeScript, styled with combination of <a href='https://tailwindcss.com/'>Tailwind CSS</a> and CSS modules. The application is named 'Chat Room'.
 <a name="readme-top"></a>
 
 <div align="left">
