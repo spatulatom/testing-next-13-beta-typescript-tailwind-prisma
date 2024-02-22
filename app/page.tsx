@@ -10,8 +10,6 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 const Home = async () => {
-  console.log('HERRRRRRRRRRRRRR not LOGGED');
-
   try {
     const data = await prisma.post.findMany({
       include: {
@@ -24,12 +22,9 @@ const Home = async () => {
       },
     });
 
-    // console.log('foundddddd', data);
-
     if (!data || data.length === 0) {
       notFound();
     }
-    // console.log('DATAAAAAA', data)
 
     return (
       <div>
@@ -67,15 +62,13 @@ const Home = async () => {
             comments={post.comments.length}
           />
         ))}
-      
       </div>
     );
   } catch (error) {
     console.error('Error fetching posts:', error);
     return (
       <div>
-         <AddPost />
-      
+        <AddPost />
       </div>
     );
   } finally {
