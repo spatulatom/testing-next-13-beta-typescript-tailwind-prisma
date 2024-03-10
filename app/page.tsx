@@ -7,6 +7,7 @@ import Counter from './Counter';
 import { notFound } from 'next/navigation';
 import { PrismaClient } from '@prisma/client';
 
+
 const prisma = new PrismaClient();
 
 const Home = async () => {
