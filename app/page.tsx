@@ -6,12 +6,22 @@ import { PostType } from '../types/Post';
 import Counter from './Counter';
 import { notFound } from 'next/navigation';
 import { PrismaClient } from '@prisma/client';
+import { unstable_noStore as noStore } from 'next/cache';
+
 
 
 const prisma = new PrismaClient();
 
 const Home = async () => {
+  // i am using next 14 feature here for data revalidation
+  // when grabbing data directly form database andand whanting to opt out of
+  //  caching(the verison this app is build is    "next": "^13.2.3",)
+  noStore()
+
+  console.log('DATA FETCH HOME PAGE1')
+  
   try {
+    console.log('DATA FETCH HOME PAGE')
     const data = await prisma.post.findMany({
       include: {
         user: true,
