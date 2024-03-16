@@ -3,6 +3,7 @@ import { NextRequest } from 'next/server';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
+import { revalidatePath, revalidateTag } from 'next/cache';
 
 // 1. This GET route is moved here from api/allposts
 export async function GET() {
@@ -113,12 +114,14 @@ export async function POST(request: NextRequest) {
         userId: prismaUser.id,
       },
     });
+  revalidatePath('/')
     return NextResponse.json(
       { result },
       {
         status: 200,
       }
     );
+   
   } catch (err) {
     return NextResponse.json(
       { error: 'Sorry, an error has occured while creating your post!' },

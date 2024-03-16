@@ -4,6 +4,7 @@ import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { NextResponse } from 'next/server';
 
 import { getServerSession } from 'next-auth/next';
+import { revalidatePath } from 'next/cache';
 
 type URL = {
   params: {
@@ -65,7 +66,7 @@ export async function DELETE(request: NextRequest, url: URL) {
         id: url.params.id,
       },
     });
-
+    revalidatePath('/')
     return NextResponse.json({ result }, { status: 201 });
   } catch (err) {
     console.log('ERROR', err);

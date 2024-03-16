@@ -4,6 +4,7 @@ import Image from 'next/image';
 
 import { PostType } from '../../types/Post';
 import { notFound } from 'next/navigation';
+import singlePost from '@/unstableCache/singlepost';
 
 type URL = {
   params: {
@@ -13,20 +14,22 @@ type URL = {
 };
 // type Post = { data: PostType };
 
-const fetchDetails = async (id: string) => {
-  const data = await fetch(`${process.env.NEXT_URL}/api/${id}`, {
-    cache: 'no-store',
-  });
-  const response = await data.json();
-  if (data.ok) {
-    return response.data;
-  }
-  throw new Error(response.error);
-};
+// const fetchDetails = async (id: string) => {
+//   const data = await fetch(`${process.env.NEXT_URL}/api/${id}`, {
+//     cache: 'no-store',
+//   });
+  
+//   const response = await data.json();
+//   if (data.ok) {
+//     return response.data;
+//   }
+//   throw new Error(response.error);
+// };
 
 // URL below equals to router().query.parans
 export default async function PostDetail(url: URL) {
-  const response: PostType= await fetchDetails(url.params.post);
+  // const response: PostType= await fetchDetails(url.params.post);
+  const response: any = await singlePost(url.params.post)
   if (!response) {
     // for http.../random number - we can use:
     notFound();
@@ -43,7 +46,7 @@ export default async function PostDetail(url: URL) {
       />
       <AddComment id={response?.id} />
       <h2>Comments:</h2>
-      {response.comments?.map((comment) => (
+      {response.comments?.map((comment:any) => (
         <div className='bg-gray-300 rounded-md text-black p-2 mt-2'>
           <div className="flex items-center gap-2">
             <Image

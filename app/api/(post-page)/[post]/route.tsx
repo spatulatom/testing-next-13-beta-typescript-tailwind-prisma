@@ -1,6 +1,7 @@
 import prisma from '../../../../prisma/client';
 import { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
+import { revalidateTag } from 'next/cache';
 
 type URL = {
   params: {
@@ -27,7 +28,7 @@ export async function GET(request: NextRequest, url: URL) {
         },
       },
     });
-
+    // revalidateTag('all-post')
     return NextResponse.json(
       { data },
       {
