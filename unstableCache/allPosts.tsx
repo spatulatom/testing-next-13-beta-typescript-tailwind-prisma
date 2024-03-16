@@ -9,7 +9,7 @@ import { cookies } from 'next/headers';
 
 const allPosts = unstable_cache(async()=>{
     // cookies()
-  const prisma = new PrismaClient();
+  const prisma = new PrismaClient(); 
 
   // i am using next 14 feature here for data revalidation
   // when grabbing data directly form database andand whanting to opt out of

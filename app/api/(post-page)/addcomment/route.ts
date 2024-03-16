@@ -4,6 +4,7 @@ import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { NextResponse } from 'next/server';
 
 import { getServerSession } from 'next-auth/next';
+import { revalidatePath } from 'next/cache';
 
 // Post a comment onto an individual post
 
@@ -68,7 +69,7 @@ export async function POST(request: NextRequest) {
         postId: body.id,
       },
     });
-
+revalidatePath('/')
     return NextResponse.json(
       { result },
       {

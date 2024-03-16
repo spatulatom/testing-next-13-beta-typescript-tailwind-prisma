@@ -39,7 +39,9 @@ export default function AddComment({ id }: PostProps) {
         router.refresh();
         setTitle('');
         setIsDisabled(false);
+        router.refresh()
         return toast.success('Added your comment', { id: commentToastId });
+       
       }
       toast.error(data.error, { id: commentToastId });
       setIsDisabled(false);
