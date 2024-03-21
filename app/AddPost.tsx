@@ -1,13 +1,30 @@
 'use client';
 
 import toast from 'react-hot-toast';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import allPosts from '@/unstableCache/allPosts';
 
 export default function CreatePost() {
   const router = useRouter();
   const [title, setTitle] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
+  const[posts, setPosts] =useState([])
+
+  useEffect(()=>{
+    const getPosts =async ()=>{
+      const posts:any = await allPosts()
+      console.log('DATAAA', posts)
+      setPosts(posts)
+      console.log('post', posts)
+    }
+   getPosts()
+   
+  },[isDisabled])
+
+  useEffect(()=>{
+    setIsDisabled(false)
+  },[posts])
 
   let toastPostID: string;
 
@@ -34,10 +51,11 @@ export default function CreatePost() {
 
   const submitPost = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsDisabled(false);
+   
     addPost(title);
     console.log('CLICK');
     toastPostID = toast.loading('Creating your post', { id: toastPostID });
+    setIsDisabled(true);
   };
 
   return (
@@ -65,6 +83,11 @@ export default function CreatePost() {
           Create post
         </button>
       </div>
+      {(posts.length>0)&&posts.map((post:any)=>(
+        <>
+        <h1 className='text-black'>{post?.user.name}</h1>
+        </>
+      ))}
     </form>
   );
 }

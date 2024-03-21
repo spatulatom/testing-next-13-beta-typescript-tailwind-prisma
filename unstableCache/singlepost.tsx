@@ -3,7 +3,7 @@ import { unstable_noStore as noStore } from 'next/cache';
 import { PrismaClient } from '@prisma/client';
 
 export default async function singlePost(id:any) {
-    // noStore()
+    noStore()
   const prisma = new PrismaClient();
 
   // i am using next 14 feature here for data revalidation
