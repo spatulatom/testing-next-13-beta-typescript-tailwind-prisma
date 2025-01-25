@@ -83,11 +83,7 @@ export default function CreatePost() {
           Create post
         </button>
       </div>
-      {(posts.length>0)&&posts.map((post:any)=>(
-        <>
-        <h1 className='text-black'>{post?.user.name}</h1>
-        </>
-      ))}
+     
     </form>
   );
 }
