@@ -10,7 +10,7 @@ import { cookies } from 'next/headers';
 
 const allPosts = async()=>{
     // cookies()
-    noStore()
+    // noStore()
   const prisma = new PrismaClient(); 
 
   // i am using next 14 feature here for data revalidation
