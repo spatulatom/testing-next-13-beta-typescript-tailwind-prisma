@@ -20,7 +20,7 @@ export default async function Nav() {
 
   return (
     <nav className="flex justify-between items-center py-8">
-      <ul className="flex w-full items-center gap-2 md:gap-6 relative z-10">
+      <ul className="flex flex-wrap md:flex-nowrap w-full items-center gap-1 md:gap-6 relative z-10">
         {/* <HomeButtonMenu /> */}
         <Link href={'/'}>Home</Link>
 
