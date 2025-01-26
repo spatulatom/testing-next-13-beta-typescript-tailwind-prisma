@@ -1,6 +1,6 @@
 import prisma from '../../../../prisma/client';
 import { NextRequest } from 'next/server';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import { authOptions } from '../../../../lib/loggoogle';
 import { NextResponse } from 'next/server';
 
 import { getServerSession } from 'next-auth/next';

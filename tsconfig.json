@@ -38,7 +38,7 @@
     "app/api/deletepost/route.ts",
     "app/userposts/page.tsx",
     "C:\\Users\\spatu\\Desktop\\projects\\testing-next-13-beta-typescript-tailwind-prisma\\.next/types/**/*.ts"
-  ],
+, "lib/loggoogle.js"  ],
   "exclude": [
     "node_modules"
   ]
