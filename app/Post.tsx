@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { cookies } from 'next/headers';
 // import { motion } from 'framer-motion';
 interface PostProps {
   id: string;
@@ -34,6 +35,7 @@ export default function Post({
       />
     );
   }
+  cookies()
   const d = new Date(date).toLocaleString().toString()
 
   console.log(
