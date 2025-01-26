@@ -49,12 +49,12 @@
 - Prisma, PostgreSQL
 - [List other tools or libraries you've added or changed]
 
-## Getting Started
-
-*Update this section with any new commands or setup procedures if they've changed.*
 
 
-## Legacy Readme befor update form Next.js 13 to Next..js 14
+*Below we have a legacy Readme before the project got updated to Next.js 14.*
+
+
+## LEGACY README WHEN THE PROJECT WAS USING NEXT.JS VERSION NUMBER: 13
 This is a Next.js 13 Beta project integrated with TypeScript, styled with combination of <a href='https://tailwindcss.com/'>Tailwind CSS</a> and CSS modules. The application is named 'Chat Room'.
 <a name="readme-top"></a>
 
