@@ -1,3 +1,60 @@
+# Chat Room - Updated for Next.js 14 and Beyond
+
+[View the Updated Deployed App on Vercel](#)
+
+## Table of Contents
+- [About the Project](#about-the-project)
+- [New Features in Next.js 14](#new-features-in-nextjs-14)
+- [Backend](#backend)
+- [Authentication](#authentication)
+- [Error Handling and UI Loading](#error-handling-and-ui-loading)
+- [Built With](#built-with)
+- [Getting Started](#getting-started)
+- [Legacy](#legacy)
+
+## About the Project
+
+'Chat Room' has been updated to leverage the latest features from Next.js 14. This project now:
+
+- Integrates more seamlessly with server components and client components.
+- Improves upon the previous data mutation and caching strategies.
+
+## New Features in Next.js 14
+
+- **Server Actions**: Simplifying data mutations directly from server components.
+- **Parallel Routes**: Enhancing performance with concurrent data fetching.
+- **Improved Caching**: More granular control over data freshness and caching strategies.
+
+*Add more details here based on what you've implemented or improved.*
+
+## Backend
+
+- **Route Handlers**: Now fully stable, enhancing API route management.
+- **Database**: Continued use of Prisma with PostgreSQL on Supabase, now with the latest connection methods.
+
+## Authentication
+
+- **NextAuth.js**: Fully compatible with the new App Router, simplifying authentication flows.
+
+## Error Handling and UI Loading
+
+- **Error Boundary**: Utilized `error.tsx` for better error management.
+- **Suspense for Loading**: Improved user experience with `loading.tsx`.
+
+## Built With
+
+- Next.js 14
+- TypeScript
+- Tailwind CSS, CSS Modules
+- Prisma, PostgreSQL
+- [List other tools or libraries you've added or changed]
+
+## Getting Started
+
+*Update this section with any new commands or setup procedures if they've changed.*
+
+
+## Legacy Readme befor update form Next.js 13 to Next..js 14
 This is a Next.js 13 Beta project integrated with TypeScript, styled with combination of <a href='https://tailwindcss.com/'>Tailwind CSS</a> and CSS modules. The application is named 'Chat Room'.
 <a name="readme-top"></a>
 
