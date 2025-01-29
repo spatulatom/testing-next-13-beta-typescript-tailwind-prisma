@@ -17,6 +17,10 @@ const nextConfig = {
       fullUrl: true,
     },
   },
+  eslint: {
+    // This will warn on lint errors during builds
+    ignoreDuringBuilds: false,
+  },
 };
 
 module.exports = nextConfig;
