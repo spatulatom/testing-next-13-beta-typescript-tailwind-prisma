@@ -1,8 +1,8 @@
 import prisma from '../../../../prisma/client';
 import { NextRequest } from 'next/server';
-import { authOptions } from '../../../../lib/loggoogle';
+import { auth } from '../../../../auth';
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
+
 import { revalidatePath, revalidateTag } from 'next/cache';
 
 // 1. This GET route is moved here from api/allposts
@@ -19,7 +19,7 @@ export async function GET() {
         createdAt: 'desc',
       },
     });
-    console.log('ALL POST PRISMA,')
+    console.log('ALL POST PRISMA,');
     return NextResponse.json(
       { data },
       {
@@ -27,7 +27,7 @@ export async function GET() {
       }
     );
   } catch (err) {
-    console.log('ALL POST PRISMA ERROR,', err)
+    console.log('ALL POST PRISMA ERROR,', err);
   }
 
   return NextResponse.json(
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
   // Check session
   let session;
   try {
-    session = await getServerSession(authOptions);
+    session = await auth();
   } catch (err) {
     return NextResponse.json(
       { error: 'An error has occured while getting user session!' },
@@ -114,14 +114,13 @@ export async function POST(request: NextRequest) {
         userId: prismaUser.id,
       },
     });
-  revalidatePath('/')
+    revalidatePath('/');
     return NextResponse.json(
       { result },
       {
         status: 200,
       }
     );
-   
   } catch (err) {
     return NextResponse.json(
       { error: 'Sorry, an error has occured while creating your post!' },

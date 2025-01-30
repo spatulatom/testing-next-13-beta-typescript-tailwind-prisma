@@ -1,15 +1,11 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
-    "strictNullChecks": true,   
+    "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
@@ -25,9 +21,7 @@
       }
     ],
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]
     }
   },
   "include": [
@@ -37,9 +31,8 @@
     ".next/types/**/*.ts",
     "app/api/deletepost/route.ts",
     "app/userposts/page.tsx",
-    "C:\\Users\\spatu\\Desktop\\projects\\testing-next-13-beta-typescript-tailwind-prisma\\.next/types/**/*.ts"
-, "lib/loggoogle.js"  ],
-  "exclude": [
-    "node_modules"
-  ]
+    "C:\\Users\\spatu\\Desktop\\projects\\testing-next-13-beta-typescript-tailwind-prisma\\.next/types/**/*.ts",
+    "auth.js"
+  ],
+  "exclude": ["node_modules"]
 }

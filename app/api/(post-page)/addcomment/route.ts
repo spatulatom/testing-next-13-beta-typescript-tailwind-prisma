@@ -1,9 +1,8 @@
 import prisma from '../../../../prisma/client';
 import { NextRequest } from 'next/server';
-import { authOptions } from '../../../../lib/loggoogle';
+import { auth } from '../../../../auth';
 import { NextResponse } from 'next/server';
 
-import { getServerSession } from 'next-auth/next';
 import { revalidatePath } from 'next/cache';
 
 // Post a comment onto an individual post
@@ -14,7 +13,7 @@ export async function POST(request: NextRequest) {
   // Get session
   let session;
   try {
-    session = await getServerSession(authOptions);
+    session = await auth()
   } catch (err) {
     console.log('ERROR', err);
   }
@@ -52,7 +51,7 @@ export async function POST(request: NextRequest) {
       }
     );
   }
-  if (body.title?.length>30) {
+  if (body.title?.length > 30) {
     return NextResponse.json(
       { error: 'Please write shorter comment.' },
       {
@@ -69,7 +68,7 @@ export async function POST(request: NextRequest) {
         postId: body.id,
       },
     });
-revalidatePath('/')
+    revalidatePath('/');
     return NextResponse.json(
       { result },
       {

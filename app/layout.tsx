@@ -1,5 +1,5 @@
 import './globals.css';
-import AuthContext from './AuthContext';
+// import AuthContext from './AuthContext';
 import Nav from './Nav';
 import QueryWrapper from './QueryWrapper';
 import { Inter, Moon_Dance } from 'next/font/google';
@@ -23,13 +23,13 @@ export default function RootLayout({
     <html lang="en">
       <head />
       <body className={`${inter.className} antialiased md:w-3/5 md:m-auto m-4`}>
-        <AuthContext>
+        {/* <AuthContext> */}
           <QueryWrapper>
             {/* @ts-expect-error Async Server Component */}
             <Nav />
             {children}
           </QueryWrapper>
-        </AuthContext>
+        {/* </AuthContext> */}
       </body>
     </html>
   );

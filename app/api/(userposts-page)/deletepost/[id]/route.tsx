@@ -1,9 +1,8 @@
 import prisma from '../../../../../prisma/client';
 import { NextRequest } from 'next/server';
-import { authOptions } from '../../../../../lib/loggoogle';
+import { auth } from '../../../../../auth';
 import { NextResponse } from 'next/server';
 
-import { getServerSession } from 'next-auth/next';
 import { revalidatePath } from 'next/cache';
 
 type URL = {
@@ -18,7 +17,7 @@ export async function DELETE(request: NextRequest, url: URL) {
   // GET session
   let session;
   try {
-    session = await getServerSession(authOptions);
+    session = await auth()
   } catch (err) {
     return NextResponse.json(
       { message: 'Database connection error 1.' },
@@ -52,13 +51,14 @@ export async function DELETE(request: NextRequest, url: URL) {
   }
   if (!prismaUser) {
     return NextResponse.json(
-      { message: 'Error has occured while checking your details in a database.' },
+      {
+        message: 'Error has occured while checking your details in a database.',
+      },
       {
         status: 403,
       }
     );
   }
- 
 
   try {
     const result = await prisma.post.delete({
@@ -66,7 +66,7 @@ export async function DELETE(request: NextRequest, url: URL) {
         id: url.params.id,
       },
     });
-    revalidatePath('/')
+    revalidatePath('/');
     return NextResponse.json({ result }, { status: 201 });
   } catch (err) {
     console.log('ERROR', err);
