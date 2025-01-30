@@ -28,7 +28,7 @@ export async function GET(request: NextRequest, url: URL) {
         },
       },
     });
-    // revalidateTag('all-post')
+    // revalidateTag ('all-post')
     return NextResponse.json(
       { data },
       {
