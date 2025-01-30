@@ -1,6 +1,7 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,9 +9,9 @@ generator client {
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")  // Add this line
-  // Remove shadowDatabaseUrl as it's not needed in production
+  directUrl = env("DIRECT_URL")
 }
+        
 
 // The properties of a model are called fields
 // id,type, scalar valurs, type modifier(?,[]), attrbutes
