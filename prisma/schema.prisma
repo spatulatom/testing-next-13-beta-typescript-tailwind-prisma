@@ -6,9 +6,10 @@ generator client {
 }
 
 datasource db {
-  provider          = "postgresql"
-  url               = env("DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")  // Add this line
+  // Remove shadowDatabaseUrl as it's not needed in production
 }
 
 // The properties of a model are called fields
