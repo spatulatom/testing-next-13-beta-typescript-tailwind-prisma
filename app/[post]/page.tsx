@@ -47,7 +47,7 @@ export default async function PostDetail(url: URL) {
       <AddComment id={response?.id} />
       <h2>Comments:</h2>
       {response.comments?.map((comment:any) => (
-        <div className='bg-gray-300 rounded-md text-black p-2 mt-2'>
+        <div key={comment.id} className='bg-gray-300 rounded-md text-black p-2 mt-2'>
           <div className="flex items-center gap-2">
             <Image
               width={24}
