@@ -36,6 +36,7 @@
     "app/userposts/page.tsx",
     "C:\\Users\\spatu\\Desktop\\projects\\testing-next-13-beta-typescript-tailwind-prisma\\.next/types/**/*.ts",
     "auth.js"
-  ],
-  "exclude": ["node_modules"]
+, "prisma/client.ts"  ],
+  "exclude": ["node_modules"],
+  "types": ["node"]
 }
