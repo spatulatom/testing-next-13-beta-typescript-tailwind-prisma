@@ -18,9 +18,9 @@ const nextConfig = {
     },
   },
   eslint: {
-    // This will warn on lint errors during builds
     ignoreDuringBuilds: false,
-  },
+    dirs: ['app/', 'components/', 'lib/', 'prisma/']
+  }
 };
 
 module.exports = nextConfig;

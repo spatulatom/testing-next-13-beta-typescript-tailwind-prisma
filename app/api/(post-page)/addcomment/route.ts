@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
   let prismaUser;
   try {
     prismaUser = await prisma.user.findUnique({
-      where: { email: session?.user?.email },
+      where: { email: session?.user?.email ?? undefined },
     });
   } catch (err) {
     console.log('PRISMA', err);
@@ -61,6 +61,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
+    if(prismaUser) {
     const result = await prisma.comment.create({
       data: {
         title: body.title,
@@ -74,7 +75,7 @@ export async function POST(request: NextRequest) {
       {
         status: 200,
       }
-    );
+    );}
   } catch (err) {
     return NextResponse.json(
       { error: 'Sorry, an error has occured while adding your comment!' },

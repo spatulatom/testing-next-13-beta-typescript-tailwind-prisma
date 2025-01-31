@@ -39,7 +39,7 @@ export async function DELETE(request: NextRequest, url: URL) {
   let prismaUser;
   try {
     prismaUser = await prisma.user.findUnique({
-      where: { email: session?.user?.email },
+      where: { email: session?.user?.email ?? undefined },
     });
   } catch (err) {
     return NextResponse.json(

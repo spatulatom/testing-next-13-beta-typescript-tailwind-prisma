@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
   try {
     const data = await prisma.user.findUnique({
       where: {
-        email: session?.user?.email,
+        email: session?.user?.email ?? undefined,
       },
       include: {
         posts: {
