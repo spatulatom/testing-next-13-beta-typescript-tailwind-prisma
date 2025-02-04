@@ -11,7 +11,7 @@ export default async function Dashboard() {
   return (
     <main>
       <h1 className="text-2xl font-bold mx-2">
-        Check out your posts {session?.user?.name}!
+        Check out your posts {session.user?.name}!
       </h1>
       <UserOwnPosts />
     </main>

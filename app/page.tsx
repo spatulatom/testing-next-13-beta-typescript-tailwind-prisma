@@ -9,24 +9,26 @@ import { PrismaClient } from '@prisma/client';
 import { unstable_noStore as noStore } from 'next/cache';
 import allPosts from '@/unstableCache/allPosts';
 import { cookies } from 'next/headers';
-
-
-
-
+import { Post as PrismaPost, User, Comment } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 const Home = async () => {
-  cookies()
+  type PostWithRelations = PrismaPost & {
+    user: User;
+    comments: Comment[];
+  };
+
+  cookies();
   // i am using next 14 feature here for data revalidation
   // when grabbing data directly form database andand whanting to opt out of
   //  caching(the verison this app is build is    "next": "^13.2.3",)
 
-  console.log('DATA FETCH HOME PAGE1')
-  
+  console.log('DATA FETCH HOME PAGE1');
+
   try {
     // noStore()
-  const data = await allPosts()
+    const data: PostWithRelations[] = await allPosts();
 
     if (!data || data.length === 0) {
       notFound();
@@ -44,7 +46,7 @@ const Home = async () => {
             priority
           />
           <div className={styles.thirteen}>
-           <h1 className='text-5xl font-bold'>14</h1>
+            <h1 className="text-5xl font-bold">14</h1>
           </div>
         </div>
 

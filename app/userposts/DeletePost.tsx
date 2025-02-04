@@ -15,7 +15,7 @@ type EditProps = {
   name: string;
   title: string;
   comments: {
-    createdAt?: string;
+    createdAt?: string;  // chck for comments at the bottom of this fiel why this might be seen as optiinal 
     id: string;
     postId: string;
     title: string;
@@ -100,3 +100,24 @@ export default function DeletePost({
     </>
   );
 }
+
+
+
+// model Comment {
+//   createdAt DateTime @default(now())  // Always exists as DateTime
+// }
+// // What happens during JSON serialization:
+// DateTime object → JSON string → TypeScript string
+// type EditProps = {
+//   comments: {
+//     createdAt?: string;  // Optional because:
+//     // 1. DateTime might not serialize cleanly
+//     // 2. JSON.stringify can produce undefined
+//     // 3. Network response might omit dates
+//   }[];
+// }
+// // Possible values after serialization:
+// createdAt: "2024-03-21T10:00:00.000Z"  // ✅ Success
+// createdAt: undefined                    // ✅ Serialization issue
+// createdAt: null                         // ✅ Database null
+// This is why createdAt is marked optional (?) - to handle potential serialization edge cases, even though it always exists in the database.

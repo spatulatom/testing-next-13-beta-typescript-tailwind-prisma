@@ -4,13 +4,15 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { cookies } from 'next/headers';
 // import { motion } from 'framer-motion';
+import { Post as PrismaPost, User } from '@prisma/client'
+
 interface PostProps {
-  id: string;
-  date: Date;
-  name: string | null;
-  avatar: string | null;
-  postTitle: string;
-  comments: number;
+  id: PrismaPost['id']
+  date: PrismaPost['createdAt']
+  name: User['name']
+  avatar: User['image']
+  postTitle: PrismaPost['title']
+  comments: number  // Keep as is - it's a computed value
 }
 
 export default function Post({

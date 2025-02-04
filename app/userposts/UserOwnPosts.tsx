@@ -47,7 +47,7 @@ export default function UserOwnPosts() {
               alt="avatar"
               className="rounded-full"
             />
-            <h3 className="font-bold">{comment?.user?.name}</h3>
+            <h3 className="font-bold">{comment.user.name}</h3>
             <h2 className="text-sm">{comment.createdAt}</h2>
           </div>
           <div className='italic'> - {comment.title}</div>
