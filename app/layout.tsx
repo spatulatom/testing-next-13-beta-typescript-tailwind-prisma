@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head />
-      <body className={`${inter.className} antialiased md:w-3/5 md:m-auto m-4`}>
+      <body className={`${inter.className} antialiased p-8 md:m-auto m-4`}>
         {/* <AuthContext> */}
           <QueryWrapper>
             {/* @ts-expect-error Async Server Component */}
