@@ -103,7 +103,7 @@ return (
                 className="text-white hover:text-teal-600 transition-all block w-full"
                 onClick={toggleMenu}
               >
-                Waves
+                Hipnotyzujące Fale
               </Link>
             </li>
           </ul>

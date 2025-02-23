@@ -95,7 +95,7 @@ export default async function Nav() {
           </a>
         </li>
         <li>
-          <Link href={"/halftone-waves"}>Waves</Link>
+          <Link href={"/halftone-waves"}>Hipnotyzujące Fale</Link>
         </li>
       </ul>
 
