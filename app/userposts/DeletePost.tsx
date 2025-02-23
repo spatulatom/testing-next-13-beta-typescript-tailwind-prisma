@@ -55,6 +55,7 @@ export default function DeletePost({
         console.log(data);
         queryClient.invalidateQueries('getAuthPosts');
         toast.success('Post has been deleted.', { id: deleteToastID });
+        router.refresh()
         
       },
     }

@@ -74,6 +74,7 @@ export default async function Nav() {
 
   return (
     <nav className="flex justify-between items-center pb-8 ">
+          <HamburgerMenu isLoggedIn={!!session} />
       <ul className="hidden md:flex flex-wrap w-full items-center gap-6 relative z-10">
         <li>
           <Link href={"/"}>Home</Link>
@@ -95,16 +96,19 @@ export default async function Nav() {
           </a>
         </li>
         <li>
-          <Link href={"/halftone-waves"}>Hipnotyzujące Fale</Link>
+          <Link href={"/halftone-waves"}>Waves</Link>
         </li>
-      </ul>
-
-      <HamburgerMenu isLoggedIn={!!session} />
+        
+      
+        </ul>
+      
 
       <div className="ml-auto">
         {!session && <Login />}
         {session?.user && <Logged image={session.user.image || ""} />}
       </div>
+    
+  
     </nav>
   )
 }
