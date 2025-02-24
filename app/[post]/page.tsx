@@ -27,9 +27,9 @@ type URL = {
 // };
 
 // URL below equals to router().query.parans
-export default async function PostDetail(url: URL) {
+export default async function PostDetail({params}: {params: {post:string}}) {
   // const response: PostType= await fetchDetails(url.params.post);
-  const response: any = await singlePost(url.params.post)
+  const response: any = await singlePost(params.post)
   if (!response) {
     // for http.../random number - we can use:
     notFound();
