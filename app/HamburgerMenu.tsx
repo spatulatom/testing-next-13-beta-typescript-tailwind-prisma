@@ -85,7 +85,7 @@ return (
                 </Link>
               </li>
             )}
-            <li className="relative z-50">
+            {/* <li className="relative z-50">
               <a
                 href="https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma#readme"
                 target="_blank"
@@ -96,7 +96,7 @@ return (
                 <FontAwesomeIcon icon={faGithub} className="h-6 w-6 mr-2" />
                 GitHub
               </a>
-            </li>
+            </li> */}
             <li className="relative z-50">
               <Link
                 href="/halftone-waves"

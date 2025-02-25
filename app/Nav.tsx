@@ -86,7 +86,7 @@ export default async function Nav() {
             </Link>
           </li>
         )}
-        <li>
+        {/* <li>
           <a
             href="https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma#readme"
             target="_blank"
@@ -94,7 +94,7 @@ export default async function Nav() {
           >
             <FontAwesomeIcon icon={faGithub} style={{ fontSize: "25px", color: "white", width: "25px" }} />
           </a>
-        </li>
+        </li> */}
         <li>
           <Link href={"/halftone-waves"}>Waves</Link>
         </li>

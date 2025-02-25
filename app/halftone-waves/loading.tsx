@@ -1,1 +1,1 @@
-export default function Loading() { return <div className="text-center h-60">Za chwilę zobaczysz Hipnotyzujące Fale... </div> }
+export default function Loading() { return <div className="text-center h-60">In a moment you will see Hipnotizing Waves, we are puttting them together especially for you... </div> }
