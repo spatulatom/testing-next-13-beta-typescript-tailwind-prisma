@@ -1,1 +1,1 @@
-export default function Loading() { return <div className="text-center h-60">In a moment you will see Hipnotizing Waves, we are puttting them together especially for you... </div> }
+export default function Loading() { return <div className="text-center h-60">This is loading.tsx component. Loading...</div> }
