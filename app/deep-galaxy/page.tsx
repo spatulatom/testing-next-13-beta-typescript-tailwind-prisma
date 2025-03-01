@@ -11,7 +11,7 @@ export default async function Home() {
       <div className="w-full">
          <h1 className="text-2xl font-bold mb-4 p-2 bg-teal-600 text-center">Exploding Galaxy</h1>
 
-      <Suspense fallback={<p className='flex justify-center items-center pt-8'>This is Suspense fallback. Galaxy is loading...</p>}>
+      <Suspense fallback={<p className='flex justify-center items-center pt-8'>Galaxy is loading...</p>}>
         <Galaxy/>
       </Suspense>
     </div>

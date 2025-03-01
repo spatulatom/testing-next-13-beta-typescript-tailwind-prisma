@@ -10,8 +10,8 @@ export default async function Home() {
 
     return (
       <div className="w-full">
-      <h1 className="text-2xl font-bold mb-4 p-2 bg-teal-600 text-center">Hipnotizing Waves -this is server component atrificialy delayed by 3s, waves below are its child client component</h1>
-      <Suspense fallback={<p className='flex justify-center items-center pt-8'>Hipnotising Waves are loading...HW is client component artificially dealyed, what we see is fallback message on Suspense</p>}>
+      <h1 className="text-2xl font-bold mb-4 p-2 bg-teal-600 text-center">Hipnotizing Waves</h1>
+      <Suspense fallback={<p className='flex justify-center items-center pt-8'>Waves are loading...</p>}>
         <HalftoneWaves />
       </Suspense>
     </div>
