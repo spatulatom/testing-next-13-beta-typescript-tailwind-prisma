@@ -1,5 +1,6 @@
 // export const dynamicParams = true
 import HalftoneWaves from './halftone-waves'
+
 import {delay} from '@/app/lib/utils'
 import {Suspense} from 'react'
 

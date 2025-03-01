@@ -68,6 +68,7 @@ import Link from "next/link"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faGithub } from "@fortawesome/free-brands-svg-icons"
 import HamburgerMenu from "./HamburgerMenu"
+import Galaxy from "./deep-galaxy/galaxy"
 
 export default async function Nav() {
   const session = await auth()
@@ -98,6 +99,7 @@ export default async function Nav() {
         <li>
           <Link href={"/halftone-waves"}>Waves</Link>
         </li>
+        <li><Link href={"/deep-galaxy"}>Galaxy</Link></li>
         
       
         </ul>

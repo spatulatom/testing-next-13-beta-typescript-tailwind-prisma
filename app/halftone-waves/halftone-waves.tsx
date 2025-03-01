@@ -1,80 +1,82 @@
-"use client"
-import { delay } from '@/app/lib/utils'
+'use client';
+import { delay } from '@/app/lib/utils';
 
-import { useEffect, useRef } from 'react'
-import {use} from 'react'
+import { useEffect, useRef } from 'react';
+import { use } from 'react';
 
 export default function HalftoneWaves() {
-  use(delay(6000)) // 2 second delay
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+  use(delay(6000)); // 2 second delay
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    async function delayed() { console.log('DEKLAYED'); await delay(5000) }
-    delayed()
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
+    async function delayed() {
+      console.log('DEKLAYED');
+      await delay(5000);
+    }
+    delayed();
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
 
-    let animationFrameId: number
-    let time = 0
+    let animationFrameId: number;
+    let time = 0;
 
     const resizeCanvas = () => {
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
-    }
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
 
     const drawHalftoneWave = () => {
-      const gridSize = 20
-      const rows = Math.ceil(canvas.height / gridSize)
-      const cols = Math.ceil(canvas.width / gridSize)
+      const gridSize = 20;
+      const rows = Math.ceil(canvas.height / gridSize);
+      const cols = Math.ceil(canvas.width / gridSize);
 
       for (let y = 0; y < rows; y++) {
         for (let x = 0; x < cols; x++) {
-          const centerX = x * gridSize
-          const centerY = y * gridSize
+          const centerX = x * gridSize;
+          const centerY = y * gridSize;
           const distanceFromCenter = Math.sqrt(
-            Math.pow(centerX - canvas.width / 2, 2) + 
-            Math.pow(centerY - canvas.height / 2, 2)
-          )
+            Math.pow(centerX - canvas.width / 2, 2) +
+              Math.pow(centerY - canvas.height / 2, 2)
+          );
           const maxDistance = Math.sqrt(
-            Math.pow(canvas.width / 2, 2) + 
-            Math.pow(canvas.height / 2, 2)
-          )
-          const normalizedDistance = distanceFromCenter / maxDistance
-          
-          const waveOffset = Math.sin(normalizedDistance * 10 - time) * 0.5 + 0.5
-          const size = gridSize * waveOffset * 0.8
+            Math.pow(canvas.width / 2, 2) + Math.pow(canvas.height / 2, 2)
+          );
+          const normalizedDistance = distanceFromCenter / maxDistance;
 
-          ctx.beginPath()
-          ctx.arc(centerX, centerY, size / 2, 0, Math.PI * 2)
-          ctx.fillStyle = `rgba(255, 255, 255, ${waveOffset * 0.5})`
-          ctx.fill()
+          const waveOffset =
+            Math.sin(normalizedDistance * 10 - time) * 0.5 + 0.5;
+          const size = gridSize * waveOffset * 0.8;
+
+          ctx.beginPath();
+          ctx.arc(centerX, centerY, size / 2, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${waveOffset * 0.5})`;
+          ctx.fill();
         }
       }
-    }
+    };
 
     const animate = () => {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)'
-      ctx.fillRect(0, 0, canvas.width, canvas.height)
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      drawHalftoneWave()
+      drawHalftoneWave();
 
-      time += 0.05
-      animationFrameId = requestAnimationFrame(animate)
-    }
+      time += 0.05;
+      animationFrameId = requestAnimationFrame(animate);
+    };
 
-    resizeCanvas()
-    window.addEventListener('resize', resizeCanvas)
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
 
-    animate()
+    animate();
 
     return () => {
-      cancelAnimationFrame(animationFrameId)
-      window.removeEventListener('resize', resizeCanvas)
-    }
-  }, [])
+      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener('resize', resizeCanvas);
+    };
+  }, []);
 
-  return <canvas ref={canvasRef} className="w-full h-screen bg-black" />
+  return <canvas ref={canvasRef} className="w-full h-screen bg-black" />;
 }
-

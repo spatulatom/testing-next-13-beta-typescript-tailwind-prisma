@@ -106,6 +106,13 @@ return (
                 Waves
               </Link>
             </li>
+            <Link
+                href="/deep-galaxy"
+                className="text-white hover:text-teal-600 transition-all block w-full"
+                onClick={toggleMenu}
+              >
+                Galaxy
+              </Link>
           </ul>
         </div>
       )}
