@@ -9,6 +9,7 @@ export default async function Home() {
 
     return (
       <div className="w-full">
+         <h1 className="text-2xl font-bold mb-4 p-2 bg-teal-600 text-center">Galaxy</h1>
 
       <Suspense fallback={<p className='flex justify-center items-center pt-8'>This is Suspense fallback. Galaxy is loading...</p>}>
         <Galaxy/>

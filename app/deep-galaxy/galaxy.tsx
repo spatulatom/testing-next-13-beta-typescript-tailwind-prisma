@@ -231,16 +231,9 @@ export default function Galaxy() {
 
   // Render full-screen canvas
   return (
-    <div className="relative w-full h-screen">
-      <canvas ref={canvasRef} className="w-full h-full" />
-      <a
-        href="https://x.com/YoheiNishitsuji/status/1895383437294420220"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="absolute bottom-4 right-4 text-sm text-white/50 hover:text-white/75 transition-colors"
-      >
-        @YoheiNishitsuji
-      </a>
+    <div className="relative md:w-full h-screen">
+      <canvas ref={canvasRef} className="h-full md:w-full" />
+    
     </div>
   )
 }
