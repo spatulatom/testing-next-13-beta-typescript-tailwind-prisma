@@ -75,7 +75,8 @@ export default function Galaxy() {
           // .1+e*0.7: Hue varies from orange to blue
           // .6: Moderate saturation for rich but not overpowering colors
           // Brightness calculation scaled down for subtler effect
-          o.rgb+=hsv(.1+e*0.7,.6,min(e*s*e/.01,.3-e)/12.);
+          // o.rgb+=hsv(.1+e*0.7,.6,min(e*s*e/.01,.3-e)/12.);
+           o.rgb+=hsv(.3+e*0.7,.6,min(e*s*e/.01,.3-e)/12.);
           
           s=1.;
           p=q+=d*e*R*.3;  // Ray marching step

@@ -36,7 +36,7 @@ const Home = async () => {
 
     return (
       <div>
-       <h1 className="text-center font-bold text-5xl uppercase mt-10 animate-shimmer bg-gradient-to-r from-teal-600 via-gray-500 to-white text-transparent bg-clip-text">Chat Room</h1>
+       <h1 className="text-center font-bold text-5xl uppercase mt-10 mb-28 animate-shimmer bg-gradient-to-r from-teal-600 via-gray-500 to-white text-transparent bg-clip-text">Chat Room</h1>
         {/* <div className={styles.center}>
           <Image
             className={styles.logo}
