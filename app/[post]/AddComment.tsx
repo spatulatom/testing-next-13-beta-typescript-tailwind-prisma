@@ -81,7 +81,7 @@ export default function AddComment({ id }: PostProps) {
           className=" text-sm bg-teal-600 text-white py-2 px-6 rounded-xl disabled:opacity-25"
           type="submit"
         >
-          Add Comment 🚀
+          Add a comment 🚀
         </button>
         <p
           className={`font-bold  ${
