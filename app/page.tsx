@@ -47,7 +47,7 @@ const Home = async () => {
             priority
           />
           <div className={styles.thirteen}>
-            <h2 className="text-xl font-bold">14</h2>
+            <h2 className="font-bold">14</h2>
           </div>
         </div>
 

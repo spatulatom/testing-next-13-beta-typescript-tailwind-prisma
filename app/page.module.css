@@ -115,7 +115,7 @@
   align-items: center;
   width: 25px;
   height: 25px;
-  padding: 25px;
+  padding: 20px;
   margin-left: 16px;
   transform: translateZ(0);
   border-radius: var(--border-radius);
@@ -263,9 +263,9 @@
 
 @keyframes rotate {
   from {
-    transform: rotate(360deg);
+    transform: rotate(0deg);
   }
   to {
-    transform: rotate(0deg);
+    transform: rotate(360deg);
   }
 }
