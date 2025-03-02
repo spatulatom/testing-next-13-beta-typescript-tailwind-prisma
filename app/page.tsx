@@ -37,7 +37,7 @@ const Home = async () => {
     return (
       <div>
        <h1 className="text-center font-bold text-5xl uppercase mt-10 animate-shimmer bg-gradient-to-r from-teal-600 via-gray-500 to-white text-transparent bg-clip-text">Chat Room</h1>
-        <div className={styles.center}>
+        {/* <div className={styles.center}>
           <Image
             className={styles.logo}
             src="/next.svg"
@@ -49,7 +49,7 @@ const Home = async () => {
           <div className={styles.thirteen}>
             <h2 className="font-bold">14</h2>
           </div>
-        </div>
+        </div> */}
 
         <AddPost />
         <Counter count={data.length} />
