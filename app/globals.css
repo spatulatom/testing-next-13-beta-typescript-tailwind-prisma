@@ -110,3 +110,15 @@ a {
     color-scheme: dark;
   }
 }
+
+
+/* animation of h1 on home page */
+@keyframes shimmer {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+.animate-shimmer {
+  background-size: 200% auto;
+  animation: shimmer 6s linear infinite;
+}

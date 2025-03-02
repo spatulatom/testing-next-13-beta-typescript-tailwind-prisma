@@ -69,7 +69,7 @@ export default function Post({
           
         </div>
         <div className="py-6 mb-4 bg-teal-600 rounded-b-lg">
-          <p className="break-all text-white px-4">{postTitle}</p>
+          <p className=" text-white px-4">{postTitle}</p>
           <p className='text-white text-sm pt-6 px-4'>
             Comments: {comments}
           </p>
