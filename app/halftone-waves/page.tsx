@@ -6,7 +6,7 @@ import {Suspense} from 'react'
 
 
 export default async function Home() {
-  await delay(2000) // 2 second delay
+  await delay(1000) // 2 second delay
 
     return (
       <div className="w-full">
