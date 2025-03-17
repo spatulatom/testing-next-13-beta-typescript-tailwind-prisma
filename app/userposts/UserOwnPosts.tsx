@@ -28,7 +28,7 @@ export default function UserOwnPosts() {
       <h2 className="m-3">You have {response.posts.length} posts.</h2>
       {response.posts.length === 0 && <h1 className="m-3">Go back to the 'Chat Room' and create you first post!</h1>}
       {response.posts.map((post) => (
-        <>
+        <div key={post.id} className="bg-gray-200 p-2 rounded-md mt-2">
         <DeletePost
           id={post.id}
           key={post.id}
@@ -53,7 +53,7 @@ export default function UserOwnPosts() {
           <div className='italic'> - {comment.title}</div>
         </div>
       ))}
-        </>
+        </div>
       ))}
      
     </div>

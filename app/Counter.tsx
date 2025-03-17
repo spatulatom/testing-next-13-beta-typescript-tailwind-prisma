@@ -6,7 +6,7 @@ type count = {
 };
 
 const Counter = ({ count }: count) => {
-  return <h2 className="ml-2">All posts: {count}</h2>;
+  return <h2 className="m-2">All posts: {count}</h2>;
 };
 
 // practicing mamo() and how it dosent prevent rerender in server componets decendnets

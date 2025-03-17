@@ -35,9 +35,10 @@ const Home = async () => {
     }
 
     return (
-      <div>
-       <h1 className="text-center font-bold text-4xl md:text-5xl uppercase mt-10 mb-20 animate-shimmer bg-gradient-to-r from-teal-600 via-black to-white text-transparent bg-clip-text">Chat Room</h1>
-        {/* <div className={styles.center}>
+      <div className='mb-20'>
+       {/* <h1 className="text-center font-bold text-4xl md:text-5xl mt-10 mb-2 animate-shimmer bg-gradient-to-r from-teal-600 via-black to-white text-transparent bg-clip-text">Chat</h1> */}
+       <h1 className="text-center font-bold text-4xl md:text-5xl mt-10 mb-2 bg-gradient-to-r from-teal-600 via-black to-white  bg-clip-text">Chat Room</h1>
+        <div className={styles.center}>
           <Image
             className={styles.logo}
             src="/next.svg"
@@ -47,9 +48,9 @@ const Home = async () => {
             priority
           />
           <div className={styles.thirteen}>
-            <h2 className="font-bold">14</h2>
+            <h2 className="font-bold text-teal-400">^15.2.2</h2>
           </div>
-        </div> */}
+        </div>
 
         <AddPost />
         <Counter count={data.length} />
