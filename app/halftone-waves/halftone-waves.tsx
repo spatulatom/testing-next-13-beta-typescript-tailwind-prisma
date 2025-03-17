@@ -5,17 +5,18 @@ import { useEffect, useRef } from 'react';
 import { use } from 'react';
 
 export default function HalftoneWaves() {
-  use(delay(1000)); // 2 second delay
+  // use(delay(1000)); // 2 second delay
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     async function delayed() {
       console.log('DEKLAYED');
-      await delay(5000);
+      // await delay(5000);
     }
-    delayed();
+    // delayed();
     const canvas = canvasRef.current;
     if (!canvas) return;
+    
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 

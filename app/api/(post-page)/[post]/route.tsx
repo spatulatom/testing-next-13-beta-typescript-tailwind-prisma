@@ -4,16 +4,16 @@ import { NextResponse } from 'next/server';
 import { revalidateTag } from 'next/cache';
 
 type URL = {
-  params: {
+  params: Promise<{
     post: string;
-  };
+  }>;
 };
 // Get an individual post
 export async function GET(request: NextRequest, url: URL) {
   try {
     const data = await prisma.post.findUnique({
       where: {
-        id: url.params.post,
+        id: (await url.params).post,
       },
       include: {
         user: true,
