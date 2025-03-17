@@ -6,9 +6,9 @@ import { NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 
 type URL = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
 export async function DELETE(request: NextRequest, url: URL) {
@@ -63,7 +63,7 @@ export async function DELETE(request: NextRequest, url: URL) {
   try {
     const result = await prisma.post.delete({
       where: {
-        id: url.params.id,
+        id: (await url.params).id,
       },
     });
     revalidatePath('/');
