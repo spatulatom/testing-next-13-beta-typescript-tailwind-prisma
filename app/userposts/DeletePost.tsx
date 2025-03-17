@@ -1,9 +1,9 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import {useEffect , useState} from 'react';
 import Toggle from './Toggle';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import axios, { AxiosError } from 'axios';
 import { motion } from 'framer-motion';
@@ -41,25 +41,25 @@ export default function DeletePost({
   let deleteToastID: string;
   const router = useRouter();
 
-  const { mutate } = useMutation(
-     async (id: string) => await axios.delete('/api/deletepost/'+id),
-    {
-      onError: (error) => {
-        console.log('DELETE ERROR', error);
-        if (error instanceof AxiosError) {
-          toast.error(error?.response?.data.message, { id: deleteToastID });
-        }else{
-        toast.error('Connection error, check your url.', { id: deleteToastID });}
-      },
-      onSuccess: (data) => {
-        console.log(data);
-        queryClient.invalidateQueries('getAuthPosts');
-        toast.success('Post has been deleted.', { id: deleteToastID });
-        router.refresh()
-        
-      },
-    }
-  );
+  const { mutate } = useMutation({
+    mutationFn: async (postId: string) => {
+      return await axios.delete(`/api/deletepost/${postId}`);
+    },
+    onError: (error) => {
+      console.log('DELETE ERROR', error);
+      if (error instanceof AxiosError) {
+        toast.error(error?.response?.data.message, { id: deleteToastID });
+      } else {
+        toast.error('Connection error, check your url.', { id: deleteToastID });
+      }
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      queryClient.invalidateQueries({ queryKey: ['getAuthPosts'] });
+      toast.success('Post has been deleted.', { id: deleteToastID });
+      router.refresh();
+    },
+  });
 
   const deletePost = () => {
     deleteToastID = toast.loading('Deleting your post.', { id: deleteToastID });
