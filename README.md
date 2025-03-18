@@ -1,10 +1,12 @@
-# Chat Room - Updated for Next.js 14 and Beyond
+# Chat Room - Updated for Next.js 15 and Beyond
 
 [View the Updated Deployed App on Vercel](#)
 
 ## Table of Contents
+
 - [About the Project](#about-the-project)
-- [New Features in Next.js 14](#new-features-in-nextjs-14)
+- [New Features in Next.js 15](#new-features-in-nextjs-15)
+- [Detailed Upgrade Examples](#detailed-upgrade-examples)
 - [Backend](#backend)
 - [Authentication](#authentication)
 - [Error Handling and UI Loading](#error-handling-and-ui-loading)
@@ -14,18 +16,361 @@
 
 ## About the Project
 
-'Chat Room' has been updated to leverage the latest features from Next.js 14. This project now:
+'Chat Room' has been updated to leverage the latest features from Next.js 15. This project now:
 
-- Integrates more seamlessly with server components and client components.
-- Improves upon the previous data mutation and caching strategies.
+- Fully integrates with the latest TanStack Query for smoother data fetching and caching.
+- Adopts new features introduced in Next.js 15 for improved performance and developer experience.
 
-## New Features in Next.js 14
+## New Features in Next.js 15
 
-- **Server Actions**: Simplifying data mutations directly from server components.
-- **Parallel Routes**: Enhancing performance with concurrent data fetching.
-- **Improved Caching**: More granular control over data freshness and caching strategies.
+- **Enhanced Server Actions**: Further improvements in data mutation and server-side logic.
+- **Streaming Updates**: Real-time updates with server-side streaming capabilities.
+- **Improved Middleware**: Simplified and more powerful middleware for handling requests.
 
-*Add more details here based on what you've implemented or improved.*
+## Upgrade Highlights
+
+### Upgrade from Next.js 14 to 15
+
+- Adopted new server-side streaming features for real-time updates.
+- Improved middleware handling for better request management.
+
+### Upgrade from React Query to TanStack Query
+
+- Migrated from React Query to TanStack Query (v5.68.0) for enhanced caching and data synchronization.
+- Leveraged TanStack Query's improved API for better developer experience and performance.
+
+### Other Upgrades
+
+- Updated Prisma to version 5.9.1 for compatibility with the latest PostgreSQL connection methods.
+- Upgraded NextAuth.js to version 5.0.0-beta.25 for better integration with the App Router.
+- Adopted the latest version of Tailwind CSS (v3.2.7) for styling improvements.
+
+_Add more details here based on what you've implemented or improved._
+
+## Detailed Upgrade Examples
+
+### Upgrade from Next.js 14 to 15
+
+#### Server Components and Data Fetching
+
+**Before (Next.js 14):**
+
+```tsx
+// In a server component
+export default async function PostList() {
+  const posts = await fetch('https://api.example.com/posts', {
+    cache: 'no-store',
+  }).then((res) => res.json());
+
+  return (
+    <div>
+      {posts.map((post) => (
+        <PostItem key={post.id} post={post} />
+      ))}
+    </div>
+  );
+}
+```
+
+**After (Next.js 15):**
+
+```tsx
+// In a server component
+export default async function PostList() {
+  // Using the new parallel data fetching pattern
+  const posts = await fetch('https://api.example.com/posts', {
+    next: { revalidate: 60 }, // New revalidation API
+  }).then((res) => res.json());
+
+  return (
+    <div>
+      {posts.map((post) => (
+        <PostItem key={post.id} post={post} />
+      ))}
+    </div>
+  );
+}
+```
+
+#### Server Actions
+
+**Before (Next.js 14):**
+
+```tsx
+'use server';
+
+export async function createPost(formData: FormData) {
+  const title = formData.get('title');
+  const content = formData.get('content');
+
+  await prisma.post.create({
+    data: { title, content },
+  });
+
+  revalidatePath('/posts');
+}
+```
+
+**After (Next.js 15):**
+
+```tsx
+'use server';
+
+export async function createPost(formData: FormData) {
+  const title = formData.get('title');
+  const content = formData.get('content');
+
+  // Enhanced error handling in Server Actions
+  try {
+    await prisma.post.create({
+      data: { title, content },
+    });
+
+    revalidatePath('/posts');
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: 'Failed to create post' };
+  }
+}
+```
+
+### Upgrade from React Query to TanStack Query
+
+#### Data Fetching
+
+**Before (React Query v3):**
+
+```tsx
+import { useQuery } from 'react-query';
+
+function PostsList() {
+  const { data, isLoading } = useQuery('posts', fetchPosts);
+
+  if (isLoading) return <div>Loading...</div>;
+
+  return (
+    <ul>
+      {data.map((post) => (
+        <li key={post.id}>{post.title}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+**After (TanStack Query v5):**
+
+```tsx
+import { useQuery } from '@tanstack/react-query';
+
+function PostsList() {
+  // New improved API with type safety
+  const { data, isPending } = useQuery({
+    queryKey: ['posts'],
+    queryFn: fetchPosts,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+
+  if (isPending) return <div>Loading...</div>;
+
+  return <ul>{data?.map((post) => <li key={post.id}>{post.title}</li>)}</ul>;
+}
+```
+
+#### Data Mutations
+
+**Before (React Query v3):**
+
+```tsx
+import { useMutation, useQueryClient } from 'react-query';
+
+function CreatePost() {
+  const queryClient = useQueryClient();
+  const mutation = useMutation(createPost, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('posts');
+    },
+  });
+
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        mutation.mutate({ title: 'New Post', content: 'Content' });
+      }}
+    >
+      <button type="submit">Create Post</button>
+    </form>
+  );
+}
+```
+
+**After (TanStack Query v5):**
+
+```tsx
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+function CreatePost() {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: createPost,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['posts'] });
+    },
+  });
+
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        mutation.mutate({ title: 'New Post', content: 'Content' });
+      }}
+    >
+      <button type="submit" disabled={mutation.isPending}>
+        {mutation.isPending ? 'Creating...' : 'Create Post'}
+      </button>
+    </form>
+  );
+}
+```
+
+### NextAuth.js Upgrade
+
+**Before (NextAuth.js v4):**
+
+```tsx
+// pages/api/auth/[...nextauth].ts
+import NextAuth from 'next-auth';
+import GoogleProvider from 'next-auth/providers/google';
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import prisma from '../../../lib/prisma';
+
+export default NextAuth({
+  adapter: PrismaAdapter(prisma),
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
+  ],
+});
+```
+
+**After (NextAuth.js v5):**
+
+```tsx
+// app/api/auth/[...nextauth]/route.ts
+import NextAuth from 'next-auth';
+import GoogleProvider from 'next-auth/providers/google';
+import { PrismaAdapter } from '@auth/prisma-adapter';
+import prisma from '@/lib/prisma';
+
+export const { handlers, auth, signIn, signOut } = NextAuth({
+  adapter: PrismaAdapter(prisma),
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
+  ],
+});
+
+export const GET = handlers.GET;
+export const POST = handlers.POST;
+```
+
+### React 18 to React 19 Upgrade
+
+**Before (React 18):**
+
+```tsx
+import { useState, useEffect } from 'react';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    document.title = `Count: ${count}`;
+  }, [count]);
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+    </div>
+  );
+}
+```
+
+**After (React 19):**
+
+```tsx
+import { useState, useEffect } from 'react';
+import { useDocumentTitle } from 'react/use-document';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  // Using the new useDocumentTitle hook from React 19
+  useDocumentTitle(`Count: ${count}`);
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+    </div>
+  );
+}
+```
+
+### Other Upgrades
+
+#### Prisma Connection (Before - 2023)
+
+```typescript
+// prisma/client.ts
+import { PrismaClient } from '@prisma/client';
+
+let prisma: PrismaClient;
+
+if (process.env.NODE_ENV === 'production') {
+  prisma = new PrismaClient();
+} else {
+  if (!global.prisma) {
+    global.prisma = new PrismaClient();
+  }
+  prisma = global.prisma;
+}
+
+export default prisma;
+```
+
+#### Prisma Connection (After - 2024 with Supavisor)
+
+```typescript
+// prisma/client.ts
+import { PrismaClient } from '@prisma/client';
+
+const prismaClientSingleton = () => {
+  return new PrismaClient({
+    datasources: {
+      db: {
+        url: process.env.DATABASE_URL_SUPAVISOR, // Using Supavisor connection pooler
+      },
+    },
+  });
+};
+
+const globalForPrisma = globalThis as unknown as {
+  prisma: ReturnType<typeof prismaClientSingleton> | undefined;
+};
+
+const prisma = globalForPrisma.prisma ?? prismaClientSingleton();
+
+export default prisma;
+
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+```
 
 ## Backend
 
@@ -43,15 +388,14 @@
 
 ## Built With
 
-- Next.js 14
+- Next.js 15
 - TypeScript
 - Tailwind CSS, CSS Modules
 - Prisma, PostgreSQL
+- TanStack Query
 - [List other tools or libraries you've added or changed]
 
-
-
-*(Below we have a legacy Readme before the project got updated to Next.js 14.)*
+_(Below we have a legacy Readme before the project got updated to Next.js 14.)_
 
 ## LEGACY README WHEN THE PROJECT WAS USING NEXT.JS VERSION NUMBER 13:
 
