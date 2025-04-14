@@ -39,9 +39,8 @@ export default function AddComment({ id }: PostProps) {
         router.refresh();
         setTitle('');
         setIsDisabled(false);
-        router.refresh()
+        router.refresh();
         return toast.success('Added your comment', { id: commentToastId });
-       
       }
       toast.error(data.error, { id: commentToastId });
       setIsDisabled(false);
@@ -51,11 +50,31 @@ export default function AddComment({ id }: PostProps) {
     }
   };
   // we can set title like this - not recommended - but only in clinet component
-  // we shloud never update out dom using pure javaScript 
-// document.title = "JavaScript DOM Update"
+  // we shloud never update out dom using pure javaScript
+  // document.title = "JavaScript DOM Update"
 
   const submitPost = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Client-side validation
+    if (!title.trim().length) {
+      toast.error('Please write something before posting.');
+      return;
+    }
+
+    if (title.length > 30) {
+      toast.error(
+        'Your comment is too long. Please keep it under 30 characters.'
+      );
+      return;
+    }
+
+    // Check for HTML tags
+    if (/<[^>]*>/.test(title)) {
+      toast.error('HTML tags are not allowed in comments.');
+      return;
+    }
+
     setIsDisabled(true);
     commentToastId = toast.loading('Adding your comment', {
       id: commentToastId,
@@ -73,6 +92,9 @@ export default function AddComment({ id }: PostProps) {
           type="text"
           name="title"
           className="p-4 text-lg rounded-md my-2 bg-white text-black"
+          placeholder="your comment..."
+          maxLength={30}
+          minLength={1}
         />
       </div>
       <div className="flex items-center gap-2">
@@ -84,7 +106,7 @@ export default function AddComment({ id }: PostProps) {
           Add a comment 🚀
         </button>
         <p
-          className={`font-bold  ${
+          className={`font-bold text-white ${
             title.length > 30 ? 'text-red-700' : 'text-gray-700'
           } `}
         >{`${title.length}/30`}</p>

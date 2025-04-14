@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
   // Get session
   let session;
   try {
-    session = await auth()
+    session = await auth();
   } catch (err) {
     console.log('ERROR', err);
   }
@@ -40,14 +40,35 @@ export async function POST(request: NextRequest) {
   let body;
   try {
     body = await request.json();
+
+    // Sanitize the comment text
+    if (body.title) {
+      // Remove HTML tags
+      body.title = body.title.replace(/<[^>]*>?/gm, '');
+      // Convert HTML entities to prevent bypass attempts
+      body.title = body.title
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#x27;/g, "'")
+        .replace(/&#x2F;/g, '/');
+      // Remove any remaining < or > characters
+      body.title = body.title.replace(/[<>]/g, '');
+      // Trim whitespace
+      body.title = body.title.trim();
+    }
   } catch (err) {
     console.log('BODY', err);
+    return NextResponse.json(
+      { error: 'Invalid comment format' },
+      { status: 400 }
+    );
   }
   if (!body.title?.length) {
     return NextResponse.json(
       { error: 'Please write something before we can post it.' },
       {
-        status: 403,
+        status: 400, // Changed from 403 to 400 for "bad request"
       }
     );
   }
@@ -55,27 +76,28 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       { error: 'Please write shorter comment.' },
       {
-        status: 403,
+        status: 400, // Changed from 403 to 400 for "bad request"
       }
     );
   }
 
   try {
-    if(prismaUser) {
-    const result = await prisma.comment.create({
-      data: {
-        title: body.title,
-        userId: prismaUser.id,
-        postId: body.id,
-      },
-    });
-    revalidatePath('/');
-    return NextResponse.json(
-      { result },
-      {
-        status: 200,
-      }
-    );}
+    if (prismaUser) {
+      const result = await prisma.comment.create({
+        data: {
+          title: body.title,
+          userId: prismaUser.id,
+          postId: body.id,
+        },
+      });
+      revalidatePath('/');
+      return NextResponse.json(
+        { result },
+        {
+          status: 200,
+        }
+      );
+    }
   } catch (err) {
     return NextResponse.json(
       { error: 'Sorry, an error has occured while adding your comment!' },
