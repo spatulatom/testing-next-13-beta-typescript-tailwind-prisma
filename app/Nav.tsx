@@ -72,6 +72,7 @@ import Galaxy from "./deep-galaxy/galaxy"
 
 export default async function Nav() {
   const session = await auth()
+  console.log('NAVIGATION');
 
   return (
     <nav className="flex justify-between items-center pb-8 ">
