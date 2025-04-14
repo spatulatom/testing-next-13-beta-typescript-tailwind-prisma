@@ -83,8 +83,8 @@ export default function CreatePost() {
           onChange={(e) => setTitle(e.target.value)}
           value={title}
           name="title"
-          placeholder="What's on your mind?"
-          className="p-4 text-lg text-black rounded-md my-2  bg-gray-200"
+          placeholder="Write your post here..."
+          className="p-4 text-md text-black rounded-md my-2  bg-gray-200"
         />
       </div>
       <div className=" flex items-center justify-between gap-2">

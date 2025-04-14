@@ -89,9 +89,9 @@ export default function AddComment({ id }: PostProps) {
         <input
           onChange={(e) => setTitle(e.target.value)}
           value={title}
-          type="text"
+          type="email"
           name="title"
-          className="p-4 text-lg rounded-md my-2 bg-white text-black"
+          className="p-4 text-md rounded-md my-2 bg-white text-black"
           placeholder="your comment..."
           maxLength={30}
           minLength={1}
