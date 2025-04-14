@@ -31,7 +31,29 @@ const Home = async () => {
     const data: PostWithRelations[] = await allPosts();
 
     if (!data || data.length === 0) {
-      notFound();
+    
+      return <div className='mb-20'>
+      {/* <h1 className="text-center font-bold text-4xl md:text-5xl mt-10 mb-2 animate-shimmer bg-gradient-to-r from-teal-600 via-black to-white text-transparent bg-clip-text">Chat</h1> */}
+      <h1 className="text-center font-bold text-4xl md:text-5xl mt-10 mb-2 bg-gradient-to-r from-teal-600 via-black to-white  bg-clip-text">Chat Room</h1>
+       <div className={styles.center}>
+         <Image
+           className={styles.logo}
+           src="/next.svg"
+           alt="Next.js Logo"
+           width={60}
+           height={12}
+           priority
+         />
+         <div className={styles.thirteen}>
+           <h2 className="font-bold text-teal-400">^15.2.2</h2>
+         </div>
+       </div>
+
+       <AddPost />
+      <div className="flex flex-col items-center justify-center ">
+        <h2 className="text-xl font-bold">No Posts Yet</h2>
+        <p className="text-gray-600 mt-2">You haven't created any posts yet.</p>
+    </div></div>
     }
 
     return (

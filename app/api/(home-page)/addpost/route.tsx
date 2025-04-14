@@ -64,35 +64,70 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // Get title from the BODY
-  const body = await request.json();
+  // Get title from the BODY and validate
+  let title: string;
+  try {
+    const body = await request.json();
 
-  const title = body;
+    // Check if body is a string or an object with a title property
+    if (typeof body === 'string') {
+      title = body;
+    } else if (typeof body === 'object' && body !== null && 'title' in body) {
+      title = body.title;
+    } else {
+      return NextResponse.json(
+        { error: 'Invalid post format. Please provide a title.' },
+        { status: 400 }
+      );
+    }
+
+    // Sanitize the input - more robust sanitization to prevent HTML injection
+    // Remove HTML tags (particularly img tags which can be used for XSS)
+    title = title.replace(/<[^>]*>?/gm, '');
+    // Convert HTML entities to prevent bypass attempts
+    title = title
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&#x27;/g, "'")
+      .replace(/&#x2F;/g, '/');
+    // Remove any remaining < or > characters that could be used to form tags
+    title = title.replace(/[<>]/g, '');
+    // Finally trim whitespace
+    title = title.trim();
+  } catch (err) {
+    return NextResponse.json(
+      { error: 'Invalid request format.' },
+      { status: 400 }
+    );
+  }
 
   //Check title
   if (!title?.length) {
     return NextResponse.json(
       { error: 'Please write something before we can post it.' },
       {
-        status: 403,
+        status: 400,
       }
     );
   }
 
   if (title?.length > 50) {
     return NextResponse.json(
-      { error: 'Please write a shorter post.' },
       {
-        status: 403,
+        error: 'Please write a shorter post. Maximum length is 50 characters.',
+      },
+      {
+        status: 400,
       }
     );
   }
 
   // Get User
-  let prismaUser:any;
+  let prismaUser: any;
   try {
     prismaUser = await prisma.user.findUnique({
-      where: { email: session?.user?.email ?? undefined},
+      where: { email: session?.user?.email ?? undefined },
     });
     if (!prismaUser) {
       return NextResponse.json(
@@ -104,6 +139,10 @@ export async function POST(request: NextRequest) {
     }
   } catch (err) {
     console.log('ERROR', err);
+    return NextResponse.json(
+      { error: 'Database error while finding user.' },
+      { status: 500 }
+    );
   }
 
   // Create a Post
@@ -122,16 +161,17 @@ export async function POST(request: NextRequest) {
       }
     );
   } catch (err) {
+    console.error('Post creation error:', err);
     return NextResponse.json(
       { error: 'Sorry, an error has occured while creating your post!' },
       {
-        status: 403,
+        status: 500,
       }
     );
   }
 }
 
-// from GC 
+// from GC
 // export async function POST(request: Request) {
 //   let prismaUser: {
 //     id: string;

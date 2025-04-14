@@ -1,7 +1,7 @@
 'use client';
 
 import toast from 'react-hot-toast';
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import allPosts from '@/unstableCache/allPosts';
 
@@ -9,22 +9,21 @@ export default function CreatePost() {
   const router = useRouter();
   const [title, setTitle] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
-  const[posts, setPosts] =useState([])
+  const [posts, setPosts] = useState([]);
 
-  useEffect(()=>{
-    const getPosts =async ()=>{
-      const posts:any = await allPosts()
-      console.log('DATAAA', posts)
-      setPosts(posts)
-      console.log('post', posts)
-    }
-   getPosts()
-   
-  },[isDisabled])
+  useEffect(() => {
+    const getPosts = async () => {
+      const posts: any = await allPosts();
+      console.log('DATAAA', posts);
+      setPosts(posts);
+      console.log('post', posts);
+    };
+    getPosts();
+  }, [isDisabled]);
 
-  useEffect(()=>{
-    setIsDisabled(false)
-  },[posts])
+  useEffect(() => {
+    setIsDisabled(false);
+  }, [posts]);
 
   let toastPostID: string;
 
@@ -41,17 +40,36 @@ export default function CreatePost() {
       router.refresh();
       if (response.ok) {
         setTitle('');
-       return toast.success('Post has been made 🔥', { id: toastPostID });
+        return toast.success('Post has been made 🔥', { id: toastPostID });
       }
       toast.error(data.error, { id: toastPostID });
     } catch (err) {
-      return toast.error('Database connection error. Try again in minute!', { id: toastPostID });
+      return toast.error('Database connection error. Try again in minute!', {
+        id: toastPostID,
+      });
     }
   };
 
   const submitPost = (e: React.FormEvent) => {
     e.preventDefault();
-   
+
+    // Client-side validation
+    if (!title.trim().length) {
+      toast.error('Please write something before posting.');
+      return;
+    }
+
+    if (title.length > 50) {
+      toast.error('Your post is too long. Please keep it under 50 characters.');
+      return;
+    }
+
+    // Check for HTML tags, particularly img tags
+    if (/<[^>]*>/.test(title)) {
+      toast.error('HTML tags are not allowed in posts.');
+      return;
+    }
+
     addPost(title);
     console.log('CLICK');
     toastPostID = toast.loading('Creating your post', { id: toastPostID });
@@ -83,7 +101,6 @@ export default function CreatePost() {
           Create a post
         </button>
       </div>
-     
     </form>
   );
 }
