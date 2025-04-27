@@ -69,6 +69,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faGithub } from "@fortawesome/free-brands-svg-icons"
 import HamburgerMenu from "./HamburgerMenu"
 import Galaxy from "./deep-galaxy/galaxy"
+import { Suspense } from "react"
 
 export default async function Nav() {
   const session = await auth()
@@ -105,12 +106,12 @@ export default async function Nav() {
       
         </ul>
       
-
+<Suspense fallback={<div className="absolute right-2">Loading...</div>}>
       <div className="ml-auto">
         {!session && <Login />}
         {session?.user && <Logged image={session.user.image || ""} />}
       </div>
-    
+    </Suspense>
   
     </nav>
   )
