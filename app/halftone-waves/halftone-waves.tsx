@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react';
 import { use } from 'react';
 
 export default function HalftoneWaves() {
-  // use(delay(1000)); // 2 second delay
+  // use(delay(5000)); // 2 second delay
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
