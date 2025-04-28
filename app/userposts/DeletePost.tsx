@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import {useEffect , useState} from 'react';
+import {useEffect , useState, useRef} from 'react';
 import Toggle from './Toggle';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
@@ -40,6 +40,7 @@ export default function DeletePost({
   const queryClient = useQueryClient();
   let deleteToastID: string;
   const router = useRouter();
+  const toastIdRef = useRef<string>("");
 
   const { mutate } = useMutation({
     mutationFn: async (postId: string) => {
@@ -48,21 +49,22 @@ export default function DeletePost({
     onError: (error) => {
       console.log('DELETE ERROR', error);
       if (error instanceof AxiosError) {
-        toast.error(error?.response?.data.message, { id: deleteToastID });
+        toast.error(error?.response?.data.message, { id: toastIdRef.current });
       } else {
-        toast.error('Connection error, check your url.', { id: deleteToastID });
+        toast.error('Connection error, check your url.', { id: toastIdRef.current });
       }
     },
     onSuccess: (data) => {
       console.log(data);
       queryClient.invalidateQueries({ queryKey: ['getAuthPosts'] });
-      toast.success('Post has been deleted.', { id: deleteToastID });
+      toast.success('Post has been deleted.', { id: toastIdRef.current });
       router.refresh();
     },
   });
 
   const deletePost = () => {
-    deleteToastID = toast.loading('Deleting your post.', { id: deleteToastID });
+    // Create a new loading toast and store its ID
+    toastIdRef.current = toast.loading('Deleting your post.');
     mutate(id);
   };
 
