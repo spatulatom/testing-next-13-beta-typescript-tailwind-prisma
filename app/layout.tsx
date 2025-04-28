@@ -6,6 +6,7 @@ import QueryWrapper from './QueryWrapper';
 import { Inter, Moon_Dance } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
 import { Suspense } from 'react';
+import Link from 'next/link';
 // By adding Inter to the <body> element, the font will be applied
 // throughout your application. Here, you're also adding the Tailwind
 // antialiased class which smooths out the font. It's not
@@ -30,9 +31,19 @@ export default function RootLayout({
       >
         {/* <AuthContext> */}
         <QueryWrapper>
-          <Suspense fallback={<div className="absolute right-2">Loading...</div>}>
+       
+        <Suspense 
+          fallback={
+            <nav className='w-screen p-3 font-medium mb-4 flex items-center gap-6'>
+            
+              <Link href="/" className="text-white hover:underline">Home</Link>      
+              <Link href="/deep-galaxy" className="text-white hover:underline">Galaxy</Link>
+              <span className="text-white">Menu loading...</span>
+            </nav>
+          }
+        >
           <Nav />
-          </Suspense>
+        </Suspense>
        
           {children}
         </QueryWrapper>
