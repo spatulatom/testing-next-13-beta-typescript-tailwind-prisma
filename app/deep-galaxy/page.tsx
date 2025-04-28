@@ -1,4 +1,4 @@
-export const dynamic = 'force-static' // This will force the page to be dynamic and not cached
+// export const dynamic = 'force-static' // This will force the page to be dynamic and not cached
 
 import {delay} from '@/app/lib/utils'
 import {Suspense} from 'react'
