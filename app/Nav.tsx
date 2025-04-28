@@ -98,15 +98,7 @@ export default async function Nav() {
             </Link>
           </li>
         )}
-        <li>
-          <a
-            href="https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma#readme"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FontAwesomeIcon icon={faGithub} style={{ fontSize: "25px", color: "white", width: "25px" }} />
-          </a>
-        </li>
+      
         <li>
           <Link href={'/halftone-waves'}>Waves</Link>
         </li>
@@ -122,7 +114,18 @@ export default async function Nav() {
           </p>
         }
     - no benefits for suspense here as the session is chacked outside of this div and then used instanlty    // > */}
+      
+          <a
+            href="https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma#readme"
+            target="_blank"
+            rel="noopener noreferrer"
+            className='mr-4 ml-6'
+          >
+            <FontAwesomeIcon icon={faGithub} style={{ fontSize: "25px", color: "white", width: "25px" }} />
+          </a>
+        
         <div className="ml-auto">
+          
           {!session && <Login />}
           {session?.user && <Logged image={session.user.image || ''} />}
         </div>
