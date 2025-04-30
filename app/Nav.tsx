@@ -105,6 +105,9 @@ export default async function Nav() {
         <li>
           <Link href={'/deep-galaxy'}>Galaxy</Link>
         </li>
+        <li>
+          <Link href={'/edit-suggestions'}>Edit Suggestions</Link>
+        </li>
       </ul>
 
       {/* <Suspense

@@ -8,7 +8,7 @@ import {
 import Image from 'next/image';
   
 
-const fetchAuthPosts = async () => {
+const fetchAuthPost= async () => {
   const response = await axios.get("/api/userposts")
   return response.data
 }
@@ -16,7 +16,7 @@ const fetchAuthPosts = async () => {
 export default function UserOwnPosts() {
   const { data, error, isLoading } = useQuery({
     queryKey: ["getAuthPosts"],
-    queryFn: fetchAuthPosts}
+    queryFn: fetchAuthPost}
   )
   if (isLoading) return <h1 className="m-4 text-center">Posts are loading...</h1>
   if (error) {console.log('Error', error)}
