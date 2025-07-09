@@ -25,7 +25,6 @@
     "paths": {
       "@/*": ["./*"]
     }
-    
   },
   "include": [
     "next-env.d.ts",
@@ -35,8 +34,10 @@
     "app/api/deletepost/route.ts",
     "app/userposts/page.tsx",
     "C:\\Users\\spatu\\Desktop\\projects\\testing-next-13-beta-typescript-tailwind-prisma\\.next/types/**/*.ts",
-    "auth.js"
-, "prisma/client.ts"  ],
+    "auth.js",
+    "prisma/client.ts",
+    "app/deep-galaxy/page.jsx"
+  ],
   "exclude": ["node_modules"],
   "types": ["node"]
 }
