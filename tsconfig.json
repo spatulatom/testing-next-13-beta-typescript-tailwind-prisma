@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -13,17 +17,18 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "incremental": true,
     "plugins": [
       {
         "name": "next"
       }
     ],
-
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": [
+        "./*"
+      ]
     }
   },
   "include": [
@@ -36,8 +41,13 @@
     "C:\\Users\\spatu\\Desktop\\projects\\testing-next-13-beta-typescript-tailwind-prisma\\.next/types/**/*.ts",
     "auth.js",
     "prisma/client.ts",
-    "app/deep-galaxy/page.jsx"
+    "app/deep-galaxy/page.jsx",
+    ".next/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules"],
-  "types": ["node"]
+  "exclude": [
+    "node_modules"
+  ],
+  "types": [
+    "node"
+  ]
 }

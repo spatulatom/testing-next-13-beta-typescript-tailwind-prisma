@@ -16,10 +16,6 @@ const nextConfig = {
     fetches: {
       fullUrl: true,
     },
-  },
-  eslint: {
-    ignoreDuringBuilds: false,
-    dirs: ['app/', 'components/', 'lib/', 'prisma/']
   }
 };
 

@@ -2,17 +2,17 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { cookies, type UnsafeUnwrappedCookies } from 'next/headers';
+import { cookies } from 'next/headers';
 // import { motion } from 'framer-motion';
-import { Post as PrismaPost, User } from '@prisma/client'
+import { Post as PrismaPost, User } from '@prisma/client';
 
 interface PostProps {
-  id: PrismaPost['id']
-  date: PrismaPost['createdAt']
-  name: User['name']
-  avatar: User['image']
-  postTitle: PrismaPost['title']
-  comments: number  // Keep as is - it's a computed value
+  id: PrismaPost['id'];
+  date: PrismaPost['createdAt'];
+  name: User['name'];
+  avatar: User['image'];
+  postTitle: PrismaPost['title'];
+  comments: number; // Keep as is - it's a computed value
 }
 
 export default function Post({
@@ -37,14 +37,14 @@ export default function Post({
       />
     );
   }
-  void (cookies() as unknown as UnsafeUnwrappedCookies)
-  const d = new Date(date).toLocaleString().toString()
+  void cookies();
+  const d = new Date(date).toLocaleString().toString();
 
   console.log(
     'POSTTTTTTTT',
     date,
     typeof date,
-    date instanceof Date,
+    date instanceof Date
     // d.toLocaleString()
   );
   return (
@@ -62,18 +62,15 @@ export default function Post({
     >
       <div className="flex items-center  bg-white p-4 rounded-t-lg">
         {whenNull}
-        <div className=''>
+        <div className="">
           {' '}
           <h3 className="font-bold text-gray-700 pl-2">{name}</h3>
           <h4 className="text-gray-600 text-sm pl-2">posted on: {d}</h4>
         </div>
-        
       </div>
       <div className="py-6 mb-4 bg-teal-600 rounded-b-lg">
         <p className=" text-white px-4">{postTitle}</p>
-        <p className='text-white text-sm pt-6 px-4'>
-          Comments: {comments}
-        </p>
+        <p className="text-white text-sm pt-6 px-4">Comments: {comments}</p>
       </div>
     </Link>
   );
