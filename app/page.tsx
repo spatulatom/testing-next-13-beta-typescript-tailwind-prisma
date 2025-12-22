@@ -12,6 +12,7 @@ import { Post as PrismaPost, User, Comment } from '@prisma/client';
 import Boundary from '@/boundry/Boundary';
 import { Suspense } from 'react';
 
+
 const Home = async () => {
   type PostWithRelations = PrismaPost & {
     user: User;

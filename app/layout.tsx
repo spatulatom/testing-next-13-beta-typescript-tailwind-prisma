@@ -26,6 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head />
+      
       <body
         className={`${inter.className} antialiased pt-2 pb-2 md:p-8 md:m-auto m-4`}
       >
