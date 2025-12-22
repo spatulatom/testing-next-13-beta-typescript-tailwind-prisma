@@ -69,7 +69,7 @@ export default function HamburgerMenu({ isLoggedIn }: HamburgerMenuProps) {
     <div className="md:hidden relative">
       <button
         onClick={toggleMenu}
-        className="text-white focus:outline-none z-20 relative"
+        className="text-white z-20 relative"
       >
         <FontAwesomeIcon icon={isOpen ? faTimes : faBars} className="h-6 w-6" />
       </button>

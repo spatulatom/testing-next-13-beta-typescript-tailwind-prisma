@@ -26,34 +26,40 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head />
+
       <body
         className={`${inter.className} antialiased pt-2 pb-2 md:p-8 md:m-auto m-4`}
       >
         {/* <AuthContext> */}
-       
-            <QueryWrapper>
-              <Suspense
-                fallback={
-                  <nav className="w-screen p-3 font-medium mb-4 flex items-center gap-6">
-                    <Link href="/" className="text-white hover:underline">
-                      Home
-                    </Link>
-                    <Link
-                      href="/deep-galaxy"
-                      className="text-white hover:underline"
-                    >
-                      Galaxy
-                    </Link>
-                    <span className="text-white">Menu loading...</span>
-                  </nav>
-                }
-              >
-                <Nav />
-              </Suspense>
 
-              {children}
-            </QueryWrapper>
-     
+        <QueryWrapper>
+          <header>
+            <Suspense
+              fallback={
+                <nav className="w-screen p-3 font-medium mb-4 flex items-center gap-6">
+                  <Link href="/" className="text-white hover:underline">
+                    Home
+                  </Link>
+                  <Link
+                    href="/deep-galaxy"
+                    className="text-white hover:underline"
+                  >
+                    Galaxy
+                  </Link>
+                  <span className="text-white">Menu loading...</span>
+                </nav>
+              }
+            >
+              <Nav />
+            </Suspense>
+          </header>
+
+          <main>{children}</main>
+
+          <footer className="mt-8 pt-4 border-t border-gray-700 text-center text-gray-400">
+            <p>&copy; 2025 Chat Room. All rights reserved.</p>
+          </footer>
+        </QueryWrapper>
       </body>
     </html>
   );
