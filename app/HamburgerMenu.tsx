@@ -108,18 +108,7 @@ export default function HamburgerMenu({ isLoggedIn }: HamburgerMenuProps) {
                 </Link>
               </li>
             )}
-            {/* <li className="relative z-50">
-              <a
-                href="https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma#readme"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white hover:text-teal-600 transition-all block w-full"
-                onClick={toggleMenu}
-              >
-                <FontAwesomeIcon icon={faGithub} className="h-6 w-6 mr-2" />
-                GitHub
-              </a>
-            </li> */}
+
             <li className="relative z-50">
               <Link
                 href="/halftone-waves"

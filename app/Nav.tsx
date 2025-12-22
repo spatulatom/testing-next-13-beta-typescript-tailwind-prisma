@@ -1,4 +1,3 @@
-
 import { auth } from '../auth';
 import Login from './Login';
 import Logged from './Logged';
@@ -6,8 +5,7 @@ import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import HamburgerMenu from './HamburgerMenu';
-
-
+import { Suspense } from 'react';
 
 export default async function Nav() {
   const session = await auth();
@@ -24,7 +22,9 @@ export default async function Nav() {
 
   return (
     <nav className="flex justify-between items-center pb-8 ">
+      <Suspense>
       <HamburgerMenu isLoggedIn={!!session} />
+      </Suspense>
       <ul className="hidden md:flex flex-wrap items-center gap-4 relative z-10">
         <li>
           <Link href={'/'}>Home</Link>
@@ -38,7 +38,7 @@ export default async function Nav() {
             </Link>
           </li>
         )}
-      
+
         <li>
           <Link href={'/halftone-waves'}>Waves</Link>
         </li>
@@ -50,30 +50,22 @@ export default async function Nav() {
         </li>
       </ul>
 
-      {/* <Suspense
-        fallback={
-          <p className="flex justify-center items-center pt-8 text-white bg-red-500">
-            User details are loading...
-          </p>
-        }
-    - no benefits for suspense here as the session is chacked outside of this div and then used instanlty    // > */}
-      
-        
-        
-        <div className="flex items-center gap-4">
-            <a
-            href="https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma#readme"
-            target="_blank"
-            rel="noopener noreferrer"
-            className=''
-          >
-            <FontAwesomeIcon icon={faGithub} style={{ fontSize: "25px", color: "white", width: "25px" }} />
-          </a>
-          
-          {!session && <Login />}
-          {session?.user && <Logged image={session.user.image || ''} />}
-        </div>
-      {/* </Suspense> */}
+      <div className="flex items-center gap-4">
+        <a
+          href="https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma#readme"
+          target="_blank"
+          rel="noopener noreferrer"
+          className=""
+        >
+          <FontAwesomeIcon
+            icon={faGithub}
+            style={{ fontSize: '25px', color: 'white', width: '25px' }}
+          />
+        </a>
+
+        {!session && <Login />}
+        {session?.user && <Logged image={session.user.image || ''} />}
+      </div>
     </nav>
   );
 }
