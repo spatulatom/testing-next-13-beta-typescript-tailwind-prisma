@@ -1,17 +1,13 @@
-"use server"
+'use server';
 import { unstable_noStore as noStore } from 'next/cache';
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/prisma/client';
 import { revalidateTag } from 'next/cache';
 import { unstable_cache } from 'next/cache';
 import { cookies } from 'next/headers';
 
-
-
-
-const allPosts = async()=>{
-    // cookies()
-    // noStore()
-  const prisma = new PrismaClient(); 
+const allPosts = async () => {
+  await cookies(); // Must await in Next 15+ to mark as dynamic
+  // noStore()
 
   // i am using next 14 feature here for data revalidation
   // when grabbing data directly form database andand whanting to opt out of
@@ -25,11 +21,11 @@ const allPosts = async()=>{
       hearts: true,
     },
     orderBy: {
-      createdAt: 'desc',
+      createdAt: 'desc', //When it does that, it sees Prisma returning createdAt Date objects, which Next considers "current time" access
     },
   });
-  
-  return data
-}
 
-export default allPosts
+  return data;
+};
+
+export default allPosts;

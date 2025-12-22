@@ -173,7 +173,13 @@ function PostsList() {
 
   if (isPending) return <div>Loading...</div>;
 
-  return <ul>{data?.map((post) => <li key={post.id}>{post.title}</li>)}</ul>;
+  return (
+    <ul>
+      {data?.map((post) => (
+        <li key={post.id}>{post.title}</li>
+      ))}
+    </ul>
+  );
 }
 ```
 
@@ -552,6 +558,33 @@ While implementing TypeScript into Next 13 beta I have been following these guid
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Getting Started
+
+### Dev server notes (Next 16)
+
+- `npm run dev` uses Turbopack by default.
+- `npm run dev:webpack` forces Webpack (`--webpack`).
+- If you want Node debugging without "address already in use" spam on port 9229 (Turbopack can spawn multiple processes), use `npm run dev:inspect`.
+
+### Windows note (Turbopack symlinks)
+
+If you run Turbopack on Windows and see an error like:
+
+"create symlink to ..." / "A required privilege is not held by the client (os error 1314)"
+
+Windows is blocking symbolic link creation.
+
+Fix options (pick one):
+
+1. Enable **Developer Mode** in Windows Settings (recommended)
+
+- Settings → System → For developers → Developer Mode → On
+
+2. Run VS Code / your terminal **as Administrator**
+
+After that, run:
+
+- `npm run dev` (Turbopack is default in Next 16)
+- `npm run dev:webpack` (forces Webpack)
 
 First, run the development server:
 

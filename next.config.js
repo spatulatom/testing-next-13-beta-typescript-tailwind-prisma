@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   cacheComponents: true,
+  turbopack: {
+    root: __dirname,
+  },
   images: {
     remotePatterns: [
       {
@@ -17,7 +20,7 @@ const nextConfig = {
     fetches: {
       fullUrl: true,
     },
-  }
+  },
 };
 
 module.exports = nextConfig;

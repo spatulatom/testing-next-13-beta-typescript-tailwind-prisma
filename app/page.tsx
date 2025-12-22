@@ -5,14 +5,12 @@ import AddPost from './AddPost';
 import { PostType } from '../types/Post';
 import Counter from './Counter';
 import { notFound } from 'next/navigation';
-import { PrismaClient } from '@prisma/client';
 import { unstable_noStore as noStore } from 'next/cache';
 import allPosts from '@/unstableCache/allPosts';
 import { cookies } from 'next/headers';
 import { Post as PrismaPost, User, Comment } from '@prisma/client';
 import Boundary from '@/boundry/Boundary';
-
-const prisma = new PrismaClient();
+import { Suspense } from 'react';
 
 const Home = async () => {
   type PostWithRelations = PrismaPost & {
@@ -20,7 +18,6 @@ const Home = async () => {
     comments: Comment[];
   };
 
-  await cookies();
   // i am using next 14 feature here for data revalidation
   // when grabbing data directly form database andand whanting to opt out of
   //  caching(the verison this app is build is    "next": "^13.2.3",)
@@ -32,35 +29,43 @@ const Home = async () => {
     const data: PostWithRelations[] = await allPosts();
 
     if (!data || data.length === 0) {
-    
-      return <div className='mb-20'>
-      {/* <h1 className="text-center font-bold text-4xl md:text-5xl mt-10 mb-2 animate-shimmer bg-gradient-to-r from-teal-600 via-black to-white text-transparent bg-clip-text">Chat</h1> */}
-      <h1 className="text-center font-bold text-4xl md:text-5xl mt-10 mb-2 bg-gradient-to-r from-teal-600 via-black to-white  bg-clip-text">Chat Room</h1>
-       <div className={styles.center}>
-         <Image
-           className={styles.logo}
-           src="/next.svg"
-           alt="Next.js Logo"
-           width={60}
-           height={12}
-           priority
-         />
-         <div className={styles.thirteen}>
-           <h2 className="font-bold text-teal-400">^16.1.0</h2>
-         </div>
-       </div>
+      return (
+        <div className="mb-20">
+          {/* <h1 className="text-center font-bold text-4xl md:text-5xl mt-10 mb-2 animate-shimmer bg-gradient-to-r from-teal-600 via-black to-white text-transparent bg-clip-text">Chat</h1> */}
+          <h1 className="text-center font-bold text-4xl md:text-5xl mt-10 mb-2 bg-gradient-to-r from-teal-600 via-black to-white  bg-clip-text">
+            Chat Room
+          </h1>
+          <div className={styles.center}>
+            <Image
+              className={styles.logo}
+              src="/next.svg"
+              alt="Next.js Logo"
+              width={60}
+              height={12}
+              priority
+            />
+            <div className={styles.thirteen}>
+              <h2 className="font-bold text-teal-400">^16.1.0</h2>
+            </div>
+          </div>
 
-       <AddPost />
-      <div className="flex flex-col items-center justify-center ">
-        <h2 className="text-xl font-bold">No Posts Yet</h2>
-        <p className="text-gray-600 mt-2">You haven't created any posts yet.</p>
-    </div></div>
+          <AddPost />
+          <div className="flex flex-col items-center justify-center ">
+            <h2 className="text-xl font-bold">No Posts Yet</h2>
+            <p className="text-gray-600 mt-2">
+              You haven't created any posts yet.
+            </p>
+          </div>
+        </div>
+      );
     }
 
     return (
-      <div className='mb-20'>
-       {/* <h1 className="text-center font-bold text-4xl md:text-5xl mt-10 mb-2 animate-shimmer bg-gradient-to-r from-teal-600 via-black to-white text-transparent bg-clip-text">Chat</h1> */}
-       <h1 className="text-center font-bold text-4xl md:text-5xl mt-10 mb-2 bg-gradient-to-r from-teal-600 via-black to-white  bg-clip-text">Chat Room</h1>
+      <div className="mb-20">
+        {/* <h1 className="text-center font-bold text-4xl md:text-5xl mt-10 mb-2 animate-shimmer bg-gradient-to-r from-teal-600 via-black to-white text-transparent bg-clip-text">Chat</h1> */}
+        <h1 className="text-center font-bold text-4xl md:text-5xl mt-10 mb-2 bg-gradient-to-r from-teal-600 via-black to-white  bg-clip-text">
+          Chat Room
+        </h1>
         <div className={styles.center}>
           <Image
             className={styles.logo}
@@ -95,13 +100,10 @@ const Home = async () => {
     console.error('Error fetching posts:', error);
     return (
       <div>
-     
-             <AddPost />
-    
+        <AddPost />
       </div>
     );
   } finally {
-    // await prisma.$disconnect();
   }
 };
 
