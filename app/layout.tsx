@@ -54,7 +54,7 @@ export default function RootLayout({
             </Suspense>
           </header>
 
-          <main>{children}</main>
+          <main className=" md:w-4/6 m-auto">{children}</main>
 
           <footer className="mt-8 pt-4 border-t border-gray-700 text-center text-gray-400">
             <p>&copy; 2025 Chat Room. All rights reserved.</p>
