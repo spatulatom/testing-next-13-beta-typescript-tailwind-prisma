@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import styles from './page.module.css';
+
 import Post from './Post';
 import AddPost from './AddPost';
 import { PostType } from '../types/Post';
@@ -30,19 +30,7 @@ const Home = async () => {
           <h1 className="text-center font-bold text-xl md:text-5xl mt-10 mb-2 bg-gradient-to-r from-teal-600 via-black to-white  bg-clip-text">
             Chat Room
           </h1>
-          <div className={styles.center}>
-            <Image
-              className={styles.logo}
-              src="/next.svg"
-              alt="Next.js Logo"
-              width={60}
-              height={12}
-              priority
-            />
-            <div className={styles.thirteen}>
-              <h2 className="font-bold text-teal-400">^16.1.0</h2>
-            </div>
-          </div>
+        
 
           <AddPost />
           <div className="flex flex-col items-center justify-center ">
@@ -57,24 +45,11 @@ const Home = async () => {
 
     return (
       <div className="">
-        <h1 className="text-center font-bold text-2xl  mt-10 animate-shimmer bg-gradient-to-r from-teal-600 via-black to-white text-transparent bg-clip-text capitalize">chat Room</h1>
-           {/* <h1 className="text-center font-bold text-4xl md:text-xl mt-10 mb-2 bg-gradient-to-r from-teal-600 via-black to-white  bg-clip-text">
+        {/* <h1 className="text-center text-2xl font-bold  mt-10 animate-shimmer bg-gradient-to-r from-teal-600 via-black to-white text-transparent bg-clip-text capitalize">chat Room</h1> */}
+           <h1 className="text-center font-bold text-xl mt-10 mb-2 bg-gradient-to-r from-teal-600 via-black to-white  bg-clip-text">
           Chat Room
-        </h1> */}
-        <div className={`${styles.center}`} >
-       
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={60}
-            height={12}
-            priority
-          />
-          <div className={styles.thirteen}>
-            <h2 className="font-bold text-teal-400">^16.1.0</h2>
-          </div>
-        </div>
+        </h1>
+      
 
         <AddPost />
         <Counter count={data.length} />

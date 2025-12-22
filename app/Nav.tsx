@@ -21,18 +21,18 @@ export default async function Nav() {
   }
 
   return (
-    <nav className="flex justify-between items-center pb-8 ">
+    <nav className="flex justify-between items-center ">
       <Suspense>
       <HamburgerMenu isLoggedIn={!!session} />
       </Suspense>
-      <ul className="hidden md:flex flex-wrap items-center gap-4 relative z-10">
+      <ul className="hidden md:flex flex-wrap items-center gap-4 relative z-10 text-sm">
         <li>
           <Link href={'/'}>Home</Link>
         </li>
         {session && (
           <li>
             <Link href={'/userposts'}>
-              <h2 className="hover:text-teal-600 transition-all text-lg">
+              <h2 className="hover:text-teal-600 transition-all ">
                 User's Posts
               </h2>
             </Link>
