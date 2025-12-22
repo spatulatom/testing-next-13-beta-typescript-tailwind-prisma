@@ -6,7 +6,7 @@ import { unstable_cache } from 'next/cache';
 import { cookies } from 'next/headers';
 
 const allPosts = async () => {
-  // cookies()
+  await cookies(); // Must await in Next 15+ to mark as dynamic
   // noStore()
 
   // i am using next 14 feature here for data revalidation
@@ -21,7 +21,7 @@ const allPosts = async () => {
       hearts: true,
     },
     orderBy: {
-      createdAt: 'desc',
+      createdAt: 'desc', //When it does that, it sees Prisma returning createdAt Date objects, which Next considers "current time" access
     },
   });
 

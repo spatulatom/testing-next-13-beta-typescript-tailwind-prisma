@@ -10,6 +10,7 @@ import allPosts from '@/unstableCache/allPosts';
 import { cookies } from 'next/headers';
 import { Post as PrismaPost, User, Comment } from '@prisma/client';
 import Boundary from '@/boundry/Boundary';
+import { Suspense } from 'react';
 
 const Home = async () => {
   type PostWithRelations = PrismaPost & {
@@ -17,7 +18,6 @@ const Home = async () => {
     comments: Comment[];
   };
 
-  await cookies();
   // i am using next 14 feature here for data revalidation
   // when grabbing data directly form database andand whanting to opt out of
   //  caching(the verison this app is build is    "next": "^13.2.3",)
