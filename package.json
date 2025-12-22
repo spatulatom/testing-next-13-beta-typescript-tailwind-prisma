@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --webpack",
-    "dev:turbo": "next dev",
+    "dev:webpack": "next dev --webpack",
+    "dev": "next dev --inspect",
     "dev:inspect": "set NODE_OPTIONS=--inspect=0 && next dev --webpack",
     "build": "npx rimraf node_modules/.prisma && prisma generate && next build",
     "start": "next start",

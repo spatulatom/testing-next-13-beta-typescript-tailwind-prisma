@@ -14,7 +14,7 @@ import Link from 'next/link';
 
 export const metadata = {
   title: 'Chat Room',
-  description: 'A friendly place for open discussions',
+  description: 'Just vent it out',
 };
 
 export default function RootLayout({
