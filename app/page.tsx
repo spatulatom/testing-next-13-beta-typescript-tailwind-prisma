@@ -12,16 +12,11 @@ import { Post as PrismaPost, User, Comment } from '@prisma/client';
 import Boundary from '@/boundry/Boundary';
 import { Suspense } from 'react';
 
-
 const Home = async () => {
   type PostWithRelations = PrismaPost & {
     user: User;
     comments: Comment[];
   };
-
-  // i am using next 14 feature here for data revalidation
-  // when grabbing data directly form database andand whanting to opt out of
-  //  caching(the verison this app is build is    "next": "^13.2.3",)
 
   console.log('DATA FETCH HOME PAGE1');
 
@@ -32,8 +27,7 @@ const Home = async () => {
     if (!data || data.length === 0) {
       return (
         <div className="mb-20">
-          {/* <h1 className="text-center font-bold text-4xl md:text-5xl mt-10 mb-2 animate-shimmer bg-gradient-to-r from-teal-600 via-black to-white text-transparent bg-clip-text">Chat</h1> */}
-          <h1 className="text-center font-bold text-4xl md:text-5xl mt-10 mb-2 bg-gradient-to-r from-teal-600 via-black to-white  bg-clip-text">
+          <h1 className="text-center font-bold text-xl md:text-5xl mt-10 mb-2 bg-gradient-to-r from-teal-600 via-black to-white  bg-clip-text">
             Chat Room
           </h1>
           <div className={styles.center}>
@@ -62,12 +56,13 @@ const Home = async () => {
     }
 
     return (
-      <div className="mb-20">
-        {/* <h1 className="text-center font-bold text-4xl md:text-5xl mt-10 mb-2 animate-shimmer bg-gradient-to-r from-teal-600 via-black to-white text-transparent bg-clip-text">Chat</h1> */}
-        <h1 className="text-center font-bold text-4xl md:text-5xl mt-10 mb-2 bg-gradient-to-r from-teal-600 via-black to-white  bg-clip-text">
+      <div className="">
+        <h1 className="text-center font-bold text-2xl  mt-10 animate-shimmer bg-gradient-to-r from-teal-600 via-black to-white text-transparent bg-clip-text capitalize">chat Room</h1>
+           {/* <h1 className="text-center font-bold text-4xl md:text-xl mt-10 mb-2 bg-gradient-to-r from-teal-600 via-black to-white  bg-clip-text">
           Chat Room
-        </h1>
-        <div className={styles.center}>
+        </h1> */}
+        <div className={`${styles.center}`} >
+       
           <Image
             className={styles.logo}
             src="/next.svg"
