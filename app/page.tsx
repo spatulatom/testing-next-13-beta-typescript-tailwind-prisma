@@ -10,6 +10,7 @@ import { unstable_noStore as noStore } from 'next/cache';
 import allPosts from '@/unstableCache/allPosts';
 import { cookies } from 'next/headers';
 import { Post as PrismaPost, User, Comment } from '@prisma/client';
+import Boundary from '@/boundry/Boundary';
 
 const prisma = new PrismaClient();
 
@@ -94,7 +95,9 @@ const Home = async () => {
     console.error('Error fetching posts:', error);
     return (
       <div>
-        <AddPost />
+     
+             <AddPost />
+    
       </div>
     );
   } finally {
