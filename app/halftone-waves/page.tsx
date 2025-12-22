@@ -1,10 +1,14 @@
-
 import HalftoneWaves from './halftone-waves';
 import { delay } from '@/app/lib/utils';
 import { Suspense } from 'react';
+import { headers } from 'next/headers';
 
 // This function only runs on the server
-function getServerTimeInfo() {
+async function getServerTimeInfo() {
+  // Make this computation request-bound (dynamic). In Next.js 16 Cache Components,
+  // accessing the current time/randomness requires reading Request data (or uncached data) first.
+  await headers();
+
   // Server-side timestamp
   const timestamp = Date.now();
   // This random number will demonstrate that the component only executes once on the server
@@ -15,7 +19,7 @@ function getServerTimeInfo() {
 
 export default async function Home() {
   // This code executes ONLY on the server
-  const serverInfo = getServerTimeInfo();
+  const serverInfo = await getServerTimeInfo();
 
   // This log appears on the server, and then is reproduced in the browser console
   // But the code itself only runs once on the server
