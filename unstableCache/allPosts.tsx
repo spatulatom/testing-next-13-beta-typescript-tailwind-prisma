@@ -1,6 +1,6 @@
 "use server"
 import { unstable_noStore as noStore } from 'next/cache';
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/prisma/client';
 import { revalidateTag } from 'next/cache';
 import { unstable_cache } from 'next/cache';
 import { cookies } from 'next/headers';
@@ -11,7 +11,6 @@ import { cookies } from 'next/headers';
 const allPosts = async()=>{
     // cookies()
     // noStore()
-  const prisma = new PrismaClient(); 
 
   // i am using next 14 feature here for data revalidation
   // when grabbing data directly form database andand whanting to opt out of

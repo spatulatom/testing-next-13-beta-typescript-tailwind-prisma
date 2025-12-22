@@ -5,14 +5,11 @@ import AddPost from './AddPost';
 import { PostType } from '../types/Post';
 import Counter from './Counter';
 import { notFound } from 'next/navigation';
-import { PrismaClient } from '@prisma/client';
 import { unstable_noStore as noStore } from 'next/cache';
 import allPosts from '@/unstableCache/allPosts';
 import { cookies } from 'next/headers';
 import { Post as PrismaPost, User, Comment } from '@prisma/client';
 import Boundary from '@/boundry/Boundary';
-
-const prisma = new PrismaClient();
 
 const Home = async () => {
   type PostWithRelations = PrismaPost & {
@@ -101,7 +98,6 @@ const Home = async () => {
       </div>
     );
   } finally {
-    // await prisma.$disconnect();
   }
 };
 

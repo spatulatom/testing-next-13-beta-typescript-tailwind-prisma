@@ -44,6 +44,7 @@
 
 
 import { PrismaClient } from '@prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
 
 
 
@@ -51,9 +52,22 @@ import { PrismaClient } from '@prisma/client';
 // exhausting your database connection limit.
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
+const connectionString =
+  process.env.POSTGRES_PRISMA_URL ??
+  process.env.DATABASE_URL;
+
+if (!connectionString) {
+  throw new Error(
+    'Missing database connection string. Set POSTGRES_PRISMA_URL (preferred) or DATABASE_URL.'
+  );
+}
+
+const adapter = new PrismaPg({ connectionString });
+
 export const prisma =
   globalForPrisma.prisma ||
   new PrismaClient({
+    adapter,
     // log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
     log: process.env.NODE_ENV === 'development' ? [] : ['error'],
   });
