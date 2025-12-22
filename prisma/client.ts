@@ -42,19 +42,15 @@
 
 // export default prisma - legacy from before updtae to Prisma 6.0
 
-
 import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
-
-
 
 // PrismaClient is attached to the `global` object in development to prevent
 // exhausting your database connection limit.
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
 const connectionString =
-  process.env.POSTGRES_PRISMA_URL ??
-  process.env.DATABASE_URL;
+  process.env.POSTGRES_PRISMA_URL ?? process.env.DATABASE_URL;
 
 if (!connectionString) {
   throw new Error(

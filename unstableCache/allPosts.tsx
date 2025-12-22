@@ -1,16 +1,13 @@
-"use server"
+'use server';
 import { unstable_noStore as noStore } from 'next/cache';
 import prisma from '@/prisma/client';
 import { revalidateTag } from 'next/cache';
 import { unstable_cache } from 'next/cache';
 import { cookies } from 'next/headers';
 
-
-
-
-const allPosts = async()=>{
-    // cookies()
-    // noStore()
+const allPosts = async () => {
+  // cookies()
+  // noStore()
 
   // i am using next 14 feature here for data revalidation
   // when grabbing data directly form database andand whanting to opt out of
@@ -27,8 +24,8 @@ const allPosts = async()=>{
       createdAt: 'desc',
     },
   });
-  
-  return data
-}
 
-export default allPosts
+  return data;
+};
+
+export default allPosts;
