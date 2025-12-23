@@ -47,19 +47,27 @@ const Home = async () => {
       <div className="">
         {/* <h1 className="text-center text-2xl font-bold  mt-10 animate-shimmer bg-gradient-to-r from-teal-600 via-black to-white text-transparent bg-clip-text capitalize">chat Room</h1> */}
         <h1 className="text-center font-bold text-xl mt-10 mb-2 bg-gradient-to-r from-teal-600 via-black to-white  bg-clip-text">
-          Chat Room
+          Chat Room - crud app with{' '}
+          <Link
+            className="text-teal-600"
+            target="_blank"
+            href="https://nextjs.org/docs/app/getting-started/cache-components"
+          >
+            Cached Components
+          </Link>
         </h1>
         <ul className="list-disc ml-6 space-y-1">
           <li>
             {' '}
-            this project was one of the early adopters of App Router and React Server
-            Components (RSC) introduced in next.js 13 beta,{' '}
+            this project was one of the early adopters of App Router and React
+            Server Components (RSC) introduced in Next.js 13 Beta,{' '}
           </li>
           <li>
-            since then it was migrated to every major next.js version
-            implementing new features at every release, from version 13 to 16 (see{' '}
+            since then it was migrated to every major Next.js version
+            trying new features at every release, from version 13 to 16
+            (see{' '}
             <Link
-              className="text-green-500"
+              className="text-teal-600"
               target="_blank"
               href="https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma#readme"
             >
@@ -67,7 +75,6 @@ const Home = async () => {
             </Link>{' '}
             for more details).{' '}
           </li>
-         
         </ul>
 
         <AddPost />
