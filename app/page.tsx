@@ -28,14 +28,14 @@ const Home = async () => {
     if (!data || data.length === 0) {
       return (
         <div className="mb-20">
-          <h1 className="text-center font-bold text-xl md:text-5xl mt-10 mb-2 bg-gradient-to-r from-teal-600 via-black to-white  bg-clip-text">
+          <h1 className="mb-2 mt-10 bg-gradient-to-r from-teal-600 via-black to-white bg-clip-text text-center text-xl font-bold md:text-5xl">
             Chat Room
           </h1>
 
           <AddPost />
-          <div className="flex flex-col items-center justify-center ">
+          <div className="flex flex-col items-center justify-center">
             <h2 className="text-xl font-bold">No Posts Yet</h2>
-            <p className="text-gray-600 mt-2">
+            <p className="mt-2 text-gray-600">
               You haven't created any posts yet.
             </p>
           </div>
@@ -46,28 +46,27 @@ const Home = async () => {
     return (
       <div className="">
         {/* <h1 className="text-center text-2xl font-bold  mt-10 animate-shimmer bg-gradient-to-r from-teal-600 via-black to-white text-transparent bg-clip-text capitalize">chat Room</h1> */}
-        <h1 className="text-center font-bold text-xl mt-10 mb-2 bg-gradient-to-r from-teal-600 via-black to-white  bg-clip-text">
+        <h1 className="mb-2 mt-10 bg-gradient-to-r from-teal-600 via-black to-white bg-clip-text text-center text-xl font-bold">
           Chat Room - crud app with{' '}
           <Link
-            className="text-teal-600"
+            className="text-teal-600 hover:underline focus:underline"
             target="_blank"
             href="https://nextjs.org/docs/app/getting-started/cache-components"
           >
             Cached Components
           </Link>
         </h1>
-        <ul className="list-disc ml-6 space-y-1">
+        <ul className="ml-6 list-disc space-y-1">
           <li>
             {' '}
             this project was one of the early adopters of App Router and React
             Server Components (RSC) introduced in Next.js 13 Beta,{' '}
           </li>
           <li>
-            since then it was migrated to every major Next.js version
-            trying new features at every release, from version 13 to 16
-            (see{' '}
+            since then it was migrated to every major Next.js version trying new
+            features at every release, from version 13 to 16 (see{' '}
             <Link
-              className="text-teal-600"
+              className="text-teal-600 hover:underline focus:underline"
               target="_blank"
               href="https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma#readme"
             >

@@ -60,17 +60,17 @@ export default function Post({
         pathname: `/${id}`,
       }}
     >
-      <div className="flex items-center  bg-white p-4 rounded-t-lg">
+      <div className="flex items-center rounded-t-lg bg-white p-4">
         {whenNull}
         <div className="">
           {' '}
-          <h3 className="font-bold text-gray-700 pl-2">{name}</h3>
-          <h4 className="text-gray-600 text-sm pl-2">posted on: {d}</h4>
+          <h3 className="pl-2 font-bold text-gray-700">{name}</h3>
+          <h4 className="pl-2 text-sm text-gray-600">posted on: {d}</h4>
         </div>
       </div>
-      <div className="py-6 mb-4 bg-teal-600 rounded-b-lg">
-        <p className=" text-white px-4">{postTitle}</p>
-        <p className="text-white text-sm pt-6 px-4">Comments: {comments}</p>
+      <div className="mb-4 rounded-b-lg bg-teal-600 py-6">
+        <p className="px-4 text-white">{postTitle}</p>
+        <p className="px-4 pt-6 text-sm text-white">Comments: {comments}</p>
       </div>
     </Link>
   );

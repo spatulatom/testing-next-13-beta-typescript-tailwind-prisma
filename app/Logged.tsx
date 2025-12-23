@@ -10,9 +10,9 @@ type User = {
 
 export default function Logged({ image }: User) {
   return (
-    <div className="flex gap-2 items-center">
+    <div className="flex items-center gap-2">
       <button
-        className="bg-gray-700 font-bold cursor-pointer text-white hover:bg-slate-600 transition-all text-sm px-2 py-2 rounded-md whitespace-nowrap"
+        className="cursor-pointer whitespace-nowrap rounded-md bg-gray-700 px-2 py-2 text-sm font-bold text-white transition-all hover:bg-slate-600"
         onClick={() => signOut()}
       >
         Sign Out
@@ -21,7 +21,7 @@ export default function Logged({ image }: User) {
         <Image
           width={96}
           height={96}
-          className="h-10 w-10 aspect-square rounded-full"
+          className="aspect-square h-10 w-10 rounded-full"
           src={image}
           alt="Google Aviator image"
           priority

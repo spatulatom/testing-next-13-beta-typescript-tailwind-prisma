@@ -18,7 +18,7 @@ type URL = {
 //   const data = await fetch(`${process.env.NEXT_URL}/api/${id}`, {
 //     cache: 'no-store',
 //   });
-  
+
 //   const response = await data.json();
 //   if (data.ok) {
 //     return response.data;
@@ -27,10 +27,12 @@ type URL = {
 // };
 
 // URL below equals to router().query.parans
-export default async function PostDetail(props: {params: Promise<{post:string}>}) {
+export default async function PostDetail(props: {
+  params: Promise<{ post: string }>;
+}) {
   const params = await props.params;
   // const response: PostType= await fetchDetails(url.params.post);
-  const response: any = await singlePost(params.post)
+  const response: any = await singlePost(params.post);
   if (!response) {
     // for http.../random number - we can use:
     notFound();
@@ -38,7 +40,7 @@ export default async function PostDetail(props: {params: Promise<{post:string}>}
   return (
     <div>
       <Post
-      date= {response.createdAt}
+        date={response.createdAt}
         id={response?.id}
         name={response?.user.name}
         avatar={response?.user.image}
@@ -47,8 +49,11 @@ export default async function PostDetail(props: {params: Promise<{post:string}>}
       />
       <AddComment id={response?.id} />
       <h2>Comments:</h2>
-      {response.comments?.map((comment:any) => (
-        <div key={comment.id} className='bg-gray-300 rounded-md text-black p-2 mt-2'>
+      {response.comments?.map((comment: any) => (
+        <div
+          key={comment.id}
+          className="mt-2 rounded-md bg-gray-300 p-2 text-black"
+        >
           <div className="flex items-center gap-2">
             <Image
               width={24}
@@ -60,7 +65,7 @@ export default async function PostDetail(props: {params: Promise<{post:string}>}
             <h3 className="font-bold">{comment?.user?.name},</h3>
             {/* <h2 className="text-sm">commented at {comment.createdAt?.substring(11, 19)}, {comment.createdAt?.substring(0,10)}</h2> */}
           </div>
-          <div className='italic'> - {comment.title}</div>
+          <div className="italic"> - {comment.title}</div>
         </div>
       ))}
     </div>

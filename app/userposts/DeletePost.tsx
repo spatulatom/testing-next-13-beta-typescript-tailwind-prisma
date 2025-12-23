@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import {useEffect , useState, useRef} from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Toggle from './Toggle';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
@@ -15,7 +15,7 @@ type EditProps = {
   name: string;
   title: string;
   comments: {
-    createdAt?: string;  // chck for comments at the bottom of this fiel why this might be seen as optiinal 
+    createdAt?: string; // chck for comments at the bottom of this fiel why this might be seen as optiinal
     id: string;
     postId: string;
     title: string;
@@ -40,7 +40,7 @@ export default function DeletePost({
   const queryClient = useQueryClient();
   let deleteToastID: string;
   const router = useRouter();
-  const toastIdRef = useRef<string>("");
+  const toastIdRef = useRef<string>('');
 
   const { mutate } = useMutation({
     mutationFn: async (postId: string) => {
@@ -51,7 +51,9 @@ export default function DeletePost({
       if (error instanceof AxiosError) {
         toast.error(error?.response?.data.message, { id: toastIdRef.current });
       } else {
-        toast.error('Connection error, check your url.', { id: toastIdRef.current });
+        toast.error('Connection error, check your url.', {
+          id: toastIdRef.current,
+        });
       }
     },
     onSuccess: (data) => {
@@ -74,17 +76,17 @@ export default function DeletePost({
         animate={{ opacity: 1, scale: 1 }}
         initial={{ opacity: 0, scale: 0.8 }}
         transition={{ ease: 'easeOut' }}
-        className="bg-white my-8 mb-1 p-8 rounded-lg "
+        className="my-8 mb-1 rounded-lg bg-white p-8"
       >
         <div className="flex items-center gap-2">
           <Image width={32} height={32} src={avatar} alt="avatar" />
           <h3 className="font-bold text-gray-700">{name}</h3>
         </div>
-        <div className="my-8 ">
+        <div className="my-8">
           <p className="break-all text-black">{title}</p>
         </div>
-        <div className="flex justify-between gap-4 ">
-          <p className=" text-sm font-bold text-gray-700">
+        <div className="flex justify-between gap-4">
+          <p className="text-sm font-bold text-gray-700">
             {comments?.length} Comments:
           </p>
           {/* <Comment comments={comments}/> */}
@@ -103,8 +105,6 @@ export default function DeletePost({
     </>
   );
 }
-
-
 
 // model Comment {
 //   createdAt DateTime @default(now())  // Always exists as DateTime

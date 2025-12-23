@@ -28,7 +28,7 @@ export default function RootLayout({
       <head />
 
       <body
-        className={`${inter.className} antialiased pt-2 pb-2 md:p-8 md:m-auto m-4`}
+        className={`${inter.className} m-4 pb-2 pt-2 antialiased md:m-auto md:p-8`}
       >
         {/* <AuthContext> */}
 
@@ -36,7 +36,7 @@ export default function RootLayout({
           <header>
             <Suspense
               fallback={
-                <nav className="w-screen p-3 font-medium mb-4 flex items-center gap-6">
+                <nav className="mb-4 flex w-screen items-center gap-6 p-3 font-medium">
                   <Link href="/" className="text-white hover:underline">
                     Home
                   </Link>
@@ -54,9 +54,9 @@ export default function RootLayout({
             </Suspense>
           </header>
 
-          <main className=" md:w-4/6 m-auto">{children}</main>
+          <main className="m-auto md:w-4/6">{children}</main>
 
-          <footer className="mt-8 pt-4 border-t border-gray-700 text-center text-gray-400">
+          <footer className="mt-8 border-t border-gray-700 pt-4 text-center text-gray-400">
             <p>&copy; 2025 Chat Room. All rights reserved.</p>
           </footer>
         </QueryWrapper>
