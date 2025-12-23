@@ -56,15 +56,14 @@ const Home = async () => {
             Cached Components
           </Link>
         </h1>
-        <ul className="ml-6 list-disc space-y-1">
-          <li>
+        <p className="ml-6 list-disc space-y-1 ">
+   
             {' '}
-            this project was one of the early adopters of App Router and React
-            Server Components (RSC) introduced in Next.js 13 Beta,{' '}
-          </li>
-          <li>
-            since then it was migrated to every major Next.js version trying new
-            features at every release, from version 13 to 16 (see{' '}
+            This project experimented with App Router and React
+            Server Components (RSC) when they were introduced in Next.js 13 Beta (in 2023).{' '}<br/> 
+         
+            Since then it was migrated to every major Next.js version trying some new
+            features at every release, from version 13 to 16+ (see{' '}
             <Link
               className="text-teal-600 hover:underline focus:underline"
               target="_blank"
@@ -73,8 +72,8 @@ const Home = async () => {
               readme
             </Link>{' '}
             for more details).{' '}
-          </li>
-        </ul>
+        
+        </p>
 
         <AddPost />
         <Counter count={data.length} />
