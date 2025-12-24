@@ -37,7 +37,7 @@ export default function Post({
       />
     );
   }
-  void cookies();
+  // void cookies();
   const d = new Date(date).toLocaleString().toString();
 
   console.log(

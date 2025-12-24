@@ -13,7 +13,12 @@ import Boundary from '@/boundry/Boundary';
 import { Suspense } from 'react';
 import Link from 'next/link';
 
+// ISR: Revalidate every 60 seconds (tells Next.js this is static with timed refresh)
+export const revalidate = 60;
+
 const Home = async () => {
+  
+  
   type PostWithRelations = PrismaPost & {
     user: User;
     comments: Comment[];
@@ -48,54 +53,52 @@ const Home = async () => {
         {/* <h1 className="text-center text-2xl font-bold  mt-10 animate-shimmer bg-gradient-to-r from-teal-600 via-black to-white text-transparent bg-clip-text capitalize">chat Room</h1> */}
         <h1 className="mb-2 mt-10 bg-gradient-to-r from-teal-600 via-black to-white bg-clip-text text-center text-xl font-bold">
           Chat Room - crud app with{' '}
-          <Link
+          <a
             className="text-teal-600 hover:underline focus:underline"
             target="_blank"
             href="https://nextjs.org/docs/app/getting-started/cache-components"
           >
             Cached Components
-          </Link>
+          </a>
         </h1>
-        <p className="ml-6 list-disc space-y-1 ">
-   
-            {' '}
-            This project experimented with App Router and React
-            Server Components (RSC) when they were introduced in Next.js 13 Beta (in 2023).{' '}<br/> 
-         
-            Since then it was migrated to every major Next.js version trying some new
-            features at every release, from version 13 to 16+ (see{' '}
-            <Link
-              className="text-teal-600 hover:underline focus:underline"
-              target="_blank"
-              href="https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma#readme"
-            >
-              readme
-            </Link>{' '}
-            for more details).{' '}
-        
+        <p className="ml-6 list-disc space-y-1">
+          {' '}
+          This project tested App Router and React Server Components (RSC) when
+          they were first  introduced in Next.js 13 Beta (in 2023). <br />
+          Since then the project was migrated to every major Next.js version trying some
+          new features at every release, from version 13 to 16+ (see{' '}
+          <a
+            className="text-teal-600 hover:underline focus:underline"
+            target="_blank"
+            href="https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma#readme"
+          >
+            readme
+          </a>{' '}
+          for more details).{' '}
         </p>
 
         <AddPost />
         <Counter count={data.length} />
-
-        {data.map((post) => (
-          <Post
-            key={post.id}
-            id={post.id}
-            date={post.createdAt}
-            name={post.user.name}
-            avatar={post.user.image}
-            postTitle={post.title}
-            comments={post.comments.length}
-          />
-        ))}
+     
+          {data.map((post) => (
+            <Post
+              key={post.id}
+              id={post.id}
+              date={post.createdAt}
+              name={post.user.name}
+              avatar={post.user.image}
+              postTitle={post.title}
+              comments={post.comments.length}
+            />
+          ))}
+     
       </div>
     );
   } catch (error) {
     console.error('Error fetching posts:', error);
     return (
       <div>
-        <AddPost />
+        <h1>Error loading posts</h1>
       </div>
     );
   } finally {
