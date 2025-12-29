@@ -72,11 +72,11 @@ export default function HamburgerMenu({ isLoggedIn }: HamburgerMenuProps) {
   }, [isOpen]);
 
   return (
-    <div className="md:hidden relative" ref={menuRef}>
+    <div className="relative md:hidden" ref={menuRef}>
       <button
         ref={buttonRef}
         onClick={toggleMenu}
-        className="text-white z-20 relative"
+        className="relative z-20 text-white"
         aria-label="Toggle mobile menu"
         aria-expanded={!!isOpen}
       >
@@ -85,13 +85,13 @@ export default function HamburgerMenu({ isLoggedIn }: HamburgerMenuProps) {
       {isOpen && (
         <nav
           aria-label="mobile navigation"
-          className="absolute top-full left-0 right-0 bg-gray-800 p-6 mt-2 w-screen z-50"
+          className="absolute left-0 right-0 top-full z-50 mt-2 w-screen bg-gray-800 p-6"
         >
           <ul className="space-y-6">
             <li className="relative z-50">
               <Link
                 href="/"
-                className="text-white hover:text-teal-600 transition-all block w-full"
+                className="block w-full text-white transition-all hover:text-teal-600"
                 onClick={toggleMenu}
               >
                 Home
@@ -101,7 +101,7 @@ export default function HamburgerMenu({ isLoggedIn }: HamburgerMenuProps) {
               <li className="relative z-50">
                 <Link
                   href="/userposts"
-                  className="text-white hover:text-teal-600 transition-all block w-full"
+                  className="block w-full text-white transition-all hover:text-teal-600"
                   onClick={toggleMenu}
                 >
                   User's Posts
@@ -112,7 +112,7 @@ export default function HamburgerMenu({ isLoggedIn }: HamburgerMenuProps) {
             <li className="relative z-50">
               <Link
                 href="/halftone-waves"
-                className="text-white hover:text-teal-600 transition-all block w-full"
+                className="block w-full text-white transition-all hover:text-teal-600"
                 onClick={toggleMenu}
               >
                 Waves
@@ -121,7 +121,7 @@ export default function HamburgerMenu({ isLoggedIn }: HamburgerMenuProps) {
             <li className="relative z-50">
               <Link
                 href="/deep-galaxy"
-                className="text-white hover:text-teal-600 transition-all block w-full"
+                className="block w-full text-white transition-all hover:text-teal-600"
                 onClick={toggleMenu}
               >
                 Galaxy
@@ -130,7 +130,7 @@ export default function HamburgerMenu({ isLoggedIn }: HamburgerMenuProps) {
             <li className="relative z-50">
               <Link
                 href="/edit-suggestions"
-                className="text-white hover:text-teal-600 transition-all block w-full"
+                className="block w-full text-white transition-all hover:text-teal-600"
                 onClick={toggleMenu}
               >
                 Edit Suggestions

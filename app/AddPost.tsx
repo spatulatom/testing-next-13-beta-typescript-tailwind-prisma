@@ -1,29 +1,13 @@
 'use client';
 
 import toast from 'react-hot-toast';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import allPosts from '@/unstableCache/allPosts';
 
 export default function CreatePost() {
   const router = useRouter();
   const [title, setTitle] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
-  const [posts, setPosts] = useState([]);
-
-  useEffect(() => {
-    const getPosts = async () => {
-      const posts: any = await allPosts();
-      console.log('DATAAA', posts);
-      setPosts(posts);
-      console.log('post', posts);
-    };
-    getPosts();
-  }, [isDisabled]);
-
-  useEffect(() => {
-    setIsDisabled(false);
-  }, [posts]);
 
   let toastPostID: string;
 
@@ -40,10 +24,13 @@ export default function CreatePost() {
       router.refresh();
       if (response.ok) {
         setTitle('');
+        setIsDisabled(false);
         return toast.success('Post has been made 🔥', { id: toastPostID });
       }
+      setIsDisabled(false);
       toast.error(data.error, { id: toastPostID });
     } catch (err) {
+      setIsDisabled(false);
       return toast.error('Database connection error. Try again in minute!', {
         id: toastPostID,
       });
@@ -77,25 +64,25 @@ export default function CreatePost() {
   };
 
   return (
-    <form onSubmit={submitPost} className="bg-white my-8 p-8 rounded-md ">
-      <div className="flex flex-col my-4">
+    <form onSubmit={submitPost} className="my-8 rounded-md bg-white p-8">
+      <div className="my-4 flex flex-col">
         <textarea
           onChange={(e) => setTitle(e.target.value)}
           value={title}
           name="title"
           placeholder="Write your post here..."
-          className="p-4 text-md text-black rounded-md my-2  bg-gray-200"
+          className="text-md my-2 rounded-md bg-gray-200 p-4 text-black"
         />
       </div>
-      <div className=" flex items-center justify-between gap-2">
+      <div className="flex items-center justify-between gap-2">
         <p
-          className={`font-bold text-sm ${
+          className={`text-sm font-bold ${
             title.length > 50 ? 'text-red-700' : 'text-gray-700'
           } `}
         >{`${title.length}/50`}</p>
         <button
           disabled={isDisabled}
-          className="text-sm bg-teal-600 text-white py-2 px-6 rounded-xl disabled:opacity-25"
+          className="rounded-xl bg-teal-600 px-6 py-2 text-sm text-white disabled:opacity-25"
           type="submit"
         >
           Create a post

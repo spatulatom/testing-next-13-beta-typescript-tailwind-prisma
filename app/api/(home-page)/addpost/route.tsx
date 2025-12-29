@@ -153,7 +153,7 @@ export async function POST(request: NextRequest) {
         userId: prismaUser.id,
       },
     });
-    revalidatePath('/');
+    // revalidateTag('my-data', 'max');
     return NextResponse.json(
       { result },
       {

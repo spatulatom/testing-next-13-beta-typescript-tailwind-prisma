@@ -1,12 +1,15 @@
-'use server';
-import { unstable_noStore as noStore } from 'next/cache';
+'use cache';
+
 import prisma from '@/prisma/client';
-import { revalidateTag } from 'next/cache';
-import { unstable_cache } from 'next/cache';
-import { cookies } from 'next/headers';
+import { cacheTag, cacheLife } from 'next/cache';
 
 const allPosts = async () => {
-  await cookies(); // Must await in Next 15+ to mark as dynamic
+  // cacheLife('max'); // Cache indefinitely
+  // cacheTag('all-posts'); // Add a tag for revalidation
+
+  // await cookies(); // Must await in Next 15+ to mark as dynamic
+  // noStore()
+
   // noStore()
 
   // i am using next 14 feature here for data revalidation

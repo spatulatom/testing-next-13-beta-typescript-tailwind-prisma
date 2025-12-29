@@ -85,13 +85,13 @@ export default function AddComment({ id }: PostProps) {
     <form onSubmit={submitPost} className="my-8">
       <h3 className="text-xl">Add a comment</h3>
 
-      <div className="flex flex-col my-2">
+      <div className="my-2 flex flex-col">
         <input
           onChange={(e) => setTitle(e.target.value)}
           value={title}
           type="text"
           name="title"
-          className="p-4 text-md rounded-md my-2 bg-white text-black"
+          className="text-md my-2 rounded-md bg-white p-4 text-black"
           placeholder="your comment..."
           maxLength={30}
           minLength={1}
@@ -100,7 +100,7 @@ export default function AddComment({ id }: PostProps) {
       <div className="flex items-center gap-2">
         <button
           disabled={isDisabled}
-          className=" text-sm bg-teal-600 text-white py-2 px-6 rounded-xl disabled:opacity-25"
+          className="rounded-xl bg-teal-600 px-6 py-2 text-sm text-white disabled:opacity-25"
           type="submit"
         >
           Add a comment 🚀

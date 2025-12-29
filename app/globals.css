@@ -42,6 +42,7 @@
   --callout-border-rgb: 172, 175, 176;
   --card-rgb: 180, 185, 188;
   --card-border-rgb: 131, 134, 135;
+  
 }
 
 /* it is preset up here for the dark/kight mode */
@@ -120,5 +121,5 @@ a {
 
 .animate-shimmer {
   background-size: 200% auto;
-  animation: shimmer 14s linear infinite;
+  animation: shimmer 94s linear infinite;
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import { PostType } from '../types/Post';
 import { memo } from 'react';
 type count = {
-  count: number
+  count: number;
 };
 
 const Counter = ({ count }: count) => {
