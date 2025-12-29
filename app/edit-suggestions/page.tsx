@@ -1,12 +1,15 @@
 import React, { Suspense } from 'react';
 import postgres from 'postgres';
 import { connection } from 'next/server';
+import { cacheLife } from 'next/cache';
 
 // Dynamic database query - FRESH on every request (no caching)
 // Use this pattern for real-time data like plane tracking, live scores, etc.
 async function FetchTotalUsersCount() {
+  'use cache';
+  cacheLife('max')
   // Signal to Next.js: "defer this to request time, I need fresh data"
-  await connection();
+  // await connection();
   
   const connectionString =
     process.env.POSTGRES_PRISMA_URL ?? process.env.DATABASE_URL!;
