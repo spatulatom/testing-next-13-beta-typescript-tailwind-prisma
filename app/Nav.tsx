@@ -6,9 +6,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import HamburgerMenu from './HamburgerMenu';
 import { Suspense } from 'react';
+// import { usePathname } from 'next/navigation';
 
 export default async function Nav() {
   const session = await auth();
+  // const pathname = usePathname();
 
   // This console.log will appear in:
   // 1. Server terminal during server-side rendering
