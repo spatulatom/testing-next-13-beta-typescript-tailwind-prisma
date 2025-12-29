@@ -1,29 +1,13 @@
 'use client';
 
 import toast from 'react-hot-toast';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import allPosts from '@/unstableCache/allPosts';
 
 export default function CreatePost() {
   const router = useRouter();
   const [title, setTitle] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
-  const [posts, setPosts] = useState([]);
-
-  useEffect(() => {
-    const getPosts = async () => {
-      const posts: any = await allPosts();
-      console.log('DATAAA', posts);
-      setPosts(posts);
-      console.log('post', posts);
-    };
-    getPosts();
-  }, [isDisabled]);
-
-  useEffect(() => {
-    setIsDisabled(false);
-  }, [posts]);
 
   let toastPostID: string;
 
@@ -40,10 +24,13 @@ export default function CreatePost() {
       router.refresh();
       if (response.ok) {
         setTitle('');
+        setIsDisabled(false);
         return toast.success('Post has been made 🔥', { id: toastPostID });
       }
+      setIsDisabled(false);
       toast.error(data.error, { id: toastPostID });
     } catch (err) {
+      setIsDisabled(false);
       return toast.error('Database connection error. Try again in minute!', {
         id: toastPostID,
       });

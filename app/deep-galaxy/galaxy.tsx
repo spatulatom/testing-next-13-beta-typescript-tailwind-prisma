@@ -1,5 +1,4 @@
-"use client"
-
+'use client'
 import { useRef, useEffect } from "react"
 
 // Main component for GLSL visualization

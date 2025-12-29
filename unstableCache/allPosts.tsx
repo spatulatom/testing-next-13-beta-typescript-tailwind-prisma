@@ -1,16 +1,15 @@
-'use server';
-import { unstable_noStore as noStore } from 'next/cache';
+'use cache';
+
 import prisma from '@/prisma/client';
-import { revalidateTag } from 'next/cache';
-import { unstable_cache } from 'next/cache';
-import { cookies } from 'next/headers';
-import { cacheTag } from 'next/cache';
+import { cacheTag, cacheLife } from 'next/cache';
 
 const allPosts = async () => {
-  // 'use cache';
-  //   cacheTag('my-data')
+  // cacheLife('max'); // Cache indefinitely
+  // cacheTag('all-posts'); // Add a tag for revalidation
 
   // await cookies(); // Must await in Next 15+ to mark as dynamic
+  // noStore()
+
   // noStore()
 
   // i am using next 14 feature here for data revalidation
@@ -25,17 +24,11 @@ const allPosts = async () => {
       hearts: true,
     },
     orderBy: {
-      createdAt: 'desc',
+      createdAt: 'desc', //When it does that, it sees Prisma returning createdAt Date objects, which Next considers "current time" access
     },
   });
 
-  // Serialize dates to ISO strings to avoid Next.js warning
-  // This keeps DB design clean while making Next.js happy
-  return data.map((post) => ({
-    ...post,
-    createdAt: post.createdAt.toISOString(),
-    updatedAt: post.updatedAt.toISOString(),
-  }));
+  return data;
 };
 
 export default allPosts;

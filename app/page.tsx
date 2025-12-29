@@ -1,22 +1,15 @@
-import Image from 'next/image';
-
 import Post from './Post';
 import AddPost from './AddPost';
-import { PostType } from '../types/Post';
 import Counter from './Counter';
-import { notFound } from 'next/navigation';
-import { unstable_noStore as noStore } from 'next/cache';
 import allPosts from '@/unstableCache/allPosts';
-import { cookies } from 'next/headers';
 import { Post as PrismaPost, User, Comment } from '@prisma/client';
-import Boundary from '@/boundry/Boundary';
-import { Suspense } from 'react';
-import Link from 'next/link';
+import { cacheLife } from 'next/cache';
 
-// ISR: Revalidate every 60 seconds (tells Next.js this is static with timed refresh)
-export const revalidate = 60;
+// const Home = async () => {
+export default async function Home() {
+  'use cache';
+  cacheLife('max'); // Cache indefinitely
 
-const Home = async () => {
   type PostWithRelations = PrismaPost & {
     user: User;
     comments: Comment[];
@@ -100,6 +93,4 @@ const Home = async () => {
     );
   } finally {
   }
-};
-
-export default Home;
+}
