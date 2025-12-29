@@ -17,8 +17,6 @@ import Link from 'next/link';
 export const revalidate = 60;
 
 const Home = async () => {
-  
-  
   type PostWithRelations = PrismaPost & {
     user: User;
     comments: Comment[];
@@ -64,9 +62,9 @@ const Home = async () => {
         <p className="ml-6 list-disc space-y-1">
           {' '}
           This project tested App Router and React Server Components (RSC) when
-          they were first  introduced in Next.js 13 Beta (in 2023). <br />
-          Since then the project was migrated to every major Next.js version trying some
-          new features at every release, from version 13 to 16+ (see{' '}
+          they were first introduced in Next.js 13 Beta (in 2023). <br />
+          Since then the project was migrated to every major Next.js version
+          trying some new features at every release, from version 13 to 16+ (see{' '}
           <a
             className="text-teal-600 hover:underline focus:underline"
             target="_blank"
@@ -79,19 +77,18 @@ const Home = async () => {
 
         <AddPost />
         <Counter count={data.length} />
-     
-          {data.map((post) => (
-            <Post
-              key={post.id}
-              id={post.id}
-              date={post.createdAt}
-              name={post.user.name}
-              avatar={post.user.image}
-              postTitle={post.title}
-              comments={post.comments.length}
-            />
-          ))}
-     
+
+        {data.map((post) => (
+          <Post
+            key={post.id}
+            id={post.id}
+            date={post.createdAt}
+            name={post.user.name}
+            avatar={post.user.image}
+            postTitle={post.title}
+            comments={post.comments.length}
+          />
+        ))}
       </div>
     );
   } catch (error) {
