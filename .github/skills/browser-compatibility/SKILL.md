@@ -4,7 +4,7 @@ description: Complete workflow for browser compatibility verification - discover
 license: MIT
 metadata:
   author: Your Organization
-  version: '3.0'
+  version: "3.0"
 ---
 
 # Browser Compatibility Verification Guide
@@ -30,32 +30,40 @@ metadata:
 ## Parameters
 
 ```
-TARGET_BROWSERS:
-  chrome >= 80
-  firefox >= 75
-  safari >= 13
-  edge >= 80
-
 STACK: nextjs | vite
 ```
 
-> **⚠️ SINGLE SOURCE OF TRUTH:** All browser targets in this document reference `TARGET_BROWSERS` above.
-> **To change targets:** Update only the Parameters section. All commands use `$TARGET_BROWSERS` as a placeholder.
+> **For LLM agents — Target Browser Resolution:**
 >
-> **For LLM agents:**
+> Resolve `TARGET_BROWSERS` using this priority order:
 >
-> - `TARGET_BROWSERS` = your **desired** minimum browser support. Convert to tool-specific formats as needed.
-> - `STACK` = determines file paths for build output (`nextjs` → `.next/`, `vite` → `dist/`).
+> 1. **Project config** — Check for `.browserslistrc` or `package.json#browserslist`. If found, use those values.
+> 2. **User prompt** — If user specifies targets in their prompt (e.g., "check for Chrome 100+"), use those.
+> 3. **Default** — Fall back to `baseline widely available` (features supported in all core browsers for 30+ months).
 >
-> **Format conversions:**
+> **Baseline options** (Browserslist syntax):
 >
-> - `.browserslistrc` / `package.json#browserslist` → one per line or JSON array
-> - Vite `build.target` → `["chrome94", "firefox103", "safari15.4"]`
-> - Stylelint `browsers` → `["chrome >= 94", "firefox >= 103", "safari >= 15.4", "edge >= 94"]`
+> - `baseline widely available` — Conservative, 30+ months of support (recommended default)
+> - `baseline newly available` — Cutting-edge, just reached all browsers
+> - `baseline 2024` — All features from Baseline 2024 and earlier
+> - Add `with downstream` to include Chromium-based browsers (Opera, Samsung, etc.)
 >
-> **Defaults rationale:** Modern browsers with ES2022 support (late 2021/early 2022), covers 97%+ of users. Aligns with React 19 / Next.js 16 defaults. Adjust per project analytics.
+> **Getting explicit browser strings** (required for `doiuse` and `es-check`):
 >
-> **Note:** Some stack dependencies (e.g., Tailwind v4) have hardcoded browser floors higher than TARGET_BROWSERS. Phase 2 will surface these—the flow stays independent of any specific tool's constraints.
+> ```powershell
+> # Run this to convert Baseline query to explicit browser versions
+> npx browserslist "baseline widely available"
+> # Example output: chrome 90, edge 90, firefox 88, safari 14
+> ```
+>
+> Then use the output in tool commands. Store the resolved string in `EXPLICIT_BROWSERS` for reuse.
+>
+> **STACK paths:**
+>
+> - `nextjs` → JS: `.next/static/chunks/**/*.js`, CSS: `.next/static/css/**/*.css`
+> - `vite` → JS: `dist/assets/**/*.js`, CSS: `dist/assets/**/*.css`
+>
+> **Note:** Some dependencies (e.g., Tailwind v4) have hardcoded browser floors higher than your targets. Phase 2 will surface these.
 
 ---
 
@@ -110,11 +118,14 @@ npm run build
 ### Step 1.2: CSS features
 
 ```powershell
+# First, resolve explicit browser string (if using Baseline)
+$EXPLICIT_BROWSERS = (npx browserslist "baseline widely available") -join ", "
+
 # STACK paths: vite → "dist/assets/**/*.css" | nextjs → ".next/static/css/**/*.css"
-npx doiuse --browsers "$TARGET_BROWSERS" "<BUILD_OUTPUT_CSS_PATH>"
+npx doiuse --browsers "$EXPLICIT_BROWSERS" "<BUILD_OUTPUT_CSS_PATH>"
 ```
 
-> Replace `$TARGET_BROWSERS` with comma-separated list from Parameters: `"chrome >= 94, firefox >= 103, safari >= 15.4, edge >= 94"`
+> **Note:** `doiuse` doesn't support Baseline queries directly—you must resolve to explicit browsers first.
 
 **Output:** Lists unsupported features, e.g.: `CSS Container Queries not supported by: Chrome < 105`
 
@@ -122,13 +133,13 @@ npx doiuse --browsers "$TARGET_BROWSERS" "<BUILD_OUTPUT_CSS_PATH>"
 
 ```powershell
 # STACK paths: vite → "dist/assets/**/*.js" | nextjs → ".next/static/chunks/**/*.js"
-npx es-check es2022 "<BUILD_OUTPUT_JS_PATH>"
+npx es-check es2020 "<BUILD_OUTPUT_JS_PATH>"
 ```
 
 **Output:**
 
-- ✅ Pass → ES2022-compatible (Chrome 94+, Safari 15+, Firefox 90+) - includes private class fields
-- ❌ Fail → Syntax exceeds ES2022; shows file/line
+- ✅ Pass → ES2020-compatible (Chrome 80+, Safari 14+, Firefox 72+)
+- ❌ Fail → Syntax exceeds ES2020; shows file/line
 
 ### Step 1.4: JS APIs
 
@@ -149,11 +160,23 @@ export default [{ files: ["**/*.js"], plugins: { compat }, rules: { "compat/comp
 
 ### Step 1.5: Document findings
 
-| Dimension       | Tool                 | Result             | Meets TARGET_BROWSERS? |
-| --------------- | -------------------- | ------------------ | ---------------------- |
-| 1. CSS features | doiuse               | (e.g., 2 warnings) | ✅ / ⚠️ list issues    |
-| 2. JS syntax    | es-check             | (e.g., ES2020 ✅)  | ✅ / ❌                |
-| 3. JS APIs      | eslint-plugin-compat | (e.g., 1 warning)  | ✅ / ⚠️ list issues    |
+**Create a findings file in the project root** by copying the template:
+
+```powershell
+# Copy template to project root (adjust path to skill location)
+Copy-Item "<SKILL_PATH>/FINDINGS_TEMPLATE.md" "./browser-compat-findings.md"
+```
+
+> **For LLM agents:** Copy [FINDINGS_TEMPLATE.md](./FINDINGS_TEMPLATE.md) to the project root as `browser-compat-findings.md` and fill in the measurement results. Do NOT modify this skill file—write findings to the project's copy instead.
+
+The template includes sections for:
+
+- Resolved browser targets (which source was used)
+- Build output paths
+- Measurement results table
+- Detailed tool output
+- Gap analysis (Phase 2)
+- Enforcement checklist (Phase 3)
 
 ---
 
@@ -163,10 +186,10 @@ export default [{ files: ["**/*.js"], plugins: { compat }, rules: { "compat/comp
 
 ### Step 2.1: Review gaps
 
-| Issue                     | Minimum Browser | Your Target  | Action                                     |
-| ------------------------- | --------------- | ------------ | ------------------------------------------ |
-| (e.g., Container Queries) | Chrome 105+     | Chrome 94+   | Remove feature / add fallback / accept gap |
-| (e.g., Private fields #)  | Safari 15+      | Safari 15.4+ | ✅ Already supported                       |
+| Issue                     | Minimum Browser | Your Target | Action                                     |
+| ------------------------- | --------------- | ----------- | ------------------------------------------ |
+| (e.g., Container Queries) | Chrome 105+     | Chrome 90+  | Remove feature / add fallback / accept gap |
+| (e.g., structuredClone)   | Safari 15.4+    | Safari 14+  | Add polyfill / use alternative             |
 
 ### Step 2.2: Discover stack constraints
 
@@ -199,6 +222,8 @@ npm ls tailwindcss | Select-String "tailwindcss@4"
 
 > **Same three dimensions, different targets.** We check CSS → JS syntax → JS APIs in both 3A (source) and 3B (build output).
 
+> **For LLM agents:** If `browser-compat-findings.md` doesn't exist in the project root, create it first by copying [FINDINGS_TEMPLATE.md](./FINDINGS_TEMPLATE.md). Update the "Phase 3" section of the findings file as you complete each step—especially 3B results, which may reveal new dependency issues not found in Phase 1.
+
 ### Step 3.0: Install tools (shared by 3A and 3B)
 
 ```powershell
@@ -209,12 +234,15 @@ npm install -D eslint eslint-plugin-compat stylelint stylelint-no-unsupported-br
 Create `.browserslistrc` at project root:
 
 ```
-# Copy TARGET_BROWSERS from Parameters section (one per line)
-chrome >= 94
-firefox >= 103
-safari >= 15.4
-edge >= 94
+# Use project's existing config, or Baseline as default
+baseline widely available
 ```
+
+> **Baseline alternatives:**
+>
+> - `baseline newly available` — cutting-edge features
+> - `baseline 2024` — yearly feature set
+> - Or explicit: `chrome >= 90, firefox >= 88, safari >= 14, edge >= 90`
 
 > ⚠️ **Tool quirk:** `eslint-plugin-compat` ignores `settings.browsers` in eslint.config.mjs—must use `.browserslistrc`.
 
@@ -235,7 +263,7 @@ Create `.stylelintrc.json`:
     "plugin/no-unsupported-browser-features": [
       true,
       {
-        "browsers": "$TARGET_BROWSERS",
+        "browsers": ["baseline widely available"],
         "severity": "warning"
       }
     ]
@@ -243,9 +271,15 @@ Create `.stylelintrc.json`:
 }
 ```
 
-> Replace `$TARGET_BROWSERS` with array from Parameters: `["chrome >= 94", "firefox >= 103", "safari >= 15.4", "edge >= 94"]`
-
-> ⚠️ **Tool quirk:** VS Code Stylelint extension ignores `.browserslistrc`; use inline `browsers` array as shown.
+> ⚠️ **Tool quirk:** VS Code Stylelint extension ignores `.browserslistrc`; must specify `browsers` inline.
+>
+> **Alternative explicit syntax** (if Baseline query not supported by your Stylelint version):
+>
+> ```json
+> "browsers": ["chrome >= 90", "firefox >= 88", "safari >= 14", "edge >= 90"]
+> ```
+>
+> To get current explicit values: `npx browserslist "baseline widely available"`
 
 #### 3A.2: JS syntax → Not needed
 
@@ -256,15 +290,15 @@ No dev-time check required. Build tools (Vite/Next.js) transpile syntax automati
 Create/update `eslint.config.mjs`:
 
 ```javascript
-import compat from 'eslint-plugin-compat';
+import compat from "eslint-plugin-compat";
 
 export default [
   // Source code checking (dev-time)
   {
-    files: ['src/**/*.{js,ts,jsx,tsx}', 'app/**/*.{js,ts,jsx,tsx}'],
+    files: ["src/**/*.{js,ts,jsx,tsx}", "app/**/*.{js,ts,jsx,tsx}"],
     plugins: { compat },
     rules: {
-      'compat/compat': 'warn',
+      "compat/compat": "warn",
     },
   },
 ];
@@ -308,7 +342,9 @@ Verify the final bundled output—catches issues from dependencies too.
 Checks CSS features from all sources (your code + dependencies).
 
 ```powershell
-npx doiuse --browsers "$TARGET_BROWSERS" "<BUILD_OUTPUT_CSS_PATH>"
+# Use explicit browsers (doiuse doesn't support Baseline queries)
+$EXPLICIT_BROWSERS = (npx browserslist "baseline widely available") -join ", "
+npx doiuse --browsers "$EXPLICIT_BROWSERS" "<BUILD_OUTPUT_CSS_PATH>"
 ```
 
 #### 3B.2: JS syntax → es-check
@@ -316,7 +352,7 @@ npx doiuse --browsers "$TARGET_BROWSERS" "<BUILD_OUTPUT_CSS_PATH>"
 Verifies bundler transpiled correctly to target ES level.
 
 ```powershell
-npx es-check es2022 "<BUILD_OUTPUT_JS_PATH>"
+npx es-check es2020 "<BUILD_OUTPUT_JS_PATH>"
 ```
 
 #### 3B.3: JS APIs → eslint-plugin-compat
@@ -326,37 +362,52 @@ Catches runtime APIs from dependencies (e.g., a library using `structuredClone()
 Add build output to `eslint.config.mjs`:
 
 ```javascript
-import compat from 'eslint-plugin-compat';
+import compat from "eslint-plugin-compat";
 
 export default [
   // 3A: Source code (from earlier)
   {
-    files: ['src/**/*.{js,ts,jsx,tsx}', 'app/**/*.{js,ts,jsx,tsx}'],
+    files: ["src/**/*.{js,ts,jsx,tsx}", "app/**/*.{js,ts,jsx,tsx}"],
     plugins: { compat },
-    rules: { 'compat/compat': 'warn' },
+    rules: { "compat/compat": "warn" },
   },
 
   // 3B: Build output
   {
-    files: ['<BUILD_OUTPUT_JS_PATH>'], // e.g., ".next/static/chunks/**/*.js"
+    files: ["<BUILD_OUTPUT_JS_PATH>"], // e.g., ".next/static/chunks/**/*.js"
     plugins: { compat },
-    languageOptions: { ecmaVersion: 2022, sourceType: 'module' },
-    rules: { 'compat/compat': 'warn' },
+    languageOptions: { ecmaVersion: 2022, sourceType: "module" },
+    rules: { "compat/compat": "warn" },
   },
 ];
 ```
 
 #### 3B.4: Add build verification script
 
+Create a shell script for cross-platform browser resolution, or use explicit targets:
+
 ```json
 {
   "scripts": {
-    "lint:compat:build": "npm run build && npx doiuse --browsers '$TARGET_BROWSERS' '<BUILD_OUTPUT_CSS_PATH>' && npx es-check es2022 '<BUILD_OUTPUT_JS_PATH>' && eslint '<BUILD_OUTPUT_JS_PATH>'"
+    "lint:compat:build": "npm run build && npx doiuse --browsers 'chrome >= 90, firefox >= 88, safari >= 14, edge >= 90' '<BUILD_OUTPUT_CSS_PATH>' && npx es-check es2020 '<BUILD_OUTPUT_JS_PATH>' && eslint '<BUILD_OUTPUT_JS_PATH>'"
   }
 }
 ```
 
-> Replace `$TARGET_BROWSERS` with comma-separated string from Parameters
+> **Tip:** Replace the hardcoded browsers with the output of `npx browserslist "baseline widely available"` to stay current with Baseline definitions.
+>
+> **For dynamic resolution in CI**, create a helper script:
+>
+> ```javascript
+> // scripts/get-browsers.js
+> const { execSync } = require("child_process");
+> const browsers = execSync("npx browserslist")
+>   .toString()
+>   .split("\n")
+>   .filter(Boolean)
+>   .join(", ");
+> console.log(browsers);
+> ```
 
 #### 3B.5: Add CI gate
 
@@ -371,7 +422,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: '20' }
+        with: { node-version: "20" }
       - run: npm ci
       - run: npm run lint:compat:build
 ```
@@ -391,11 +442,14 @@ jobs:
 
 ### Phase 1: Measure (build output)
 
+- [ ] Resolve browser targets (check `.browserslistrc` → prompt → default to `baseline widely available`)
+- [ ] Get explicit browser string: `npx browserslist "baseline widely available"`
 - [ ] `npm run build`
-- [ ] CSS features: `npx doiuse --browsers "$TARGET_BROWSERS" "<CSS_PATH>"` (use comma-separated list)
-- [ ] JS syntax: `npx es-check es2022 "<JS_PATH>"`
+- [ ] CSS features: `npx doiuse --browsers "<EXPLICIT_BROWSERS>" "<CSS_PATH>"`
+- [ ] JS syntax: `npx es-check es2020 "<JS_PATH>"`
 - [ ] JS APIs: (optional—covered fully in Phase 3)
-- [ ] Document findings in table
+- [ ] Copy `FINDINGS_TEMPLATE.md` to project root as `browser-compat-findings.md`
+- [ ] Document findings in the copied file
 
 ### Phase 2: Decide
 
@@ -405,7 +459,7 @@ jobs:
 
 ### Phase 3A: Development (source code)
 
-- [ ] Create `.browserslistrc`
+- [ ] Create `.browserslistrc` (use `baseline widely available` or project-specific targets)
 - [ ] Install tools: `npm i -D eslint eslint-plugin-compat stylelint stylelint-no-unsupported-browser-features`
 - [ ] CSS features: Configure `.stylelintrc.json`
 - [ ] JS syntax: _(not needed—bundler handles)_
