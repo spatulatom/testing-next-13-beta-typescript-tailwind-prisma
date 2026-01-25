@@ -4,7 +4,7 @@ description: Complete workflow for browser compatibility verification - discover
 license: MIT
 metadata:
   author: Your Organization
-  version: "3.0"
+  version: '3.0'
 ---
 
 # Browser Compatibility Verification Guide
@@ -290,15 +290,15 @@ No dev-time check required. Build tools (Vite/Next.js) transpile syntax automati
 Create/update `eslint.config.mjs`:
 
 ```javascript
-import compat from "eslint-plugin-compat";
+import compat from 'eslint-plugin-compat';
 
 export default [
   // Source code checking (dev-time)
   {
-    files: ["src/**/*.{js,ts,jsx,tsx}", "app/**/*.{js,ts,jsx,tsx}"],
+    files: ['src/**/*.{js,ts,jsx,tsx}', 'app/**/*.{js,ts,jsx,tsx}'],
     plugins: { compat },
     rules: {
-      "compat/compat": "warn",
+      'compat/compat': 'warn',
     },
   },
 ];
@@ -362,22 +362,22 @@ Catches runtime APIs from dependencies (e.g., a library using `structuredClone()
 Add build output to `eslint.config.mjs`:
 
 ```javascript
-import compat from "eslint-plugin-compat";
+import compat from 'eslint-plugin-compat';
 
 export default [
   // 3A: Source code (from earlier)
   {
-    files: ["src/**/*.{js,ts,jsx,tsx}", "app/**/*.{js,ts,jsx,tsx}"],
+    files: ['src/**/*.{js,ts,jsx,tsx}', 'app/**/*.{js,ts,jsx,tsx}'],
     plugins: { compat },
-    rules: { "compat/compat": "warn" },
+    rules: { 'compat/compat': 'warn' },
   },
 
   // 3B: Build output
   {
-    files: ["<BUILD_OUTPUT_JS_PATH>"], // e.g., ".next/static/chunks/**/*.js"
+    files: ['<BUILD_OUTPUT_JS_PATH>'], // e.g., ".next/static/chunks/**/*.js"
     plugins: { compat },
-    languageOptions: { ecmaVersion: 2022, sourceType: "module" },
-    rules: { "compat/compat": "warn" },
+    languageOptions: { ecmaVersion: 2022, sourceType: 'module' },
+    rules: { 'compat/compat': 'warn' },
   },
 ];
 ```
@@ -400,12 +400,12 @@ Create a shell script for cross-platform browser resolution, or use explicit tar
 >
 > ```javascript
 > // scripts/get-browsers.js
-> const { execSync } = require("child_process");
-> const browsers = execSync("npx browserslist")
+> const { execSync } = require('child_process');
+> const browsers = execSync('npx browserslist')
 >   .toString()
->   .split("\n")
+>   .split('\n')
 >   .filter(Boolean)
->   .join(", ");
+>   .join(', ');
 > console.log(browsers);
 > ```
 
@@ -422,7 +422,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: "20" }
+        with: { node-version: '20' }
       - run: npm ci
       - run: npm run lint:compat:build
 ```
