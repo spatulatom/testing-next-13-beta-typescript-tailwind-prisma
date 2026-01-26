@@ -1,0 +1,146 @@
+# Browser Compatibility Findings
+
+<!--
+  LLM AGENTS: DO NOT MODIFY THIS STRUCTURE
+  - Keep all headings, tables, and section order exactly as shown
+  - Only replace placeholder text (e.g., <PROJECT_NAME>, ✅ / ❌) with actual values
+  - Consistent structure enables comparison across projects
+-->
+
+**Project:** `<PROJECT_NAME>`  
+**Date:** `<DATE>`  
+**Target Browsers:** `<TARGET_BROWSERS or "baseline widely available">`
+
+---
+
+## Phase 1: Measurement Results
+
+### Pre-existing Browser Config
+
+> Document what existed **before** running this skill (not what was created during analysis).
+
+| Source (in priority order)   | Found? | Value (if found) |
+| ---------------------------- | ------ | ---------------- |
+| User-specified in prompt?    | ❌ No  | —                |
+| `.browserslistrc` existed?   | ❌ No  | —                |
+| `package.json#browserslist`? | ❌ No  | —                |
+
+### Resolution
+
+| Decision                       | Value                                      |
+| ------------------------------ | ------------------------------------------ |
+| **Source used**                | (Prompt / `.browserslistrc` / Default)     |
+| **Resolved targets**           | (e.g., chrome 115+, safari 16.4+, ...)     |
+| **Explicit browser string**    | (output of `npx browserslist`)             |
+| **Created `.browserslistrc`?** | ✅ Yes / ❌ No (if created, note it's new) |
+
+### Build Output Paths
+
+| Stack    | JS Path                       | CSS Path                    |
+| -------- | ----------------------------- | --------------------------- |
+| Next.js  | `.next/static/chunks/**/*.js` | `.next/static/css/**/*.css` |
+| Vite     | `dist/assets/**/*.js`         | `dist/assets/**/*.css`      |
+| **Used** | `<ACTUAL_JS_PATH>`            | `<ACTUAL_CSS_PATH>`         |
+
+### Measurement Results
+
+| Dimension       | Tool                 | Result             | Meets Target? |
+| --------------- | -------------------- | ------------------ | ------------- |
+| 1. CSS features | doiuse               | (e.g., 2 warnings) | ✅ / ⚠️       |
+| 2. JS syntax    | es-check             | (e.g., ES2022 ✅)  | ✅ / ❌       |
+| 3. JS APIs      | eslint-plugin-compat | (e.g., 1 warning)  | ✅ / ⚠️       |
+
+### Detailed Issues
+
+#### CSS Features (doiuse output)
+
+```
+<paste doiuse output here>
+```
+
+#### JS Syntax (es-check output)
+
+**Baseline target:** ES20XX (calculated: current year - 2.5)
+
+| ES Level          | Result  | Min Browsers (approx)  |
+| ----------------- | ------- | ---------------------- |
+| ES20XX (baseline) | ✅ / ❌ | Chrome XX+, Safari XX+ |
+| ES20XX            | ✅ / ❌ |                        |
+| ES20XX            | ✅ / ❌ |                        |
+| ES20XX            | ✅ / ❌ |                        |
+
+**Actual support floor:** ES20XX (oldest passing level)  
+**Backward compatibility headroom:** X years beyond baseline
+
+```
+<paste es-check output here if needed>
+```
+
+#### JS APIs (eslint-plugin-compat output)
+
+```
+<paste eslint output here>
+```
+
+---
+
+## Phase 2: Decision
+
+### Gap Analysis
+
+| Issue                     | Minimum Browser | Your Target | Action                                     |
+| ------------------------- | --------------- | ----------- | ------------------------------------------ |
+| (e.g., Container Queries) | Chrome 105+     | Chrome 90+  | Remove feature / add fallback / accept gap |
+| (e.g., structuredClone)   | Safari 15.4+    | Safari 14+  | Add polyfill / use alternative             |
+
+### Stack Constraints Discovered
+
+| Tool/Dependency     | Hardcoded Floor           | Impact                           |
+| ------------------- | ------------------------- | -------------------------------- |
+| (e.g., Tailwind v4) | Safari 16.4+, Chrome 111+ | CSS won't work in older browsers |
+
+### Decision Checkpoint
+
+- [ ] **All checks pass** → Stop here, no enforcement needed
+- [ ] **Gaps exist but acceptable** → Document limitations below
+- [ ] **Gaps must be fixed** → Proceed to Phase 3
+
+**Accepted Limitations (if any):**
+
+- **Next Steps:**
+
+- ***
+
+## Phase 3: Enforcement (if implemented)
+
+### 3A: Development Tools Configured
+
+- [ ] `.browserslistrc` created
+- [ ] `.stylelintrc.json` configured
+- [ ] `eslint.config.mjs` configured
+- [ ] Editor integration verified
+- [ ] `lint:compat` script added
+
+### 3B: Repeatable npm Scripts Added
+
+> Based on Phase 1 findings, add npm scripts to re-run checks on demand.
+
+| Script          | Command                                        |
+| --------------- | ---------------------------------------------- |
+| `compat:css`    | `<doiuse command with target browsers>`        |
+| `compat:syntax` | `<es-check command with discovered ES floor>`  |
+| `compat:apis`   | `<eslint-plugin-compat command on build path>` |
+
+---
+
+## Summary (Optional)
+
+**Overall Status:** ✅ Pass / ⚠️ Acceptable with limitations / ❌ Needs fixes
+
+**Key Findings:**
+
+- **Recommendations:**
+
+- ***
+
+  **Generated by:** browser-compatibility skill
