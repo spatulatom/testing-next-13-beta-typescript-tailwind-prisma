@@ -42,7 +42,8 @@
     "auth.js",
     "prisma/client.ts",
     "app/deep-galaxy/page.jsx",
-    ".next/dev/types/**/*.ts"
+    ".next/dev/types/**/*.ts",
+    ".next/dev/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"
