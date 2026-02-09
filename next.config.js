@@ -4,6 +4,12 @@ const nextConfig = {
   turbopack: {
     root: __dirname,
   },
+    experimental: {
+    // Enable filesystem caching for `next dev`
+    turbopackFileSystemCacheForDev: true,
+    // Enable filesystem caching for `next build`
+    turbopackFileSystemCacheForBuild: true,
+  },
   images: {
     remotePatterns: [
       {
@@ -21,6 +27,7 @@ const nextConfig = {
       fullUrl: true,
     },
   },
+  reactCompiler: true,
 };
 
 module.exports = nextConfig;
