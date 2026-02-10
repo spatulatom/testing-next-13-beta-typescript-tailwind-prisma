@@ -1,5 +1,12 @@
 # Next.js Documentation Lookup Instructions
 
+**📌 Documentation Version: Next.js 16.1.4**  
+_Last synced: February 10, 2026_
+
+> ⚠️ **IMPORTANT**: After upgrading Next.js, run:  
+> `npx @next/codemod agents-md --output .github/copilot-instructions.md`  
+> to sync documentation with the new version.
+
 ## CRITICAL: Use Local .next-docs Files for Maximum Efficiency
 
 **ALWAYS prefer reading local documentation files over using MCP tools.**
