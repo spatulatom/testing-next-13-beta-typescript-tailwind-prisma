@@ -1,6 +1,6 @@
 # Next.js Documentation Lookup Instructions
 
-**Next.js 16.1.6** · Docs synced February 10, 2026
+**Next.js 15.1.6** · Docs synced February 10, 2025
 
 ## CRITICAL: Use Local .next-docs Files for Maximum Efficiency
 
