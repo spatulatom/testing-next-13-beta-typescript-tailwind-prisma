@@ -73,16 +73,3 @@ Resync local `.next-docs/` files and the copilot-instructions.md docs index afte
 
    ⚠️ **WARNING:** Do NOT modify any other content in the file. Only update the version number and date in line 3.
 
-6. **If codemod command fails:**
-
-   **STOP. Do NOT automatically update the header.**
-
-   Instead, ask the user:
-
-   > "The `agents-md` codemod is not available. Since you upgraded from version X.Y.Z to [NEW_VERSION], would you like me to manually update just the version header in `.github/copilot-instructions.md`?
-   >
-   > For patch updates (X.Y.Z → X.Y.W), the documentation is typically compatible. For minor/major updates, the documentation index may be outdated."
-
-   **Only proceed with the header update from step 5 if the user explicitly confirms.**
-
-   Never update the header without user permission.
