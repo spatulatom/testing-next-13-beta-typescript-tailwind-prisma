@@ -4,7 +4,7 @@ description: Use when the user upgraded, updated, or bumped their Next.js versio
 license: MIT
 metadata:
   author: project
-  version: '1.0'
+  version: '1.1'
   reference: https://vercel.com/blog/agents-md-outperforms-skills-in-our-agent-evals
 ---
 
@@ -36,28 +36,35 @@ Resync local `.next-docs/` files and the copilot-instructions.md docs index afte
 4. **Run the sync command:**
 
    ```bash
-   npx @next/codemod agents-md --output .github/copilot-instructions.md
+   npx @next/codemod@canary agents-md --output .github/copilot-instructions.md
    ```
 
-   This downloads version-matched docs to `.next-docs/` and updates the compressed index in `copilot-instructions.md`.
+   **CRITICAL:** Use `@next/codemod@canary` (not the stable version). The `agents-md` transform is only available in the canary release as of February 2026.
 
-5. **Update version header (only if codemod succeeded OR user gave permission):**
+   This command:
+   - Detects the installed Next.js version automatically
+   - Downloads version-matched docs to `.next-docs/` directory
+   - Updates/injects the compressed 8KB docs index into `copilot-instructions.md`
 
-   **CRITICAL: Use `replace_string_in_file` with precise context to update ONLY the version and date.**
+   Expected output: `✓ Updated .github/copilot-instructions.md (X KB → Y KB)`
 
-   Read line 3 of `.github/copilot-instructions.md` to get the current header line.
+5. **Update version header:**
 
-   Replace the old string (including surrounding context for safety):
+   **IMPORTANT:** The codemod updates the compressed docs index but doesn't modify the custom version header at the top of the file. You must update it manually.
+
+   Read the current header (lines 1-5) of `.github/copilot-instructions.md` and update ONLY the version number and date on line 3.
+
+   Use `replace_string_in_file` with precise context:
 
    ```
    # Next.js Documentation Lookup Instructions
 
-   **Next.js X.Y.Z** · Docs synced Month DD, YYYY
+   **Next.js [OLD_VERSION]** · Docs synced [OLD_DATE]
 
    ## CRITICAL: Use Local .next-docs Files for Maximum Efficiency
    ```
 
-   With the new string (update ONLY version and date, keep everything else identical):
+   Replace with:
 
    ```
    # Next.js Documentation Lookup Instructions
@@ -68,8 +75,28 @@ Resync local `.next-docs/` files and the copilot-instructions.md docs index afte
    ```
 
    Where:
-   - `[NEW_VERSION]` = installed Next.js version from step 1
-   - `[CURRENT_DATE]` = today's date in format: "Month DD, YYYY" (e.g., "February 10, 2026")
+   - `[NEW_VERSION]` = installed Next.js version from step 1 (e.g., "16.1.6")
+   - `[CURRENT_DATE]` = today's date in format "Month DD, YYYY" (e.g., "February 10, 2026")
 
-   ⚠️ **WARNING:** Do NOT modify any other content in the file. Only update the version number and date in line 3.
+   ⚠️ **Do NOT modify any other content.** Only update line 3.
 
+## Troubleshooting
+
+**Error: "Invalid transform choice"**
+
+- You're using `@next/codemod` instead of `@next/codemod@canary`
+- The `agents-md` transform is only in the canary version
+- Fix: Add `@canary` to the command
+
+**Command hangs or prompts for input:**
+
+- The command might be waiting for user input (version confirmation or file selection)
+- The `--output` flag should prevent prompts, but if it happens:
+  - Provide the version when prompted (should auto-detect)
+  - Choose "Custom..." and enter `.github/copilot-instructions.md`
+
+**Version header not updated after codemod:**
+
+- This is expected behavior
+- The codemod only updates the compressed docs index (between `<!-- NEXT-AGENTS-MD-START -->` and `<!-- NEXT-AGENTS-MD-END -->` markers)
+- You must manually update line 3 with the version and date as described in step 5
