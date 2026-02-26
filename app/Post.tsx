@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { cookies } from 'next/headers';
 // import { motion } from 'framer-motion';
-import { Post as PrismaPost, User } from '@prisma/client';
+import type { Post as PrismaPost, User } from '@prisma/client';
 
 interface PostProps {
   id: PrismaPost['id'];

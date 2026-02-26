@@ -1,414 +1,252 @@
-# Prisma Setup Guide for This Project
+# Prisma Guide (Next.js 16 + Turbopack + Vercel)
 
-## Table of Contents
+Last updated: February 26, 2026
 
-- [Overview](#overview)
-- [The Three Prisma Packages](#the-three-prisma-packages)
-- [Why Version Sync Matters](#why-version-sync-matters)
-- [Understanding `prisma generate`](#understanding-prisma-generate)
-- [Development vs Production Workflow](#development-vs-production-workflow)
-- [The Adapter Pattern (Why We Use It)](#the-adapter-pattern-why-we-use-it)
-- [Next.js Config for Turbopack](#nextjs-config-for-turbopack)
-- [Common Issues & Solutions](#common-issues--solutions)
-- [Quick Reference Commands](#quick-reference-commands)
+## Table of contents
 
----
+- [Why this guide exists](#why-this-guide-exists)
+- [TL;DR](#tldr)
+- [The mental model: build-time vs runtime](#the-mental-model-build-time-vs-runtime)
+- [Why Prisma is special](#why-prisma-is-special)
+- [Webpack vs Turbopack (practical difference for Prisma)](#webpack-vs-turbopack-practical-difference-for-prisma)
+- [Project standards in this repo](#project-standards-in-this-repo)
+- [Vercel deployment lifecycle with Prisma](#vercel-deployment-lifecycle-with-prisma)
+- [Real-world issue triage (what failed?)](#real-world-issue-triage-what-failed)
+- [Version policy for this repo](#version-policy-for-this-repo)
+- [Commands we use](#commands-we-use)
+- [Quick checklist before opening a bug](#quick-checklist-before-opening-a-bug)
+- [Repository references](#repository-references)
 
-## Overview
+## Why this guide exists
 
-This project uses **Prisma 7.3.0** as the ORM (Object-Relational Mapping) tool for PostgreSQL database access. Prisma works differently than most npm packages because it generates custom TypeScript code based on your database schema.
+Prisma can look like a normal npm package, but it is not just plain JavaScript at runtime. It combines generated client code, dynamic loading, and platform-specific artifacts. That is the core reason bundler behavior matters.
 
-**Current versions (all synced):**
+This guide explains exactly:
 
-- `prisma@7.3.0` (CLI tool - devDependencies)
-- `@prisma/client@7.3.0` (Runtime library - dependencies)
-- `@prisma/adapter-pg@7.3.0` (PostgreSQL adapter - dependencies)
-
----
-
-## The Three Prisma Packages
-
-### 1. `prisma` (CLI Tool)
-
-- **Location:** `devDependencies`
-- **Purpose:** Developer tooling for database operations
-- **Used for:**
-  - Running migrations: `npx prisma migrate dev`
-  - Generating client code: `npx prisma generate`
-  - Opening Prisma Studio: `npx prisma studio`
-  - Database introspection: `npx prisma db pull`
-- **NOT needed in production** (only during development and build time)
-
-### 2. `@prisma/client` (Runtime Library)
-
-- **Location:** `dependencies`
-- **Purpose:** The actual code your application imports and uses
-- **Example usage:**
-  ```typescript
-  import prisma from './prisma/client';
-  const posts = await prisma.post.findMany();
-  ```
-- **Important:** This package is a **template** that gets filled with your schema-specific code by `prisma generate`
-
-### 3. `@prisma/adapter-pg` (PostgreSQL Adapter)
-
-- **Location:** `dependencies`
-- **Purpose:** Connects Prisma Client to PostgreSQL using native `pg` driver
-- **Benefits:**
-  - Better for serverless/edge environments (Vercel, Cloudflare Workers)
-  - Improved connection pooling
-  - More efficient than Prisma's default query engine in certain scenarios
-- **Used in:** `prisma/client.ts`
-  ```typescript
-  import { PrismaPg } from '@prisma/adapter-pg';
-  const adapter = new PrismaPg({ connectionString });
-  const prisma = new PrismaClient({ adapter });
-  ```
+- What happens with Webpack vs Turbopack
+- What happens locally vs on Vercel
+- Which issues are real Prisma/bundling issues vs unrelated warnings
+- What config and coding patterns we standardize on in this repo
 
 ---
 
-## Why Version Sync Matters
+## TL;DR
 
-**All three packages MUST be at the same version!**
-
-### What Happens with Mismatched Versions:
-
-```
-❌ Bad: Version mismatch
-prisma@7.3.0          → Generates code for v7.3.0
-@prisma/client@7.2.0  → Expects code for v7.2.0
-Result: Missing files like 'query_compiler_fast_bg.js'
-```
-
-```
-✅ Good: Versions synced
-prisma@7.3.0          → Generates code for v7.3.0
-@prisma/client@7.3.0  → Expects code for v7.3.0
-@prisma/adapter-pg@7.3.0
-Result: Everything works!
-```
-
-### Error Signs of Version Mismatch:
-
-- `Cannot find module './query_compiler_fast_bg.js'`
-- `PrismaClientKnownRequestError`
-- Runtime type errors
-- Build failures
+- Prisma should run on the Node.js server runtime, not in client bundles.
+- Bundling server code is fine, but Prisma packages often need to stay externalized.
+- In Next.js 16, Prisma packages are already on Next’s auto externalization list, but we keep explicit config for clarity.
+- Vercel does not bundle at request time. Bundling happens during build.
+- Runtime warnings from `pg` SSL modes are database connection-string issues, not Turbopack bundling failures.
 
 ---
 
-## Understanding `prisma generate`
+## The mental model: build-time vs runtime
 
-### What It Does:
+### Build-time (local `next build` or Vercel build)
 
-1. Reads your `prisma/schema.prisma` file
-2. Generates TypeScript types and query methods
-3. Creates code in `node_modules/.prisma/client/`
-4. Populates `node_modules/@prisma/client/` with your schema-specific code
+Next compiles server and client code into deployable output. This is where Webpack or Turbopack does module analysis and bundling decisions.
 
-### Generated Output Includes:
+### Runtime (local `next dev` requests, or Vercel serverless/node function execution)
 
-- Type definitions for your models (`Post`, `User`, `Comment`, etc.)
-- Type-safe query methods (`.findMany()`, `.create()`, `.update()`, etc.)
-- Relation helpers
-- Native database binaries for your platform
+The built server output is executed. If a dependency was externalized, Node resolves it from `node_modules` at runtime.
 
-### Why It's Different from Normal npm Packages:
-
-**Normal Package (e.g., lodash):**
-
-```
-npm install lodash → Downloads pre-built code → Ready to use ✓
-```
-
-**Prisma Client:**
-
-```
-npm install @prisma/client → Downloads empty template
-↓
-prisma generate → Reads YOUR schema.prisma → Generates YOUR types ✓
-```
-
-**Key Point:** The generated code is project-specific and created at install time, not downloaded from npm!
+Important: Vercel is not re-bundling Prisma on each request. Any bundling decision already happened during build.
 
 ---
 
-## Development vs Production Workflow
+## Why Prisma is special
 
-### Development (Your Machine):
+Prisma usage in app code often looks like normal imports, but runtime behavior is different:
 
-**Initial Setup:**
+- Prisma Client is generated from `prisma/schema.prisma`
+- The runtime may rely on dynamic resolution and non-trivial package internals
+- Adapter + database driver behavior introduces runtime-only concerns
 
-```bash
-npm install              # Installs all packages
-# postinstall hook runs: prisma generate (auto)
-npm run dev             # Start dev server
-```
-
-**When You Change `schema.prisma`:**
-
-```bash
-npx prisma migrate dev  # Updates database + runs generate automatically
-# OR manually:
-npx prisma generate     # Just regenerate types without DB changes
-```
-
-**You DON'T need to run `prisma generate` every time you start dev server!**
+Because of this, treating Prisma exactly like a pure ESM utility package can break in certain bundling paths.
 
 ---
 
-### Production/CI/CD (Vercel, GitHub Actions, etc.):
+## Webpack vs Turbopack (practical difference for Prisma)
 
-**What Happens:**
+### Webpack (historically)
 
-```bash
-git clone your-repo     # Fresh start, no node_modules
-npm install             # Installs packages
-# postinstall hook runs: prisma generate (creates your types)
-npm run build           # Builds Next.js
-npm start               # Runs production server
-```
+- More mature compatibility surface for older server-bundling patterns
+- Some projects “just worked” without explicit config
+- Less obvious when a package should have been explicitly externalized
 
-**Why `postinstall` Hook:**
+### Turbopack (current default in Next 16)
 
-- CI/CD starts with empty `node_modules/`
-- After `npm install`, Prisma Client is installed but not generated
-- `postinstall` script auto-runs `prisma generate` after every `npm install`
-- This ensures client is always ready before `npm run build`
+- Faster and stricter module graph handling
+- More likely to surface boundary issues early (server/client/runtime assumptions)
+- Better to be explicit about external packages and server-only imports
 
-**Our package.json:**
+### What this means for us
 
-```json
-{
-  "scripts": {
-    "postinstall": "prisma generate", // ← Auto-generates after npm install
-    "build": "next build" // ← Simple! No manual generate needed
-  }
-}
-```
+Turbopack is not “wrong” with Prisma. It is exposing constraints that were easier to miss before. Our approach is to make server boundaries and externalization explicit.
 
 ---
 
-## The Adapter Pattern (Why We Use It)
+## Project standards in this repo
 
-### Traditional Prisma Setup:
+### 1) Keep Prisma externalized for server execution clarity
 
-```typescript
-import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
-```
+In `next.config.js` we keep:
 
-- Uses Prisma's default query engine
-- Works fine for traditional servers
+- `serverExternalPackages: ['@prisma/client', 'prisma']`
 
-### Our Adapter Setup:
+Notes:
 
-```typescript
-import { PrismaClient } from '@prisma/client';
-import { PrismaPg } from '@prisma/adapter-pg';
+- In Next.js 16, these packages are already in Next’s auto opt-out list.
+- We still keep explicit config because it documents intent and avoids ambiguity during upgrades.
 
-const adapter = new PrismaPg({ connectionString });
-const prisma = new PrismaClient({ adapter });
-```
+### 2) Keep Prisma usage server-only
 
-### Benefits:
+Allowed:
 
-1. **Better for Serverless** (Vercel, AWS Lambda)
-2. **Connection Pooling** - Reuses database connections efficiently
-3. **Edge Runtime Compatible** - Works with Vercel Edge Functions
-4. **Native PostgreSQL Driver** - Uses battle-tested `pg` package
+- Route Handlers
+- Server Components
+- Server Actions
+- Shared server utilities
 
-### When to Use Adapter Pattern:
+Avoid:
 
-- ✅ Deploying to Vercel
-- ✅ Serverless environments
-- ✅ High-traffic applications
-- ✅ Need connection pooling
-- ❌ Simple apps with low traffic (traditional setup is fine)
+- Client Components
+- Browser-only modules
 
----
+### 3) Use type-only Prisma imports in shared/component files
 
-## Next.js Config for Turbopack
+If only types are needed, use `import type` so no runtime Prisma dependency can accidentally leak into bundles.
 
-### Required Configuration:
+### 4) Ensure client generation in all environments
 
-**File:** `next.config.js`
+`package.json` keeps:
 
-```javascript
-const nextConfig = {
-  serverExternalPackages: ['@prisma/client', 'prisma'],
-  // ... other config
-};
-```
+- `postinstall: prisma generate`
 
-### Why This Is Required:
-
-**Problem:** Turbopack (Next.js 16's new bundler) tries to bundle all server code, including Prisma.
-
-**Issue:** Prisma Client contains:
-
-- Native binaries (`.node` files)
-- WebAssembly modules
-- Dynamic imports
-- These can't be bundled like regular JavaScript
-
-**Solution:** `serverExternalPackages` tells Turbopack:
-
-> "Don't bundle these packages - use them directly from node_modules"
-
-**Without this config:**
-
-```
-✗ Error: Cannot find module './query_compiler_fast_bg.js'
-✗ Native binaries not found
-✗ Runtime errors
-```
-
-**With this config:**
-
-```
-✓ Prisma used as-is from node_modules
-✓ Native binaries found correctly
-✓ Everything works!
-```
+This protects local fresh installs, CI, and Vercel builds.
 
 ---
 
-## Common Issues & Solutions
+## Vercel deployment lifecycle with Prisma
 
-### Issue 1: "Cannot find module './query_compiler_fast_bg.js'"
+1. Install dependencies (`npm install`)
+2. Run `postinstall` -> `prisma generate`
+3. Build app (`next build`) with Turbopack/Next build pipeline
+4. Deploy built output
+5. Handle requests in Node runtime
 
-**Cause:** Version mismatch or missing generation
-
-**Solution:**
-
-```bash
-# Sync all versions
-npm install @prisma/client@7.3.0 @prisma/adapter-pg@7.3.0 -D prisma@7.3.0
-
-# Clean regenerate
-npx rimraf node_modules/.prisma
-npx prisma generate
-```
+If Prisma is externalized, server runtime loads it via Node resolution from installed dependencies.
 
 ---
 
-### Issue 2: Types Not Updating After Schema Change
+## Real-world issue triage (what failed?)
 
-**Cause:** Forgot to regenerate after modifying `schema.prisma`
+Use this matrix before assuming “Turbopack Prisma bug”.
 
-**Solution:**
+### A) Runtime warning mentions SSL mode semantics (`pg`)
 
-```bash
-npx prisma migrate dev  # Updates DB + regenerates
-# OR
-npx prisma generate     # Just regenerates types
-```
+Likely cause:
 
----
+- Connection string parameter choice, not bundling
 
-### Issue 3: Build Fails in CI/CD
+Fix:
 
-**Cause:** Prisma Client not generated before build
+- Use `sslmode=verify-full` (or explicitly opt into libpq-compatible behavior if intended)
 
-**Solution:** Ensure `postinstall` hook exists in `package.json`:
+### B) Error: Prisma module not found / generated artifacts missing
 
-```json
-{
-  "scripts": {
-    "postinstall": "prisma generate"
-  }
-}
-```
+Likely cause:
 
----
+- `prisma generate` not run in environment
+- Version mismatch among `prisma`, `@prisma/client`, `@prisma/adapter-pg`
 
-### Issue 4: Turbopack Bundling Errors
+Fix:
 
-**Cause:** Missing `serverExternalPackages` config
+- Sync versions
+- Run clean generate
+- Ensure `postinstall` hook exists
 
-**Solution:** Add to `next.config.js`:
+### C) Error appears only when file becomes client-side
 
-```javascript
-serverExternalPackages: ['@prisma/client', 'prisma'];
-```
+Likely cause:
 
----
+- Prisma runtime import leaked into client graph
 
-## Quick Reference Commands
+Fix:
 
-### Daily Development:
+- Move runtime Prisma code to server-only module
+- Keep client/shared files on type-only imports
 
-```bash
-npm run dev                 # Start dev server (generates client on install)
-npx prisma studio          # Open database GUI
-npx prisma migrate dev     # Create + apply migration
-```
+### D) Edge runtime route tries to use Node-only Prisma path
 
-### Schema Changes:
+Likely cause:
 
-```bash
-# After editing schema.prisma:
-npx prisma migrate dev --name description_of_change
-```
+- Runtime mismatch (Edge vs Node expectations)
 
-### Fresh Start (Troubleshooting):
+Fix:
 
-```bash
-# Full clean reinstall
-rm -rf node_modules .next node_modules/.prisma
-npm install
-npx prisma generate
-npm run dev
-```
-
-### Production Build:
-
-```bash
-npm install    # postinstall hook runs prisma generate
-npm run build  # Builds Next.js
-npm start      # Starts production server
-```
-
-### Check Versions:
-
-```bash
-npm ls prisma
-npm ls @prisma/client
-npm ls @prisma/adapter-pg
-```
-
-### Update All Prisma Packages:
-
-```bash
-npm install @prisma/client@latest @prisma/adapter-pg@latest -D prisma@latest
-npx prisma generate
-```
+- Use Node runtime for Prisma-backed handlers/components, or use a supported edge strategy
 
 ---
 
-## Files Structure Reference
+## Version policy for this repo
 
-```
-project-root/
-├── prisma/
-│   ├── schema.prisma          # Database schema definition
-│   ├── client.ts              # Custom Prisma Client with adapter
-│   └── migrations/            # Database migrations
-├── node_modules/
-│   ├── .prisma/
-│   │   └── client/            # Generated Prisma Client code (DO NOT COMMIT)
-│   ├── @prisma/client/        # Populated by prisma generate
-│   ├── @prisma/adapter-pg/    # PostgreSQL adapter
-│   └── prisma/                # CLI tool
-├── next.config.js             # serverExternalPackages config
-└── package.json               # postinstall hook
-```
+Keep these synchronized:
 
-**Important:** Never commit `node_modules/.prisma/` - it's generated per environment!
+- `prisma`
+- `@prisma/client`
+- `@prisma/adapter-pg`
+
+Mismatch symptoms can include missing generated files, runtime import failures, or odd adapter behavior.
 
 ---
 
-**Last Updated:** February 10, 2026  
-**Prisma Version:** 7.3.0  
-**Next.js Version:** 16.1.4
+## Commands we use
+
+### Normal development
+
+- `npm run dev`
+- `npx prisma studio`
+- `npx prisma migrate dev`
+
+### After schema changes
+
+- `npx prisma migrate dev --name your_change_name`
+
+### Repair generated client issues
+
+- `npx rimraf node_modules/.prisma`
+- `npx prisma generate`
+
+### Validate dependency versions
+
+- `npm ls prisma`
+- `npm ls @prisma/client`
+- `npm ls @prisma/adapter-pg`
+
+---
+
+## Quick checklist before opening a bug
+
+- Are Prisma packages version-synced?
+- Did `prisma generate` run in this environment?
+- Is Prisma runtime code only in server paths?
+- Are Prisma type imports type-only where appropriate?
+- Is `serverExternalPackages` set (even if auto-covered by Next)?
+- Is the observed message actually a DB/connection warning instead of a bundling error?
+
+---
+
+## Repository references
+
+- Prisma client setup: `prisma/client.ts`
+- Prisma schema: `prisma/schema.prisma`
+- Next config: `next.config.js`
+- Package scripts/deps: `package.json`
+
+This document should be updated whenever:
+
+- Prisma major/minor versions change
+- Next.js major versions change
+- Runtime target strategy changes (Node vs Edge)
+- Deployment platform behavior changes

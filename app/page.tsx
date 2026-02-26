@@ -2,7 +2,7 @@ import Post from './Post';
 import AddPost from './AddPost';
 import Counter from './Counter';
 import allPosts from '@/unstableCache/allPosts';
-import { Post as PrismaPost, User, Comment } from '@prisma/client';
+import type { Post as PrismaPost, User, Comment } from '@prisma/client';
 import { cacheLife } from 'next/cache';
 
 // const Home = async () => {
