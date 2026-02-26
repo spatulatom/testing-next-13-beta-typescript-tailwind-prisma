@@ -17,7 +17,7 @@ export async function DELETE(request: NextRequest, url: URL) {
   // GET session
   let session;
   try {
-    session = await auth()
+    session = await auth();
   } catch (err) {
     return NextResponse.json(
       { message: 'Database connection error 1.' },
