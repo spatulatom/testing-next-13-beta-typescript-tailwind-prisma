@@ -81,17 +81,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Sanitize the input - more robust sanitization to prevent HTML injection
-    // Remove HTML tags (particularly img tags which can be used for XSS)
+    // Sanitize the input to prevent HTML injection
+    // Remove HTML tags
     title = title.replace(/<[^>]*>?/gm, '');
-    // Convert HTML entities to prevent bypass attempts
-    title = title
-      .replace(/&lt;/g, '<')
-      .replace(/&gt;/g, '>')
-      .replace(/&quot;/g, '"')
-      .replace(/&#x27;/g, "'")
-      .replace(/&#x2F;/g, '/');
-    // Remove any remaining < or > characters that could be used to form tags
+    // Remove any remaining < or > characters that could form tags
     title = title.replace(/[<>]/g, '');
     // Finally trim whitespace
     title = title.trim();

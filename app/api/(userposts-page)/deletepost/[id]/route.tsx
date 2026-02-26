@@ -60,21 +60,41 @@ export async function DELETE(request: NextRequest, url: URL) {
     );
   }
 
+  const postId = (await url.params).id;
+
+  // Check that the post belongs to the authenticated user before deleting
+  let post;
+  try {
+    post = await prisma.post.findUnique({
+      where: { id: postId },
+      select: { userId: true },
+    });
+  } catch (err) {
+    return NextResponse.json(
+      { message: 'Database connection error 3.' },
+      { status: 500 }
+    );
+  }
+  if (!post) {
+    return NextResponse.json({ message: 'Post not found.' }, { status: 404 });
+  }
+  if (post.userId !== prismaUser.id) {
+    return NextResponse.json(
+      { message: 'You are not authorized to delete this post.' },
+      { status: 403 }
+    );
+  }
+
   try {
     const result = await prisma.post.delete({
-      where: {
-        id: (await url.params).id,
-      },
+      where: { id: postId },
     });
     revalidatePath('/');
     return NextResponse.json({ result }, { status: 201 });
   } catch (err) {
-    console.log('ERROR', err);
     return NextResponse.json(
-      { message: 'Error has occured while deleting your post.' },
-      {
-        status: 403,
-      }
+      { message: 'Error has occurred while deleting your post.' },
+      { status: 403 }
     );
   }
 }
