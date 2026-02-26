@@ -1,9 +1,5 @@
-// 'use client';
-
 import Image from 'next/image';
 import Link from 'next/link';
-import { cookies } from 'next/headers';
-// import { motion } from 'framer-motion';
 import type { Post as PrismaPost, User } from '@prisma/client';
 
 interface PostProps {
@@ -37,24 +33,9 @@ export default function Post({
       />
     );
   }
-  // void cookies();
   const d = new Date(date).toLocaleString().toString();
 
-  console.log(
-    'POSTTTTTTTT',
-    date,
-    typeof date,
-    date instanceof Date
-    // d.toLocaleString()
-  );
   return (
-    // <motion.div
-    //   animate={{ opacity: 1, scale: 1 }}
-    //   initial={{ opacity: 0, scale: 0.8 }}
-    //   transition={{ ease: 'easeOut' }}
-    //   className="bg-white my-8 p-8 rounded-lg "
-    // >
-    // </motion.div>
     <Link
       href={{
         pathname: `/${id}`,

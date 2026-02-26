@@ -5,7 +5,6 @@ import allPosts from '@/unstableCache/allPosts';
 import type { Post as PrismaPost, User, Comment } from '@prisma/client';
 import { cacheLife } from 'next/cache';
 
-// const Home = async () => {
 export default async function Home() {
   'use cache';
   cacheLife('max'); // Cache indefinitely
@@ -15,10 +14,7 @@ export default async function Home() {
     comments: Comment[];
   };
 
-  console.log('DATA FETCH HOME PAGE1');
-
   try {
-    // noStore()
     const data: PostWithRelations[] = await allPosts();
 
     if (!data || data.length === 0) {
@@ -41,7 +37,6 @@ export default async function Home() {
 
     return (
       <div className="">
-        {/* <h1 className="text-center text-2xl font-bold  mt-10 animate-shimmer bg-gradient-to-r from-teal-600 via-black to-white text-transparent bg-clip-text capitalize">chat Room</h1> */}
         <h1 className="mb-2 mt-10 bg-gradient-to-r from-teal-600 via-black to-white bg-clip-text text-center text-xl font-bold">
           Chat Room - crud app with{' '}
           <a
@@ -91,6 +86,5 @@ export default async function Home() {
         <h1>Error loading posts</h1>
       </div>
     );
-  } finally {
   }
 }

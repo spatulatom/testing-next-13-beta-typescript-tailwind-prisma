@@ -10,31 +10,14 @@ type URL = {
   params: {
     post: string;
   };
-  // searchParams: string
 };
-// type Post = { data: PostType };
 
-// const fetchDetails = async (id: string) => {
-//   const data = await fetch(`${process.env.NEXT_URL}/api/${id}`, {
-//     cache: 'no-store',
-//   });
-
-//   const response = await data.json();
-//   if (data.ok) {
-//     return response.data;
-//   }
-//   throw new Error(response.error);
-// };
-
-// URL below equals to router().query.parans
 export default async function PostDetail(props: {
   params: Promise<{ post: string }>;
 }) {
   const params = await props.params;
-  // const response: PostType= await fetchDetails(url.params.post);
   const response: any = await singlePost(params.post);
   if (!response) {
-    // for http.../random number - we can use:
     notFound();
   }
   return (
@@ -63,7 +46,6 @@ export default async function PostDetail(props: {
               className="rounded-full"
             />
             <h3 className="font-bold">{comment?.user?.name},</h3>
-            {/* <h2 className="text-sm">commented at {comment.createdAt?.substring(11, 19)}, {comment.createdAt?.substring(0,10)}</h2> */}
           </div>
           <div className="italic"> - {comment.title}</div>
         </div>

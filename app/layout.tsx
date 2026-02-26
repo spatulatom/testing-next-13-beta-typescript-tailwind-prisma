@@ -1,20 +1,17 @@
 import './globals.css';
-// import AuthContext from './AuthContext';
 import Nav from './Nav';
 import QueryWrapper from './QueryWrapper';
-import { Inter, Moon_Dance } from 'next/font/google';
+import { Inter } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
 import { Suspense } from 'react';
 import Link from 'next/link';
 
-// By adding Inter to the <body> element, the font will be applied
-// throughout your application. Here, you're also adding the Tailwind
-// antialiased class which smooths out the font. It's not
-// necessary to use this class, but it adds a nice touch.
-
 export const metadata = {
   title: 'Chat Room',
   description: 'Just vent it out',
+  verification: {
+    google: 'dnW1TgJ5V2K2BLtrlGnYB9zT1glT6E43xb8aWiHuPzM',
+  },
 };
 
 export default function RootLayout({
@@ -22,7 +19,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  console.log('ROOT LAYOUT');
   return (
     <html lang="en">
       <head />
@@ -30,8 +26,6 @@ export default function RootLayout({
       <body
         className={`${inter.className} m-4 pb-2 pt-2 antialiased md:m-auto md:p-8`}
       >
-        {/* <AuthContext> */}
-
         <QueryWrapper>
           <header>
             <Suspense
