@@ -1,9 +1,9 @@
 import prisma from '../../../../../prisma/client';
 import { NextRequest } from 'next/server';
 import { auth } from '../../../../../auth';
-import { NextResponse } from 'next/server';
+import { NextResponse, after } from 'next/server';
 
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 
 type URL = {
   params: Promise<{
@@ -89,7 +89,17 @@ export async function DELETE(request: NextRequest, url: URL) {
     const result = await prisma.post.delete({
       where: { id: postId },
     });
+    
+    // Revalidate cached data
     revalidatePath('/');
+    revalidateTag('all-posts', 'max');
+    revalidateTag(`post-${postId}`, 'max');
+    
+    // Non-blocking logging after response is sent
+    after(() => {
+      console.log(`Post deleted: ${postId}`);
+    });
+    
     return NextResponse.json({ result }, { status: 201 });
   } catch (err) {
     return NextResponse.json(

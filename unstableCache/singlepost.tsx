@@ -1,14 +1,12 @@
-import { unstable_noStore as noStore } from 'next/cache';
 import prisma from '@/prisma/client';
+import { cacheLife, cacheTag } from 'next/cache';
 
-export default async function singlePost(id: any) {
-  noStore();
+export default async function singlePost(id: string) {
+  'use cache';
+  cacheLife('minutes'); // Cache for 5 minutes by default
+  cacheTag(`post-${id}`); // Tag for granular revalidation
 
-  // i am using next 14 feature here for data revalidation
-  // when grabbing data directly form database andand whanting to opt out of
-  //  caching(the verison this app is build is    "next": "^13.2.3",)
-
-  console.log('DATA FETCH UNSATBLE STORE- SINGLE POST');
+  console.log('DATA FETCH CACHED - SINGLE POST', id);
 
   const data = await prisma.post.findUnique({
     where: {

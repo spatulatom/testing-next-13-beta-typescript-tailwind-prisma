@@ -1,15 +1,14 @@
 'use client';
 
 import toast from 'react-hot-toast';
-import { useState } from 'react';
+import { useState, useTransition, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function CreatePost() {
   const router = useRouter();
   const [title, setTitle] = useState('');
-  const [isDisabled, setIsDisabled] = useState(false);
-
-  let toastPostID: string;
+  const [isPending, startTransition] = useTransition();
+  const toastIdRef = useRef<string>('');
 
   const addPost = async (param: string) => {
     try {
@@ -21,18 +20,20 @@ export default function CreatePost() {
         body: JSON.stringify(param),
       });
       const data = await response.json();
-      router.refresh();
+      
       if (response.ok) {
         setTitle('');
-        setIsDisabled(false);
-        return toast.success('Post has been made 🔥', { id: toastPostID });
+        toast.success('Post has been made 🔥', { id: toastIdRef.current });
+        // Use startTransition for non-urgent UI updates
+        startTransition(() => {
+          router.refresh();
+        });
+        return;
       }
-      setIsDisabled(false);
-      toast.error(data.error, { id: toastPostID });
+      toast.error(data.error, { id: toastIdRef.current });
     } catch (err) {
-      setIsDisabled(false);
-      return toast.error('Database connection error. Try again in minute!', {
-        id: toastPostID,
+      toast.error('Database connection error. Try again in minute!', {
+        id: toastIdRef.current,
       });
     }
   };
@@ -57,10 +58,8 @@ export default function CreatePost() {
       return;
     }
 
+    toastIdRef.current = toast.loading('Creating your post');
     addPost(title);
-    console.log('CLICK');
-    toastPostID = toast.loading('Creating your post', { id: toastPostID });
-    setIsDisabled(true);
   };
 
   return (
@@ -72,6 +71,7 @@ export default function CreatePost() {
           name="title"
           placeholder="Write your post here..."
           className="text-md my-2 rounded-md bg-gray-200 p-4 text-black"
+          disabled={isPending}
         />
       </div>
       <div className="flex items-center justify-between gap-2">
@@ -81,11 +81,11 @@ export default function CreatePost() {
           } `}
         >{`${title.length}/50`}</p>
         <button
-          disabled={isDisabled}
+          disabled={isPending}
           className="rounded-xl bg-teal-600 px-6 py-2 text-sm text-white disabled:opacity-25"
           type="submit"
         >
-          Create a post
+          {isPending ? 'Creating...' : 'Create a post'}
         </button>
       </div>
     </form>

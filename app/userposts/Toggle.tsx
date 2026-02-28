@@ -1,10 +1,8 @@
 "use client"
 
 type ToggleProps = {
-  // deletePost: () => void
-  // setToggle: (toggle: boolean) => void
-  deletePost: any
-  setToggle: any
+  deletePost: () => void
+  setToggle: (toggle: boolean) => void
 }
 
 export default function Toggle({ deletePost, setToggle }: ToggleProps) {

@@ -1,29 +1,24 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useTransition, useRef } from 'react';
 
 import toast from 'react-hot-toast';
-import { PostType } from '../../types/Post';
 import { useRouter } from 'next/navigation';
 
-type Comment = {
-  postId?: string;
-  title: string;
-};
 type PostProps = {
   id: string;
 };
+
 export default function AddComment({ id }: PostProps) {
   const router = useRouter();
-  let commentToastId: string;
-  console.log(id);
   const [title, setTitle] = useState('');
-  const [isDisabled, setIsDisabled] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const toastIdRef = useRef<string>('');
 
-  const addComment = async (arg1: string, arg2: string) => {
+  const addComment = async (commentTitle: string, postId: string) => {
     const param = {
-      title: arg1,
-      id: arg2,
+      title: commentTitle,
+      id: postId,
     };
 
     try {
@@ -35,23 +30,21 @@ export default function AddComment({ id }: PostProps) {
         body: JSON.stringify(param),
       });
       const data = await response.json();
+      
       if (response.ok) {
-        router.refresh();
         setTitle('');
-        setIsDisabled(false);
-        router.refresh();
-        return toast.success('Added your comment', { id: commentToastId });
+        toast.success('Added your comment', { id: toastIdRef.current });
+        // Use startTransition for non-urgent UI updates
+        startTransition(() => {
+          router.refresh();
+        });
+        return;
       }
-      toast.error(data.error, { id: commentToastId });
-      setIsDisabled(false);
+      toast.error(data.error, { id: toastIdRef.current });
     } catch (err) {
-      toast.error('Database connection error.', { id: commentToastId });
-      setIsDisabled(false);
+      toast.error('Database connection error.', { id: toastIdRef.current });
     }
   };
-  // we can set title like this - not recommended - but only in clinet component
-  // we shloud never update out dom using pure javaScript
-  // document.title = "JavaScript DOM Update"
 
   const submitPost = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,12 +68,10 @@ export default function AddComment({ id }: PostProps) {
       return;
     }
 
-    setIsDisabled(true);
-    commentToastId = toast.loading('Adding your comment', {
-      id: commentToastId,
-    });
+    toastIdRef.current = toast.loading('Adding your comment');
     addComment(title, id);
   };
+
   return (
     <form onSubmit={submitPost} className="my-8">
       <h3 className="text-xl">Add a comment</h3>
@@ -95,15 +86,16 @@ export default function AddComment({ id }: PostProps) {
           placeholder="your comment..."
           maxLength={30}
           minLength={1}
+          disabled={isPending}
         />
       </div>
       <div className="flex items-center gap-2">
         <button
-          disabled={isDisabled}
+          disabled={isPending}
           className="rounded-xl bg-teal-600 px-6 py-2 text-sm text-white disabled:opacity-25"
           type="submit"
         >
-          Add a comment 🚀
+          {isPending ? 'Adding...' : 'Add a comment 🚀'}
         </button>
         <p
           className={`font-bold text-white ${

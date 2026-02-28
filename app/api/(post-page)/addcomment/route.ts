@@ -1,9 +1,9 @@
 import prisma from '../../../../prisma/client';
 import { NextRequest } from 'next/server';
 import { auth } from '../../../../auth';
-import { NextResponse } from 'next/server';
+import { NextResponse, after } from 'next/server';
 
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 
 // Post a comment onto an individual post
 
@@ -90,7 +90,17 @@ export async function POST(request: NextRequest) {
           postId: body.id,
         },
       });
+      
+      // Revalidate cached data for the specific post
       revalidatePath('/');
+      revalidateTag(`post-${body.id}`, 'max');
+      revalidateTag('all-posts', 'max');
+      
+      // Non-blocking logging after response is sent
+      after(() => {
+        console.log(`Comment added to post ${body.id} by user ${prismaUser.id}`);
+      });
+      
       return NextResponse.json(
         { result },
         {

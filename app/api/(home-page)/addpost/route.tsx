@@ -1,7 +1,7 @@
 import prisma from '../../../../prisma/client';
 import { NextRequest } from 'next/server';
 import { auth } from '../../../../auth';
-import { NextResponse } from 'next/server';
+import { NextResponse, after } from 'next/server';
 
 import { revalidatePath, revalidateTag } from 'next/cache';
 
@@ -117,7 +117,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Get User
-  let prismaUser: any;
+  let prismaUser;
   try {
     prismaUser = await prisma.user.findUnique({
       where: { email: session?.user?.email ?? undefined },
@@ -146,7 +146,15 @@ export async function POST(request: NextRequest) {
         userId: prismaUser.id,
       },
     });
-    // revalidateTag('my-data', 'max');
+    
+    // Revalidate cached data
+    revalidateTag('all-posts', 'max');
+    
+    // Non-blocking logging after response is sent
+    after(() => {
+      console.log(`Post created by user ${prismaUser.id}: ${result.id}`);
+    });
+    
     return NextResponse.json(
       { result },
       {

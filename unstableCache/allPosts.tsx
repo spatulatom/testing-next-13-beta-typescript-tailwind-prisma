@@ -4,19 +4,10 @@ import prisma from '@/prisma/client';
 import { cacheTag, cacheLife } from 'next/cache';
 
 const allPosts = async () => {
-  // cacheLife('max'); // Cache indefinitely
-  // cacheTag('all-posts'); // Add a tag for revalidation
+  cacheLife('hours'); // Cache for 1 hour
+  cacheTag('all-posts'); // Tag for revalidation via revalidateTag('all-posts')
 
-  // await cookies(); // Must await in Next 15+ to mark as dynamic
-  // noStore()
-
-  // noStore()
-
-  // i am using next 14 feature here for data revalidation
-  // when grabbing data directly form database andand whanting to opt out of
-  //  caching(the verison this app is build is    "next": "^13.2.3",)
-
-  console.log('DATA FETCH UNSATBLE STORE - ALL POSTS');
+  console.log('DATA FETCH CACHED - ALL POSTS');
   const data = await prisma.post.findMany({
     include: {
       user: true,
