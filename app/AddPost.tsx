@@ -20,7 +20,7 @@ export default function CreatePost() {
         body: JSON.stringify(param),
       });
       const data = await response.json();
-      
+
       if (response.ok) {
         setTitle('');
         toast.success('Post has been made 🔥', { id: toastIdRef.current });

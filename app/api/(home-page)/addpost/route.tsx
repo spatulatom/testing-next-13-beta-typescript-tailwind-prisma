@@ -146,15 +146,15 @@ export async function POST(request: NextRequest) {
         userId: prismaUser.id,
       },
     });
-    
+
     // Revalidate cached data
     revalidateTag('all-posts', 'max');
-    
+
     // Non-blocking logging after response is sent
     after(() => {
       console.log(`Post created by user ${prismaUser.id}: ${result.id}`);
     });
-    
+
     return NextResponse.json(
       { result },
       {

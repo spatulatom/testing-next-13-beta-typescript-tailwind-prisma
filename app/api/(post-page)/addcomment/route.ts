@@ -90,17 +90,19 @@ export async function POST(request: NextRequest) {
           postId: body.id,
         },
       });
-      
+
       // Revalidate cached data for the specific post
       revalidatePath('/');
       revalidateTag(`post-${body.id}`, 'max');
       revalidateTag('all-posts', 'max');
-      
+
       // Non-blocking logging after response is sent
       after(() => {
-        console.log(`Comment added to post ${body.id} by user ${prismaUser.id}`);
+        console.log(
+          `Comment added to post ${body.id} by user ${prismaUser.id}`
+        );
       });
-      
+
       return NextResponse.json(
         { result },
         {

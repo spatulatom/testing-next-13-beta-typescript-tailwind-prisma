@@ -30,7 +30,7 @@ export default function AddComment({ id }: PostProps) {
         body: JSON.stringify(param),
       });
       const data = await response.json();
-      
+
       if (response.ok) {
         setTitle('');
         toast.success('Added your comment', { id: toastIdRef.current });

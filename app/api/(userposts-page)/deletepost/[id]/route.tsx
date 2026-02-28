@@ -89,17 +89,17 @@ export async function DELETE(request: NextRequest, url: URL) {
     const result = await prisma.post.delete({
       where: { id: postId },
     });
-    
+
     // Revalidate cached data
     revalidatePath('/');
     revalidateTag('all-posts', 'max');
     revalidateTag(`post-${postId}`, 'max');
-    
+
     // Non-blocking logging after response is sent
     after(() => {
       console.log(`Post deleted: ${postId}`);
     });
-    
+
     return NextResponse.json({ result }, { status: 201 });
   } catch (err) {
     return NextResponse.json(
