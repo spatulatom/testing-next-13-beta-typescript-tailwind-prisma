@@ -93,8 +93,9 @@ export async function POST(request: NextRequest) {
 
       // Revalidate cached data for the specific post
       revalidatePath('/');
-      revalidateTag(`post-${body.id}`, 'max');
-      revalidateTag('all-posts', 'max');
+      revalidatePath(`/[post]/${body.id}`);
+      revalidateTag(`post-${body.id}`);
+      revalidateTag('all-posts');
 
       // Non-blocking logging after response is sent
       after(() => {

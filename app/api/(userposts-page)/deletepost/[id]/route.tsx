@@ -92,8 +92,9 @@ export async function DELETE(request: NextRequest, url: URL) {
 
     // Revalidate cached data
     revalidatePath('/');
-    revalidateTag('all-posts', 'max');
-    revalidateTag(`post-${postId}`, 'max');
+    revalidatePath('/userposts');
+    revalidateTag('all-posts');
+    revalidateTag(`post-${postId}`);
 
     // Non-blocking logging after response is sent
     after(() => {

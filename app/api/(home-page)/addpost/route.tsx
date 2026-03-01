@@ -148,7 +148,8 @@ export async function POST(request: NextRequest) {
     });
 
     // Revalidate cached data
-    revalidateTag('all-posts', 'max');
+    revalidatePath('/');
+    revalidateTag('all-posts');
 
     // Non-blocking logging after response is sent
     after(() => {
