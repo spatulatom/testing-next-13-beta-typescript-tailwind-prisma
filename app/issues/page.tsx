@@ -1,5 +1,6 @@
 import { IssueCard } from './components/IssueCard';
 import { IssueFilters } from './components/IssueFilters';
+import { cacheLife } from 'next/cache';
 
 interface Issue {
   number: number;
@@ -23,14 +24,24 @@ async function fetchGitHubIssues(): Promise<Issue[]> {
       {
         headers: {
           Accept: 'application/vnd.github.v3+json',
+          ...(process.env.GITHUB_TOKEN && { Authorization: `token ${process.env.GITHUB_TOKEN}` }),
         },
         next: { revalidate: 3600 },
       }
     );
 
+    // Handle rate limiting
+    if (response.status === 403) {
+      const remaining = response.headers.get('x-ratelimit-remaining');
+      if (remaining === '0') {
+        console.error('GitHub API rate limit exceeded');
+        throw new Error('GitHub API rate limit exceeded. Please try again later.');
+      }
+    }
+
     if (!response.ok) {
       console.error('GitHub API error:', response.statusText);
-      return [];
+      throw new Error(`GitHub API error: ${response.statusText}`);
     }
 
     const data = await response.json();
@@ -90,25 +101,6 @@ export default async function IssuesPage() {
         {issues.map((issue) => (
           <IssueCard key={issue.number} issue={issue} />
         ))}
-      </div>
-    </div>
-  );
-}
-
-function IssueFilters({ issues }: { issues: Issue[] }) {
-  'use client';
-  return (
-    <div className="mb-6 flex gap-4">
-      <div className="flex gap-2">
-        <button className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white">
-          All ({issues.length})
-        </button>
-        <button className="rounded-lg bg-gray-200 px-4 py-2 text-sm font-medium text-gray-800 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200">
-          Open ({issues.filter((i) => i.state === 'OPEN').length})
-        </button>
-        <button className="rounded-lg bg-gray-200 px-4 py-2 text-sm font-medium text-gray-800 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200">
-          Closed ({issues.filter((i) => i.state === 'CLOSED').length})
-        </button>
       </div>
     </div>
   );

@@ -41,21 +41,13 @@ export async function POST(request: NextRequest) {
   try {
     body = await request.json();
 
-    // Sanitize the comment text
+    // Sanitize the comment text - use a simpler, more secure approach
     if (body.title) {
-      // Remove HTML tags
-      body.title = body.title.replace(/<[^>]*>?/gm, '');
-      // Convert HTML entities to prevent bypass attempts
+      // Remove HTML tags and potentially dangerous characters
       body.title = body.title
-        .replace(/&lt;/g, '<')
-        .replace(/&gt;/g, '>')
-        .replace(/&quot;/g, '"')
-        .replace(/&#x27;/g, "'")
-        .replace(/&#x2F;/g, '/');
-      // Remove any remaining < or > characters
-      body.title = body.title.replace(/[<>]/g, '');
-      // Trim whitespace
-      body.title = body.title.trim();
+        .replace(/<[^>]*>?/gm, '')  // Remove HTML tags
+        .replace(/[<>&"']/g, '')     // Remove dangerous characters
+        .trim();
     }
   } catch (err) {
     console.log('BODY', err);
@@ -93,8 +85,9 @@ export async function POST(request: NextRequest) {
 
       // Revalidate cached data for the specific post
       revalidatePath('/');
-      revalidateTag(`post-${body.id}`, 'max');
-      revalidateTag('all-posts', 'max');
+      revalidatePath(`/[post]/${body.id}`);
+      revalidateTag(`post-${body.id}`);
+      revalidateTag('all-posts');
 
       // Non-blocking logging after response is sent
       after(() => {
