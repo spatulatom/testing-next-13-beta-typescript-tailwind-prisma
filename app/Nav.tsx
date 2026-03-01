@@ -38,6 +38,11 @@ export default async function Nav() {
         <li>
           <Link href={'/edit-suggestions'}>Edit Suggestions</Link>
         </li>
+        <li>
+          <Link href={'/issues'}>
+            <h2 className="transition-all hover:text-teal-600">Issues</h2>
+          </Link>
+        </li>
       </ul>
 
       <div className="flex items-center gap-4">
