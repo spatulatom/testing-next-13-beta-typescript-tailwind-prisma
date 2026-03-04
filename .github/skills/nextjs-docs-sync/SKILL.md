@@ -6,7 +6,6 @@ metadata:
   author: project
   version: "1.1"
   reference: https://vercel.com/blog/agents-md-outperforms-skills-in-our-agent-evals
-disable-model-invocation: true
 ---
 
 # Next.js Documentation Sync
