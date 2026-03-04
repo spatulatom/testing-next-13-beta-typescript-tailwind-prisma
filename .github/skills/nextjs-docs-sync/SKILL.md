@@ -4,7 +4,7 @@ description: Use when the user upgraded, updated, or bumped their Next.js versio
 license: MIT
 metadata:
   author: project
-  version: '1.1'
+  version: "1.1"
   reference: https://vercel.com/blog/agents-md-outperforms-skills-in-our-agent-evals
 ---
 
