@@ -42,21 +42,29 @@
 
 - When creating branches, prefix them with `tom/` to indicate they came from me.
 
+### Permission Gate (Git + GitHub)
+
+- Default to **read-only** repo operations for Git/GitHub.
+- Do **not** run `git commit`, `git push`, create/switch branches, open/update PRs, create/edit/close issues, or tick issue checkboxes unless I explicitly approve that exact action in this chat.
+- Prefer local edits for my review first; if approval is missing or ambiguous, stop and ask before any Git/GitHub mutation.
+
 ### Plans
 
-- At the end of each plan, give me a list of unresolved questions to answer, if any. Make the questions extremely concise. Sacrifice grammar for the sake of concision.
+- In `[[PLAN]]` mode, end each plan response with unresolved questions (if any). Keep questions extremely concise; grammar can be minimal.
 
 ### GitHub Issues
 
 - Structure issues with a brief description and sub-tasks as checkboxes so progress can be tracked across sessions.
 - After completing work on a sub-task, suggest a commit message referencing the issue number and sub-point (e.g. `fix: resolve #12 step 2 - ...`).
+
 - Only tick checkboxes when explicitly asked to by the user.
 
 ### Autopilot Mode (Copilot CLI only)
 
 - Autopilot mode is only available in Copilot CLI (background agent), not in VS Code chat.
-- When in autopilot mode, apply `--max-autopilot-continues 6` as a safety cap to prevent runaway premium request usage — not as a preferred stopping point. The goal is always task completion.
-- Each autonomous continuation costs premium requests; the CLI displays the cost per step. Fewer continuations = lower cost, so keep tasks well-scoped.
+- Treat each autonomous continuation as one iteration; with `--max-autopilot-continues 6`, run at most 6 continuations before stopping for review.
+- This cap is a safety guard to prevent runaway premium usage, not a preferred stopping point; the goal remains task completion.
+- Each continuation consumes premium requests, and the CLI shows per-step cost. Fewer continuations = lower cost, so keep tasks well-scoped.
 - The point of autopilot is to **save** premium requests vs. interactive mode (where every clarifying question/reply costs one).
 ---
 
