@@ -1,10 +1,10 @@
 # Next.js Documentation Lookup Instructions
 
-**Next.js 16.1.6** · Docs synced February 10, 2026
+**Next.js 16.1.6** · Docs synced March 4, 2026
 
 ## CRITICAL: Use Local .next-docs Files for Maximum Efficiency
 
-**ALWAYS prefer reading local documentation files over using MCP tools.**
+**ALWAYS prefer reading local documentation files over using Next.js DevTools MCP tools.**
 
 ### Required Workflow for Next.js Questions:
 
@@ -28,15 +28,30 @@
 ✅ **Predictable size** - know exact token cost before loading  
 ✅ **No network overhead** - instant access
 
-### When to Use MCP Tools:
+### When to Use Next.js DevTools MCP Tools:
 
-⚠️ Only use `nextjs_index` / `nextjs_call` MCP tools when:
+⚠️ Only use `nextjs_index` / `nextjs_call` Next.js DevTools MCP tools when:
 
 - Debugging a RUNNING Next.js dev server
 - Getting real-time errors, routes, or build diagnostics
 - The user explicitly asks to check the running application
 
-**Do NOT use MCP `nextjs_docs` tool** - use local files instead.
+**Do NOT use Next.js DevTools MCP `nextjs_docs` tool** - use local files instead.
+
+### Git
+
+- When creating branches, prefix them with `tom/` to indicate they came from me.
+
+### Plans
+
+- At the end of each plan, give me a list of unresolved questions to answer, if any. Make the questions extremely concise. Sacrifice grammar for the sake of concision.
+
+### GitHub Issues
+
+- Structure issues with a brief description and sub-tasks as checkboxes so progress can be tracked across sessions.
+- After completing work on a sub-task, suggest a commit message referencing the issue number and sub-point (e.g. `fix: resolve #12 step 2 - ...`).
+- Only tick checkboxes when explicitly asked to by the user.
+
 
 ---
 
