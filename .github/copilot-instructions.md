@@ -53,7 +53,7 @@
 
 ### GitHub Issues
 
-- Structure issues with a brief description and sub-tasks as checkboxes so progress can be tracked across sessions.
+- Structure issues with 1. a brief description and 2. a numbered list where child items are sub-tasks with checkboxes (so progress can be tracked across sessions).
 - Only tick checkboxes when explicitly asked to by the user.
 
 ### Git Branching
