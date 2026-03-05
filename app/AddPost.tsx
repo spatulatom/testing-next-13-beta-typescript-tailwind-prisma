@@ -33,6 +33,7 @@ export default function CreatePost() {
       setIsDisabled(false);
       return toast.error('Database connection error. Try again in minute!', {
         id: toastPostID,
+        
       });
     }
   };
