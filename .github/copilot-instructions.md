@@ -50,7 +50,7 @@
 
 ### Plans
 
-- In `[[PLAN]]` mode, end each plan response with unresolved questions (if any). Keep questions extremely concise; grammar can be minimal.
+- In `[[PLAN]]` mode, end every plan response with unresolved questions (if any). Keep questions extremely concise; grammar can be minimal.
 
 ### GitHub Issues
 
@@ -62,9 +62,9 @@
 ### Autopilot Mode (Copilot CLI only)
 
 - Autopilot mode is only available in Copilot CLI (background agent), not in VS Code chat.
-- Treat each autonomous continuation as one iteration; with `--max-autopilot-continues 6`, run at most 6 continuations before stopping for review.
-- This cap is a safety guard to prevent runaway premium usage, not a preferred stopping point; the goal remains task completion.
-- Each continuation consumes premium requests, and the CLI shows per-step cost. Fewer continuations = lower cost, so keep tasks well-scoped.
+- Treat each autonomous continuation as one iteration (one continuation = one iteration); with `--max-autopilot-continues 6`, run at most 6 continuations before stopping for review.
+- This cap is a safety guard to prevent runaway premium usage, not a preferred stopping point; the goal is still task completion.
+- Each continuation consumes premium requests, and the CLI shows per-step cost. Fewer continuations means lower cost, so keep tasks well-scoped.
 - The point of autopilot is to **save** premium requests vs. interactive mode (where every clarifying question/reply costs one).
 ---
 
