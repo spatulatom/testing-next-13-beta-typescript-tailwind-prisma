@@ -5,7 +5,8 @@
   "scripts": {
     "postinstall": "prisma generate",
     "dev:webpack": "next dev --webpack",
-    "dev": "next dev --inspect",
+    "dev:inspect": "next dev --inspect",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
