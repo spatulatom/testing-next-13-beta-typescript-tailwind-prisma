@@ -57,11 +57,15 @@
 
 - Write issues as: overarching description + numbered `Progress Checklist`.
 - Overarching description must be 1-3 sentences explaining problem, goal, and why it matters.
+- Keep the top-level checklist short: default to 3-5 items and do not exceed 5 unless the user explicitly asks for it.
+- Top-level checklist items should usually be large enough to map to a meaningful deliverable or commit when practical so then the whole Github Issue could be mapped to 3-5 commits.
+- Prefer grouping related work into a single meaningful milestone with subpoints instead of creating long flat lists.
 - Use plain-text status markers only: `☐` pending, `✅` done (do not use GitHub task checkboxes).
-- Add a short subpoint or subpoints (`- ...`) when useful for context.
+- Add a short subpoint or subpoints (`- ...`) when useful for context; use them to capture scope, constraints, or smaller tasks.
 - Subpoints are notes only (never ticked).
 - Do not nest deeper than one subpoint level.
-- Only change status markers when explicitly asked by the user.
+- When a plan would need more than 5 top-level items, either regroup it into broader milestones or split it into multiple issues.
+- **Important:** Only change status markers when explicitly asked by the user.
 
 Example:
 
@@ -69,9 +73,9 @@ Example:
 
 ✅ = Completed, ☐ = Pending
 
-1. ☐ Implement login validation
+1. ✅ Implement login validation
    - Add server-side validation for missing/invalid credentials.
-2. ✅ Reproduce mobile login bug
+2. ☐ Reproduce mobile login bug
    - Bug occurs when password field is empty on mobile Safari.
    - Added test case to confirm fix.
 3. ☐ Add regression test
