@@ -57,12 +57,9 @@ export default async function Nav() {
           href="https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma#readme"
           target="_blank"
           rel="noopener noreferrer"
-          className=""
+          className="text-app-inverse"
         >
-          <FontAwesomeIcon
-            icon={faGithub}
-            style={{ fontSize: '25px', color: 'white', width: '25px' }}
-          />
+          <FontAwesomeIcon icon={faGithub} className="size-6" />
         </a>
 
         {!session && <Login />}

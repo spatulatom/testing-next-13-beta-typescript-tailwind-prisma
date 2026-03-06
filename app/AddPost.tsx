@@ -1,15 +1,14 @@
 'use client';
 
 import toast from 'react-hot-toast';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function CreatePost() {
   const router = useRouter();
   const [title, setTitle] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
-
-  let toastPostID: string;
+  const toastPostID = useRef<string | undefined>(undefined);
 
   const addPost = async (param: string) => {
     try {
@@ -25,15 +24,16 @@ export default function CreatePost() {
       if (response.ok) {
         setTitle('');
         setIsDisabled(false);
-        return toast.success('Post has been made 🔥', { id: toastPostID });
+        return toast.success('Post has been made 🔥', {
+          id: toastPostID.current,
+        });
       }
       setIsDisabled(false);
-      toast.error(data.error, { id: toastPostID });
+      toast.error(data.error, { id: toastPostID.current });
     } catch (err) {
       setIsDisabled(false);
       return toast.error('Database connection error. Try again in minute!', {
-        id: toastPostID,
-        
+        id: toastPostID.current,
       });
     }
   };
@@ -58,10 +58,12 @@ export default function CreatePost() {
       return;
     }
 
-    addPost(title);
     console.log('CLICK');
-    toastPostID = toast.loading('Creating your post', { id: toastPostID });
     setIsDisabled(true);
+    toastPostID.current = toast.loading('Creating your post', {
+      id: toastPostID.current,
+    });
+    addPost(title);
   };
 
   return (
@@ -72,7 +74,7 @@ export default function CreatePost() {
           value={title}
           name="title"
           placeholder="Write your post here..."
-          className="text-md my-2 rounded-md bg-gray-200 p-4 text-black"
+          className="my-2 rounded-md bg-gray-200 p-4 text-base text-black"
         />
       </div>
       <div className="flex items-center justify-between gap-2">

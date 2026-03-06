@@ -1,9 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import toast from 'react-hot-toast';
-import { PostType } from '../../types/Post';
 import { useRouter } from 'next/navigation';
 
 type Comment = {
@@ -15,7 +14,7 @@ type PostProps = {
 };
 export default function AddComment({ id }: PostProps) {
   const router = useRouter();
-  let commentToastId: string;
+  const commentToastId = useRef<string | undefined>(undefined);
   console.log(id);
   const [title, setTitle] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
@@ -40,12 +39,14 @@ export default function AddComment({ id }: PostProps) {
         setTitle('');
         setIsDisabled(false);
         router.refresh();
-        return toast.success('Added your comment', { id: commentToastId });
+        return toast.success('Added your comment', {
+          id: commentToastId.current,
+        });
       }
-      toast.error(data.error, { id: commentToastId });
+      toast.error(data.error, { id: commentToastId.current });
       setIsDisabled(false);
     } catch (err) {
-      toast.error('Database connection error.', { id: commentToastId });
+      toast.error('Database connection error.', { id: commentToastId.current });
       setIsDisabled(false);
     }
   };
@@ -76,8 +77,8 @@ export default function AddComment({ id }: PostProps) {
     }
 
     setIsDisabled(true);
-    commentToastId = toast.loading('Adding your comment', {
-      id: commentToastId,
+    commentToastId.current = toast.loading('Adding your comment', {
+      id: commentToastId.current,
     });
     addComment(title, id);
   };
@@ -91,7 +92,7 @@ export default function AddComment({ id }: PostProps) {
           value={title}
           type="text"
           name="title"
-          className="text-md my-2 rounded-md bg-white p-4 text-black"
+          className="my-2 rounded-md bg-white p-4 text-base text-black"
           placeholder="your comment..."
           maxLength={30}
           minLength={1}

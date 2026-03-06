@@ -4,13 +4,6 @@ const nextConfig = {
   turbopack: {
     root: __dirname,
   },
-  experimental: {
-    // Enable filesystem caching for `next dev`- till the default is switched 
-    // to `true` in a future release
-    turbopackFileSystemCacheForDev: true,
-    // Enable filesystem caching for `next build`
-    // turbopackFileSystemCacheForBuild: true,
-  },
   images: {
     remotePatterns: [
       {
