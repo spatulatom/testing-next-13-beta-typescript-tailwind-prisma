@@ -4,13 +4,13 @@
 
 ## CRITICAL: Use Local .next-docs Files for Maximum Efficiency
 
-**ALWAYS prefer reading local documentation files over using Next.js DevTools MCP tools.**
+**Default to reading local documentation files for Next.js concepts, APIs, and best-practice lookups.**
 
 ### Required Workflow for Next.js Questions:
 
 1. **Check the index below** to find the relevant `.mdx` file path
 2. **Construct the full local path**: `.next-docs/{path-from-index}`
-3. **Use `read_file` tool** to read the documentation
+3. **Use the available file-reading tool to read the documentation.**
 4. **Start with a small range** (e.g., lines 1-100) to check headers and structure
 5. **Read more lines if needed** based on what you find
 
@@ -30,13 +30,15 @@
 
 ### When to Use Next.js DevTools MCP Tools:
 
-⚠️ Only use `nextjs_index` / `nextjs_call` Next.js DevTools MCP tools when:
+⚠️ Use Next.js DevTools MCP tools when the answer depends on the running application, for example:
 
 - Debugging a RUNNING Next.js dev server
 - Getting real-time errors, routes, or build diagnostics
 - The user explicitly asks to check the running application
+- Inspecting page metadata, server actions, logs, or other live runtime state
+- Runntime-aware diagnostics that require context beyond static documentation when live app context matters
 
-**Do NOT use Next.js DevTools MCP `nextjs_docs` tool** - use local files instead.
+**Do not default to Next.js DevTools MCP tools for static documentation lookups unless explicitly asked or when you think it is necessary for double-checking**
 
 ### Plans
 
@@ -64,6 +66,7 @@
 Example:
 
 ## Progress Checklist
+
 ✅ = Completed, ☐ = Pending
 
 1. ☐ Implement login validation
