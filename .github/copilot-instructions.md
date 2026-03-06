@@ -53,8 +53,26 @@
 
 ### GitHub Issues
 
-- Structure issues with 1. a brief description and 2. a numbered list where child items are sub-tasks with checkboxes (so progress can be tracked across sessions).
-- Only tick checkboxes when explicitly asked to by the user.
+- Write issues as: overarching description + numbered `Progress Checklist`.
+- Overarching description must be 1-3 sentences explaining problem, goal, and why it matters.
+- Use plain-text status markers only: `☐` pending, `✅` done (do not use GitHub task checkboxes).
+- Add a short subpoint or subpoints (`- ...`) when useful for context.
+- Subpoints are notes only (never ticked).
+- Do not nest deeper than one subpoint level.
+- Only change status markers when explicitly asked by the user.
+
+Example:
+
+## Progress Checklist
+✅ = Completed, ☐ = Pending
+
+1. ☐ Implement login validation
+   - Add server-side validation for missing/invalid credentials.
+2. ✅ Reproduce mobile login bug
+   - Bug occurs when password field is empty on mobile Safari.
+   - Added test case to confirm fix.
+3. ☐ Add regression test
+   - Cover invalid token and empty password cases.
 
 ### Git Branching
 
