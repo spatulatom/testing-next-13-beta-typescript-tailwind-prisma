@@ -91,7 +91,7 @@ export default function AddComment({ id }: PostProps) {
           value={title}
           type="text"
           name="title"
-          className="text-md my-2 rounded-md bg-white p-4 text-black"
+          className="my-2 rounded-md bg-white p-4 text-base text-black"
           placeholder="your comment..."
           maxLength={30}
           minLength={1}

@@ -33,7 +33,6 @@ export default function CreatePost() {
       setIsDisabled(false);
       return toast.error('Database connection error. Try again in minute!', {
         id: toastPostID,
-        
       });
     }
   };
@@ -72,7 +71,7 @@ export default function CreatePost() {
           value={title}
           name="title"
           placeholder="Write your post here..."
-          className="text-md my-2 rounded-md bg-gray-200 p-4 text-black"
+          className="my-2 rounded-md bg-gray-200 p-4 text-base text-black"
         />
       </div>
       <div className="flex items-center justify-between gap-2">
