@@ -13,6 +13,7 @@
 - [Built With](#built-with)
 - [Getting Started](#getting-started)
 - [Legacy](#legacy)
+- [Modernization Tracks](#modernization-tracks)
 
 ## About the Project
 
@@ -605,6 +606,44 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Modernization Tracks
+
+This project follows a **versioned modernization strategy**, where each major Next.js upgrade receives its own dedicated track. This approach enables systematic, measurable progress while keeping the codebase aligned with upstream best practices.
+
+### Completed Tracks
+
+- **Next.js 13 → 14**: Stabilized Server Components, Route Handlers, and experimental features
+- **Next.js 14 → 15**: Streaming, enhanced middleware, TanStack Query v5 migration
+- **Next.js 15 → 16**: React 19 migration, Cache Components preparation
+
+### Active Track: Next.js 16 / React 19
+
+**Status**: In Progress  
+**Goal**: Full Next.js 16.1.6 + React 19 adoption with Cache Components ready  
+**Pattern**: Each major version bump gets a dedicated README section at the end of this file
+
+The current modernization pass is tracked in these GitHub issues. Resolve them in priority order:
+
+1. [#34 Reconcile dependency and build tooling](https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma/issues/34)
+2. [#35 Migrate metadata and head handling to the Metadata API](https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma/issues/35)
+3. [#36 Reduce client-only surface area and adopt modern Server Actions patterns](https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma/issues/36)
+4. [#37 Modernize auth integration and route handler contracts](https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma/issues/37)
+5. [#38 Standardize Cache Components and revalidation strategy](https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma/issues/38)
+6. [#39 Clean repo hygiene, TypeScript config, and docs](https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma/issues/39)
+
+### Adding Future Tracks
+
+When upgrading to a new major version (e.g., Next.js 17, 18):
+
+1. Create a new GitHub milestone or issue set for that version
+2. Add a new final `## Modernization Track - Next.js XX / React YY` section **at the end** of this README
+3. Update the TOC to link to it
+4. Move the previous track from "Active" to "Completed"
+
+This keeps the active track always visible at a glance while preserving the upgrade history.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

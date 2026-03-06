@@ -4,13 +4,13 @@
 
 ## CRITICAL: Use Local .next-docs Files for Maximum Efficiency
 
-**ALWAYS prefer reading local documentation files over using Next.js DevTools MCP tools.**
+**Default to reading local documentation files for Next.js concepts, APIs, and best-practice lookups.**
 
 ### Required Workflow for Next.js Questions:
 
 1. **Check the index below** to find the relevant `.mdx` file path
 2. **Construct the full local path**: `.next-docs/{path-from-index}`
-3. **Use `read_file` tool** to read the documentation
+3. **Use the available file-reading tool to read the documentation.**
 4. **Start with a small range** (e.g., lines 1-100) to check headers and structure
 5. **Read more lines if needed** based on what you find
 
@@ -30,13 +30,15 @@
 
 ### When to Use Next.js DevTools MCP Tools:
 
-⚠️ Only use `nextjs_index` / `nextjs_call` Next.js DevTools MCP tools when:
+⚠️ Use Next.js DevTools MCP tools when the answer depends on the running application, for example:
 
 - Debugging a RUNNING Next.js dev server
 - Getting real-time errors, routes, or build diagnostics
 - The user explicitly asks to check the running application
+- Inspecting page metadata, server actions, logs, or other live runtime state
+- Runntime-aware diagnostics that require context beyond static documentation when live app context matters
 
-**Do NOT use Next.js DevTools MCP `nextjs_docs` tool** - use local files instead.
+**Do not default to Next.js DevTools MCP tools for static documentation lookups unless explicitly asked or when you think it is necessary for double-checking**
 
 ### Plans
 
@@ -50,25 +52,34 @@
 
 - Default to **read-only** repo operations for Git/GitHub.
 - Do **not** run `git commit`, `git push`, create/switch branches, open/update PRs, create/edit/close issues, or tick issue checkboxes unless explicitly asked by the user to do so.
+- For GitHub work, remember that both **GitHub MCP** and **GitHub CLI (`gh`)** may be available:
+  - Prefer **GitHub MCP** for read/search/list/fetch workflows.
+  - Prefer **`gh` CLI** for authenticated write operations when explicitly asked by the user (for example: creating issues, editing issues, opening PRs), especially if MCP is read-only in the current session.
+  - Before write operations with `gh`, check authentication with `gh auth status`.
 
 ### GitHub Issues
 
 - Write issues as: overarching description + numbered `Progress Checklist`.
 - Overarching description must be 1-3 sentences explaining problem, goal, and why it matters.
+- Keep the top-level checklist short: default to 3-5 items and do not exceed 5 unless the user explicitly asks for it.
+- Top-level checklist items should usually be large enough to map to a meaningful deliverable or commit when practical so then the whole Github Issue could be mapped to 3-5 commits.
+- Prefer grouping related work into a single meaningful milestone with subpoints instead of creating long flat lists.
 - Use plain-text status markers only: `☐` pending, `✅` done (do not use GitHub task checkboxes).
-- Add a short subpoint or subpoints (`- ...`) when useful for context.
+- Add a short subpoint or subpoints (`- ...`) when useful for context; use them to capture scope, constraints, or smaller tasks.
 - Subpoints are notes only (never ticked).
 - Do not nest deeper than one subpoint level.
-- Only change status markers when explicitly asked by the user.
+- When a plan would need more than 5 top-level items, either regroup it into broader milestones or split it into multiple issues.
+- **Important:** Only change status markers when explicitly asked by the user.
 
 Example:
 
 ## Progress Checklist
+
 ✅ = Completed, ☐ = Pending
 
-1. ☐ Implement login validation
+1. ✅ Implement login validation
    - Add server-side validation for missing/invalid credentials.
-2. ✅ Reproduce mobile login bug
+2. ☐ Reproduce mobile login bug
    - Bug occurs when password field is empty on mobile Safari.
    - Added test case to confirm fix.
 3. ☐ Add regression test
