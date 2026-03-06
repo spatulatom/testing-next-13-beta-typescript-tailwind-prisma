@@ -52,6 +52,10 @@
 
 - Default to **read-only** repo operations for Git/GitHub.
 - Do **not** run `git commit`, `git push`, create/switch branches, open/update PRs, create/edit/close issues, or tick issue checkboxes unless explicitly asked by the user to do so.
+- For GitHub work, remember that both **GitHub MCP** and **GitHub CLI (`gh`)** may be available:
+  - Prefer **GitHub MCP** for read/search/list/fetch workflows.
+  - Prefer **`gh` CLI** for authenticated write operations when explicitly asked by the user (for example: creating issues, editing issues, opening PRs), especially if MCP is read-only in the current session.
+  - Before write operations with `gh`, check authentication with `gh auth status`.
 
 ### GitHub Issues
 
