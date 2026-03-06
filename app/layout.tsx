@@ -30,7 +30,7 @@ export default function RootLayout({
       <body
         className={`${inter.className} m-4 pb-2 pt-2 antialiased md:m-auto md:p-8`}
       >
-        {/* <AuthContext> */}
+   
 
         <QueryWrapper>
           <header>
