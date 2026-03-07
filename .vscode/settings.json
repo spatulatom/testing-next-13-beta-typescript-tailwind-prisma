@@ -3,6 +3,7 @@
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "github.copilot.nextEditSuggestions.enabled": true,
   "chat.tools.terminal.autoApprove": {
-    "npx @next/codemod@canary": true
+    "npx @next/codemod@canary": true,
+    "npm dlx": true
   }
 }
