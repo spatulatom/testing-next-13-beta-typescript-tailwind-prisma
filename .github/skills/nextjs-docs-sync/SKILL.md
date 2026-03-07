@@ -1,23 +1,24 @@
 ---
 name: nextjs-docs-sync
-description: Use when the user upgraded, updated, or bumped their Next.js version, or ran npm update/install for next. Syncs local .next-docs documentation and the copilot-instructions.md docs index to match the newly installed Next.js version.
+description: Use when the user upgraded, updated, or bumped their Next.js version, ran npm update/install for next, or needs to create local docs for the first time. Syncs or creates local .next-docs documentation and the copilot-instructions.md docs index to match the installed Next.js version.
 license: MIT
 metadata:
   author: project
-  version: "1.1"
+  version: "1.2"
   reference: https://vercel.com/blog/agents-md-outperforms-skills-in-our-agent-evals
 ---
 
 # Next.js Documentation Sync
 
-Resync local `.next-docs/` files and the copilot-instructions.md docs index after a Next.js version upgrade.
+Create or resync local `.next-docs/` files and the copilot-instructions.md docs index so they match the installed Next.js version.
 
-> **Why a skill?** The agents-md docs index in copilot-instructions.md gives the agent version-matched Next.js documentation on every turn (see [reference](https://vercel.com/blog/agents-md-outperforms-skills-in-our-agent-evals)). This skill ensures that index stays current after upgrades — a rare event that doesn't justify always-on instruction weight.
+> **Why a skill?** The agents-md docs index in copilot-instructions.md gives the agent version-matched Next.js documentation on every turn (see [reference](https://vercel.com/blog/agents-md-outperforms-skills-in-our-agent-evals)). This skill handles the occasional bootstrap or resync workflow without adding more always-on instruction weight to every turn.
 
 ## When This Applies
 
 - User says they upgraded, updated, or bumped Next.js
 - User ran `npm update`, `npm install next@latest`, or similar
+- `.next-docs/` does not exist yet but repo instructions point agents to it
 - Installed `next` version (in `package.json` or via `npm list next`) differs from the version in `.github/copilot-instructions.md` header
 
 ## Procedure
@@ -28,12 +29,22 @@ Resync local `.next-docs/` files and the copilot-instructions.md docs index afte
    npm list next
    ```
 
-2. **Check documented version:**
+2. **Check whether local docs already exist:**
+
+   - Read `.github/copilot-instructions.md` and confirm the repo points agents to `.next-docs/`
+   - Check whether `.next-docs/` exists in the repo
+
+   This determines the flow:
+
+   - **Create flow:** `.next-docs/` is missing, incomplete, or the docs index markers are missing
+   - **Update flow:** `.next-docs/` exists but the installed Next.js version no longer matches the documented version
+
+3. **Check documented version:**
    Read line 3 of `.github/copilot-instructions.md` — it contains the version string, e.g. `**Next.js 16.1.6**`.
 
-3. **Compare:** If versions match, no action needed. If they differ, continue.
+4. **Compare:** If `.next-docs/` exists and versions match, no docs sync is needed. Otherwise continue with the sync command.
 
-4. **Run the sync command:**
+5. **Run the sync command for either flow:**
 
    ```bash
    npx @next/codemod@canary agents-md --output .github/copilot-instructions.md
@@ -48,7 +59,20 @@ Resync local `.next-docs/` files and the copilot-instructions.md docs index afte
 
    Expected output: `✓ Updated .github/copilot-instructions.md (X KB → Y KB)`
 
-5. **Update version header:**
+6. **Ensure `.next-docs/` stays trackable after the sync:**
+
+   If this repo uses `.next-docs/` as the local docs source of truth, make sure `.next-docs/` is **not** ignored by `.gitignore`.
+
+   Why this matters:
+   - Fresh clones and other agents can read the same version-matched docs immediately
+   - Reviewers can inspect diffs after a docs refresh
+   - The repo does not silently depend on a generated local artifact that is missing from source control
+
+   If `.gitignore` contains `.next-docs/`, remove that ignore rule.
+
+   Only skip this when the repo intentionally relies on bundled docs from `node_modules/next/dist/docs` instead of checked-in `.next-docs/`.
+
+7. **Update version header:**
 
    **IMPORTANT:** The codemod updates the compressed docs index but doesn't modify the custom version header at the top of the file. You must update it manually.
 
@@ -99,4 +123,9 @@ Resync local `.next-docs/` files and the copilot-instructions.md docs index afte
 
 - This is expected behavior
 - The codemod only updates the compressed docs index (between `<!-- NEXT-AGENTS-MD-START -->` and `<!-- NEXT-AGENTS-MD-END -->` markers)
-- You must manually update line 3 with the version and date as described in step 5
+- You must manually update line 3 with the version and date as described in step 7
+
+**`.next-docs/` was created or updated but does not show up in git diff:**
+
+- Check `.gitignore` for a `.next-docs/` rule
+- If the repo instructions point agents to `.next-docs/`, remove that ignore rule so the docs stay reviewable and available to other clones
