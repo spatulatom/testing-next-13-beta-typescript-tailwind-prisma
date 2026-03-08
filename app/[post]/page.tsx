@@ -1,4 +1,4 @@
-import Post from '../Post';
+import Post from '../_components/posts/Post';
 import AddComment from './AddComment';
 import Image from 'next/image';
 
