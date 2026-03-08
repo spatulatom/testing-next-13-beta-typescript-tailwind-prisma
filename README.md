@@ -22,6 +22,19 @@
 - Fully integrates with the latest TanStack Query for smoother data fetching and caching.
 - Adopts new features introduced in Next.js 15 for improved performance and developer experience.
 
+## Project Structure Conventions
+
+- In `app/`, a folder is routable only if it contains `page.tsx` or `route.ts`.
+- Folders wrapped in parentheses (e.g. `(experimental)`) are route groups and do not change URLs.
+- Underscore-prefixed folders are private implementation details (not routes):
+  - `app/_ui` for shared UI used across routes
+  - `app/_providers` for app-wide providers
+  - `app/<route>/_ui` for route-local UI
+- `prisma/` stays at project root for schema and migrations.
+- `public/` stays at project root for static assets.
+- `types/` stays at project root for shared TypeScript types.
+- `server-cache/` (formerly `unstableCache/`) stores shared server-side cached data helpers.
+
 ## New Features in Next.js 15
 
 - **Enhanced Server Actions**: Further improvements in data mutation and server-side logic.
