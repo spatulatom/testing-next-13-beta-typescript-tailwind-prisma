@@ -38,7 +38,11 @@
 - Inspecting page metadata, server actions, logs, or other live runtime state
 - Runntime-aware diagnostics that require context beyond static documentation when live app context matters
 
-**Do not default to Next.js DevTools MCP tools for static documentation lookups unless explicitly asked or when you think it is necessary for double-checking**
+✅ For implementation tasks that touch a running app, prefer a runtime-first flow:
+- Use local `.next-docs` for API/concept lookup.
+- Use Next.js DevTools MCP (`nextjs_index` / `nextjs_call`) to verify routes, errors, and live behavior before and after changes.
+
+**Do not default to Next.js DevTools MCP tools for static documentation lookups unless explicitly asked or needed for runtime verification.**
 
 ### Plans
 
