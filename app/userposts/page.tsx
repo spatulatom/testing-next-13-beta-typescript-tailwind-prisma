@@ -1,6 +1,6 @@
 import { auth } from '../../auth';
 import { redirect } from 'next/navigation';
-import UserOwnPosts from './_components/UserOwnPosts';
+import UserOwnPosts from './_ui/UserOwnPosts';
 
 export default async function Dashboard() {
   const session = await auth();

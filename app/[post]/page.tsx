@@ -1,9 +1,9 @@
-import Post from '../_components/posts/Post';
-import AddComment from './_components/AddComment';
+import Post from '../_ui/posts/Post';
+import AddComment from './_ui/AddComment';
 import Image from 'next/image';
 
 import { notFound } from 'next/navigation';
-import singlePost from '@/unstableCache/singlepost';
+import singlePost from '@/server-cache/singlepost';
 
 type URL = {
   params: {
