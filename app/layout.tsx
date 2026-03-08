@@ -1,5 +1,4 @@
 import './globals.css';
-// import AuthContext from './AuthContext';
 import Nav from './_components/navigation/Nav';
 import QueryWrapper from './_components/providers/QueryWrapper';
 import { Inter, Moon_Dance } from 'next/font/google';

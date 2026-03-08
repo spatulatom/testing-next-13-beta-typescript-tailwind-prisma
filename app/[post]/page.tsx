@@ -1,8 +1,7 @@
 import Post from '../_components/posts/Post';
-import AddComment from './AddComment';
+import AddComment from './_components/AddComment';
 import Image from 'next/image';
 
-import { PostType } from '../../types/Post';
 import { notFound } from 'next/navigation';
 import singlePost from '@/unstableCache/singlepost';
 

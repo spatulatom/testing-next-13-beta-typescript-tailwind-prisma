@@ -1,4 +1,4 @@
-import HalftoneWaves from './halftone-waves';
+import HalftoneWaves from './_components/HalftoneWaves';
 import { delay } from '@/app/lib/utils';
 import { Suspense } from 'react';
 import { headers } from 'next/headers';
