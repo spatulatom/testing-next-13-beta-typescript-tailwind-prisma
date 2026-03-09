@@ -5,33 +5,13 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import singlePost from '@/server-cache/singlepost';
 
-type URL = {
-  params: {
-    post: string;
-  };
-  // searchParams: string
-};
-// type Post = { data: PostType };
 
-// const fetchDetails = async (id: string) => {
-//   const data = await fetch(`${process.env.NEXT_URL}/api/${id}`, {
-//     cache: 'no-store',
-//   });
-
-//   const response = await data.json();
-//   if (data.ok) {
-//     return response.data;
-//   }
-//   throw new Error(response.error);
-// };
-
-// URL below equals to router().query.parans
-export default async function PostDetail(props: {
+export default async function PostDetail({params}: {
   params: Promise<{ post: string }>;
 }) {
-  const params = await props.params;
+  const { post } = await params;
   // const response: PostType= await fetchDetails(url.params.post);
-  const response: any = await singlePost(params.post);
+  const response: any = await singlePost(post);
   if (!response) {
     // for http.../random number - we can use:
     notFound();
