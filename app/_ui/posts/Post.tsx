@@ -24,16 +24,17 @@ export default function Post({
   comments,
 }: PostProps) {
   let whenNull;
-  if (avatar === null) {
-    whenNull = '';
+  if (avatar === null || avatar === undefined || avatar === '') {
+    whenNull = null;
   } else {
     whenNull = (
       <Image
-        className="rounded-full"
+        className="size-8 rounded-full"
         width={32}
         height={32}
         src={avatar}
         alt="avatar"
+        style={{ width: 'auto', height: 'auto' }}
       />
     );
   }
