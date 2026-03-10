@@ -1,6 +1,5 @@
 // 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { cookies } from 'next/headers';
 // import { motion } from 'framer-motion';
@@ -23,21 +22,14 @@ export default function Post({
   postTitle,
   comments,
 }: PostProps) {
-  let whenNull;
-  if (avatar === null || avatar === undefined || avatar === '') {
-    whenNull = null;
-  } else {
-    whenNull = (
-      <Image
-        className="size-8 rounded-full"
-        width={32}
-        height={32}
-        src={avatar}
-        alt="avatar"
-        style={{ width: 'auto', height: 'auto' }}
-      />
-    );
-  }
+  // Using regular img tag to test if Google avatar loads without Next.js Image optimization
+  const avatarElement = avatar ? (
+    <img
+      className="size-8 rounded-full"
+      src={avatar}
+      alt="avatar"
+    />
+  ) : null;
   // void cookies();
   const d = new Date(date).toLocaleString().toString();
 
@@ -62,7 +54,7 @@ export default function Post({
       }}
     >
       <div className="flex items-center rounded-t-lg bg-white p-4">
-        {whenNull}
+        {avatarElement}
         <div className="">
           {' '}
           <h3 className="pl-2 font-bold text-gray-700">{name}</h3>
