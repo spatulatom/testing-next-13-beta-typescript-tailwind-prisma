@@ -1,5 +1,6 @@
 // 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { cookies } from 'next/headers';
 // import { motion } from 'framer-motion';
@@ -22,10 +23,12 @@ export default function Post({
   postTitle,
   comments,
 }: PostProps) {
-  // Using regular img tag to test if Google avatar loads without Next.js Image optimization
+  // Test 1: Using Image with global unoptimized:true in next.config.js
   const avatarElement = avatar ? (
-    <img
+    <Image
       className="size-8 rounded-full"
+      width={32}
+      height={32}
       src={avatar}
       alt="avatar"
     />
