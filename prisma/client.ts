@@ -49,14 +49,19 @@ import { PrismaPg } from '@prisma/adapter-pg';
 // exhausting your database connection limit.
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
-const connectionString =
+const baseConnectionString =
   process.env.POSTGRES_PRISMA_URL ?? process.env.DATABASE_URL;
 
-if (!connectionString) {
+if (!baseConnectionString) {
   throw new Error(
     'Missing database connection string. Set POSTGRES_PRISMA_URL (preferred) or DATABASE_URL.'
   );
 }
+
+// Ensure sslmode=verify-full to avoid pg security warning about future behavior changes
+const connectionString = baseConnectionString.includes('sslmode=')
+  ? baseConnectionString
+  : `${baseConnectionString}${baseConnectionString.includes('?') ? '&' : '?'}sslmode=verify-full`;
 
 const adapter = new PrismaPg({ connectionString });
 
