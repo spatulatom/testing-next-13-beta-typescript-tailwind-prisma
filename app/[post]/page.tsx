@@ -12,6 +12,8 @@ export default async function PostDetail({params}: {
   const { post } = await params;
   // const response: PostType= await fetchDetails(url.params.post);
   const response: any = await singlePost(post);
+  console.log('[v0] Single post user data:', response?.user);
+  console.log('[v0] Single post user image:', response?.user?.image);
   if (!response) {
     // for http.../random number - we can use:
     notFound();
