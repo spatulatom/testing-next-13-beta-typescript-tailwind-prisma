@@ -1,6 +1,5 @@
 // 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { cookies } from 'next/headers';
 // import { motion } from 'framer-motion';
@@ -23,12 +22,10 @@ export default function Post({
   postTitle,
   comments,
 }: PostProps) {
-  // Test 1: Using Image with global unoptimized:true in next.config.js
+  // Using regular img tag - Next.js Image component has inconsistent behavior in v0 sandbox
   const avatarElement = avatar ? (
-    <Image
+    <img
       className="size-8 rounded-full"
-      width={32}
-      height={32}
       src={avatar}
       alt="avatar"
     />

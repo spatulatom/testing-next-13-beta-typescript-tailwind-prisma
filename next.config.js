@@ -12,8 +12,6 @@ const nextConfig = {
     root: __dirname,
   },
   images: {
-    // Test 1: Disable image optimization to see if that's causing the issue
-    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
