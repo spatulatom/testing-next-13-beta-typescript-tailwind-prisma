@@ -1,0 +1,20 @@
+{
+  "plugins": ["stylelint-no-unsupported-browser-features"],
+  "rules": {
+    "plugin/no-unsupported-browser-features": [
+      true,
+      {
+        "browsers": [
+          "chrome >= 115",
+          "and_chr >= 115",
+          "firefox >= 116",
+          "and_ff >= 116",
+          "safari >= 16.4",
+          "ios_saf >= 16.4",
+          "edge >= 115"
+        ],
+        "severity": "warning"
+      }
+    ]
+  }
+}
