@@ -161,6 +161,8 @@ Browser compatibility has three distinct dimensions. **We always check in this o
 
 **Goal:** Validate that your build output works in TARGET_BROWSERS.
 
+⚠️ **FINDINGS MUST USE TEMPLATE:** All results go into `browser-compat-findings.md` using the exact structure from [FINDINGS_TEMPLATE.md](./FINDINGS_TEMPLATE.md). Do not create custom formats.
+
 > **Philosophy:** We target `baseline widely available` as our guaranteed floor. If the build supports older browsers, that's a bonus—not a goal. Chasing ancient browser support has diminishing returns.
 
 > **We measure the finished product (build output), not source files.** Build output is the source of truth—it includes transpiled code and bundled dependencies.
@@ -266,23 +268,21 @@ Remove-Item eslint.compat-check.mjs
 
 ### Step 1.5: Document findings
 
-**Create a findings file in the project root** by copying the template:
+**Copy the template and fill in measurements.** Do not create a custom report format.
 
 ```powershell
 # Copy template to project root (adjust path to skill location)
 Copy-Item "<SKILL_PATH>/FINDINGS_TEMPLATE.md" "./browser-compat-findings.md"
 ```
 
-> **For LLM agents — STRICT TEMPLATE REQUIREMENT:**
+> **For LLM agents — TEMPLATE REQUIREMENT:**
 >
-> 1. Read [FINDINGS_TEMPLATE.md](./FINDINGS_TEMPLATE.md) first
-> 2. Copy it to the project root as `browser-compat-findings.md`
-> 3. **Keep the exact same structure, headings, and table formats**
-> 4. Only replace placeholder text (e.g., `<PROJECT_NAME>`, `✅ / ❌`) with actual values
-> 5. Do NOT reorganize sections, rename headings, or create custom formats
-> 6. Do NOT modify the skill files
+> 1. Copy [FINDINGS_TEMPLATE.md](./FINDINGS_TEMPLATE.md) to `browser-compat-findings.md` in project root
+> 2. **Only** replace placeholder values (e.g., `<PROJECT_NAME>`, `✅ / ❌`) with your actual measurements
+> 3. Keep structure, headings, tables, and section order exactly as shown in the template
+> 4. Do NOT customize, reorganize, or rename sections
 >
-> **Why:** Consistent structure enables comparison across projects. Custom formats break this.
+> **Why:** Consistent structure allows comparison across projects. Any deviation breaks this.
 
 The template sections (keep this order):
 
