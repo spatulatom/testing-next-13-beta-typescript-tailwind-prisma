@@ -1,10 +1,11 @@
 ---
 name: browser-compatibility
-description: Complete workflow for browser compatibility verification - discover build targets, add real-time linting for JavaScript APIs and CSS features, and validate build output. Use when setting up eslint-plugin-compat, Stylelint, browserslist configuration, troubleshooting compatibility issues, or implementing CI/CD browser checks.
+description: Complete workflow for browser compatibility verification — discover build targets, add real-time linting for JavaScript APIs and CSS features, and validate build output.
+disable-model-invocation: true
 license: MIT
 metadata:
   author: Your Organization
-  version: "3.0"
+  version: '3.0'
 ---
 
 # Browser Compatibility Verification Guide
@@ -19,11 +20,30 @@ metadata:
 2. [Goal](#goal)
 3. [Three Dimensions of Compatibility](#three-dimensions-of-compatibility)
 4. [Phase 1: Measure](#phase-1-measure)
+   - [Step 1.1: Build the project](#step-11-build-the-project)
+   - [Step 1.2: CSS features](#step-12-css-features)
+   - [Step 1.3: JS syntax](#step-13-js-syntax)
+   - [Step 1.4: JS APIs](#step-14-js-apis)
+   - [Step 1.5: Document findings](#step-15-document-findings)
 5. [Phase 2: Decide](#phase-2-decide)
+   - [Step 2.1: Review gaps](#step-21-review-gaps)
+   - [Step 2.2: Check build tool configuration](#step-22-check-build-tool-configuration)
+   - [Step 2.3: Discover hardcoded compiler targets](#step-23-discover-hardcoded-compiler-targets)
+   - [Step 2.4: Decision checkpoint](#step-24-decision-checkpoint)
 6. [Phase 3: Enforce (Optional)](#phase-3-enforce-optional)
+   - [Step 3.0: Install tools](#step-30-install-tools-shared-by-3a-and-3b)
    - [3A: Development (Source Code)](#3a-development-source-code)
+     - [3A.1: CSS features → Stylelint](#3a1-css-features--stylelint)
+     - [3A.2: JS syntax → Not needed](#3a2-js-syntax--not-needed)
+     - [3A.3: JS APIs → ESLint](#3a3-js-apis--eslint)
+     - [3A.4: Verify editor integration](#3a4-verify-editor-integration)
+     - [3A.5: Add development script](#3a5-add-development-script)
    - [3B: Build Output (Repeatable npm Scripts)](#3b-build-output-repeatable-npm-scripts)
 7. [Checklist](#checklist)
+   - [Phase 1: Measure](#phase-1-measure-build-output)
+   - [Phase 2: Decide](#phase-2-decide-1)
+   - [Phase 3A: Development](#phase-3a-development-source-code)
+   - [Phase 3B: Build output](#phase-3b-build-output-repeatable-npm-scripts)
 
 ---
 
@@ -83,7 +103,21 @@ STACK: nextjs | vite
 > - `nextjs` → JS: `.next/static/chunks/**/*.js`, CSS: `.next/static/css/**/*.css`
 > - `vite` → JS: `dist/assets/**/*.js`, CSS: `dist/assets/**/*.css`
 >
-> **Note:** Some dependencies (e.g., Tailwind v4) have hardcoded browser floors higher than your targets. Phase 2 will surface these.
+> **Declared target vs effective floor per dimension:**
+>
+> `TARGET_BROWSERS` is your _declared_ intent. But each dimension has its own _effective_ floor, which may be higher:
+>
+> | Dimension        | Effective floor controlled by                                                                                                         |
+> | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+> | **CSS features** | PostCSS/Autoprefixer (follows browserslist) **or** hardcoded tool floors (e.g., Tailwind v4 forces Safari 16.4+ regardless of config) |
+> | **JS syntax**    | SWC/Babel transpilation target (Next.js reads browserslist; Vite/esbuild uses its own `target`)                                       |
+> | **JS APIs**      | Polyfills you explicitly include — no tool handles this automatically                                                                 |
+>
+> **Rule:** Your overall browser support claim is the most restrictive floor across all three dimensions. When dimensions diverge, document each separately and report the limiting one clearly.
+>
+> **Example of divergence:** Tailwind v4 locks CSS to Safari 16.4+, but your SWC config targets ES2020 (Safari 14+) for JS. Result: your effective floor is Safari 16.4+ (CSS wins). Claiming Safari 14+ support would be wrong.
+>
+> Phase 2 will surface these constraints — compare them per dimension, not just overall.
 
 ---
 
@@ -196,6 +230,7 @@ npx es-check es2018 "<BUILD_OUTPUT_JS_PATH>"
 | ES2020   | 80+               | 14+               |
 
 ### Step 1.4: JS APIs
+
 Unlike JS syntax (which bundlers transpile), JS APIs run as-is in the browser. Skipping this check means runtime errors in older browsers will go undetected.
 
 ```powershell
@@ -285,22 +320,40 @@ Determine whether your build tools respect `.browserslistrc` or have their own t
 
 > **For LLM agents:** Check project's build config files (`next.config.js`, `vite.config.js`, `babel.config.js`) to understand what controls transpilation. Document findings.
 
-### Step 2.3: Discover stack constraints
+### Step 2.3: Discover hardcoded compiler targets
 
-Check if any dependencies have hardcoded browser floors higher than TARGET_BROWSERS:
+**These override your declared target and cannot be changed by `.browserslistrc`.** Check each dimension:
+
+**CSS dimension — check for tools with hardcoded floors:**
 
 ```powershell
-# Check for Tailwind v4 (has hardcoded targets)
+# Check for Tailwind v4 (has hardcoded CSS targets)
 npm ls tailwindcss | Select-String "tailwindcss@4"
 ```
 
-**Known constraints** (update as tools evolve):
+**Known CSS constraints** (verify versions — these change as tools evolve):
 
-| Tool                | Hardcoded Floor (as of Jan 2026)        | Impact if TARGET_BROWSERS is lower                         |
-| ------------------- | --------------------------------------- | ---------------------------------------------------------- |
-| **Tailwind CSS v4** | Safari 16.4+, Chrome 111+, Firefox 128+ | CSS won't work in older browsers regardless of your config |
+| Tool                | Hardcoded Floor (as of Jan 2026)        | Impact                                                           |
+| ------------------- | --------------------------------------- | ---------------------------------------------------------------- |
+| **Tailwind CSS v4** | Safari 16.4+, Chrome 111+, Firefox 128+ | CSS won't work in older browsers regardless of `.browserslistrc` |
 
-> **LLM note:** If new tools with hardcoded targets are discovered, add them here. The flow is constraint-agnostic—just document what you find.
+**JS syntax dimension — check transpiler config:**
+
+```powershell
+# Next.js: SWC reads browserslist — check what your .browserslistrc resolves to
+npx browserslist   # shows which browsers SWC targets
+
+# Vite: esbuild has its own target — check vite.config.js
+Get-Content vite.config.js | Select-String "target"
+```
+
+> **esbuild/Vite note:** `build.target` in `vite.config.js` overrides browserslist for JS. If set (e.g., `target: 'es2020'`), that is your JS syntax floor — browserslist has no effect on it.
+
+**JS API dimension — no automatic floor:**
+
+APIs are not transpiled. Your effective JS API floor is determined by which polyfills you ship. If you ship none, the floor is whatever `baseline widely available` browsers all support natively.
+
+> **LLM note:** Compare all three effective floors. The most restrictive one is your real support floor. If one dimension is significantly higher than the others (e.g., Tailwind forcing CSS to Safari 16.4+ while JS supports Safari 14+), flag this explicitly in findings — it's the key constraint to communicate to the user.
 
 ### Step 2.4: Decision checkpoint
 
@@ -411,15 +464,15 @@ No dev-time check required. Build tools (Vite/Next.js) transpile syntax automati
 Create/update `eslint.config.mjs`:
 
 ```javascript
-import compat from "eslint-plugin-compat";
+import compat from 'eslint-plugin-compat';
 
 export default [
   // Source code checking (dev-time)
   {
-    files: ["src/**/*.{js,ts,jsx,tsx}", "app/**/*.{js,ts,jsx,tsx}"],
+    files: ['src/**/*.{js,ts,jsx,tsx}', 'app/**/*.{js,ts,jsx,tsx}'],
     plugins: { compat },
     rules: {
-      "compat/compat": "warn",
+      'compat/compat': 'warn',
     },
   },
 ];
