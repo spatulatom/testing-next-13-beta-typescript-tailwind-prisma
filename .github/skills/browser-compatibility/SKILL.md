@@ -50,7 +50,7 @@ metadata:
 ## Parameters
 
 ```
-STACK: nextjs | vite
+STACK: nextjs | vite | other
 ```
 
 > **For LLM agents — Target Browser Resolution:**
@@ -98,10 +98,13 @@ STACK: nextjs | vite
 >
 > **Note:** The output includes mobile browsers (`and_chr`, `and_ff`, `ios_saf`). When creating manual browser lists, always include these mobile identifiers.
 >
-> **STACK paths:**
+> **Common build-output path examples — not guarantees:**
 >
-> - `nextjs` → JS: `.next/static/chunks/**/*.js`, CSS: `.next/static/css/**/*.css`
-> - `vite` → JS: `dist/assets/**/*.js`, CSS: `dist/assets/**/*.css`
+> - `nextjs` often emits JS under `.next/static/chunks/**/*.js`; CSS may be under `.next/static/css/**/*.css` or `.next/static/chunks/**/*.css` depending on bundler/runtime
+> - `vite` often emits JS/CSS under `dist/assets/**/*.{js,css}`
+> - `other` stacks (Astro, SvelteKit, Webpack, custom builds, etc.) must be inspected directly after build
+>
+> **Rule:** treat these as starting examples only. Always inspect the actual build output and record the real emitted JS/CSS paths you audited.
 >
 > **Declared target vs effective floor per dimension:**
 >
@@ -163,6 +166,8 @@ Browser compatibility has three distinct dimensions. **We always check in this o
 
 ⚠️ **FINDINGS MUST USE TEMPLATE:** All results go into `browser-compat-findings.md` using the exact structure from [FINDINGS_TEMPLATE.md](./FINDINGS_TEMPLATE.md). Do not create custom formats.
 
+> **Phase 1 scope is build output only.** Do not use source files, editor diagnostics, or dev-server-only artifacts as Phase 1 evidence. Every finding in this phase must come from emitted JS/CSS assets produced by the build.
+
 > **Philosophy:** We target `baseline widely available` as our guaranteed floor. If the build supports older browsers, that's a bonus—not a goal. Chasing ancient browser support has diminishing returns.
 
 > **We measure the finished product (build output), not source files.** Build output is the source of truth—it includes transpiled code and bundled dependencies.
@@ -184,19 +189,45 @@ npm run build
 # First, resolve explicit browser string (if using Baseline)
 $EXPLICIT_BROWSERS = (npx browserslist "baseline widely available") -join ", "
 
-# STACK paths: vite → "dist/assets/**/*.css" | nextjs → ".next/static/css/**/*.css"
+# Use the real emitted CSS path you discovered after build.
+# Example paths only: vite → "dist/assets/**/*.css" | nextjs → ".next/static/css/**/*.css"
 npx doiuse --browsers "$EXPLICIT_BROWSERS" "<BUILD_OUTPUT_CSS_PATH>"
 ```
 
 > **Note:** `doiuse` doesn't support Baseline queries directly—you must resolve to explicit browsers first.
+
+> **Secondary emitted-CSS method — Lightning CSS:**
+>
+> If `doiuse` fails because it cannot parse the emitted CSS, try Lightning CSS on the emitted CSS files directly. This is still a build-output check, not a source-level fallback.
+>
+> ```powershell
+> # Install once if needed
+> npm install -D lightningcss-cli
+>
+> # Run this per emitted CSS file. If .browserslistrc exists, --browserslist will load it.
+> # Otherwise use --targets "baseline widely available" or your explicit query.
+> npx lightningcss "<BUILD_OUTPUT_CSS_FILE>" --browserslist -o "<TEMP_OUTPUT_CSS_FILE>"
+> ```
+>
+> **How to interpret Lightning CSS results:**
+>
+> - If Lightning CSS **cannot parse** the emitted CSS, keep the CSS result as ⚠️ Inconclusive.
+> - If Lightning CSS **parses and lowers syntax/adds fallbacks**, record that as secondary emitted-CSS evidence that some modern syntax can be compiled for the selected targets.
+> - If Lightning CSS **parses with little or no output change**, do **not** treat that as a full compatibility pass. Lightning CSS is primarily a parser/transpiler, not a complete unsupported-feature reporter like `doiuse`.
+> - Use Lightning CSS to supplement Phase 1 evidence, not to replace the compatibility judgment model entirely.
 
 > ⚠️ **Tailwind v4 limitation:** If the project uses Tailwind v4, `doiuse` will **crash with a parse error** (`CssSyntaxError: Unclosed block`) before doing any browser comparison. This happens **regardless of what browsers you pass via `--browsers`** — the failure is caused by doiuse's bundled PostCSS being too old to parse Tailwind v4's `@layer properties { @supports (...) { } }` syntax. Changing targets will not fix it.
 >
 > **If `doiuse` crashes:**
 >
 > 1. Mark the CSS check as ⚠️ Inconclusive in the findings file
-> 2. Document Tailwind v4's known hardcoded browser floors in Phase 2.1 instead (Safari 16.4+, Chrome 111+, Firefox 128+)
-> 3. For ongoing CSS checks (Phase 3A), use `stylelint` + `stylelint-no-unsupported-browser-features` instead of doiuse
+> 2. Try Lightning CSS on the emitted CSS as a **secondary** Phase 1 method if you want additional build-output evidence
+> 3. Document Tailwind v4's known hardcoded browser floors in Phase 2.1 instead (Safari 16.4+, Chrome 111+, Firefox 128+)
+> 4. For ongoing CSS checks (Phase 3A), use `stylelint` + `stylelint-no-unsupported-browser-features` instead of doiuse
+>
+> **Important:** Do not silently replace a build-output CSS check with a source-level check in Phase 1. If you try another tool, it must analyze the emitted CSS files directly. If no reliable emitted-CSS tool is available, keep the result as ⚠️ Inconclusive and explain why.
+
+> **Important:** Even when Lightning CSS succeeds, Phase 2 must still consider framework/tool hardcoded floors. A successful transform is supportive evidence, not a guarantee that the stack officially supports browsers below its stated minimum.
 
 **Output:** Lists unsupported features, e.g.: `CSS Container Queries not supported by: Chrome < 105`
 
@@ -213,7 +244,8 @@ npx doiuse --browsers "$EXPLICIT_BROWSERS" "<BUILD_OUTPUT_CSS_PATH>"
 > 3. Use your current knowledge to map ES levels → browser versions (don't rely on hardcoded tables)
 
 ```powershell
-# STACK paths: vite → "dist/assets/**/*.js" | nextjs → ".next/static/chunks/**/*.js"
+# Use the real emitted JS path you discovered after build.
+# Example paths only: vite → "dist/assets/**/*.js" | nextjs → ".next/static/chunks/**/*.js"
 
 # Test baseline level first (calculated from current year - 2.5)
 npx es-check es2023 "<BUILD_OUTPUT_JS_PATH>"  # Replace with calculated baseline
@@ -289,6 +321,7 @@ Copy-Item "<SKILL_PATH>/FINDINGS_TEMPLATE.md" "./browser-compat-findings.md"
 > 2. **Only** replace placeholder values (e.g., `<PROJECT_NAME>`, `✅ / ❌`) with your actual measurements
 > 3. Keep structure, headings, tables, and section order exactly as shown in the template
 > 4. Do NOT customize, reorganize, or rename sections
+> 5. Fill Phase 1 using the actual emitted JS/CSS paths you audited, even if they differ from the common Next.js/Vite examples in the template
 >
 > **Why:** Consistent structure allows comparison across projects. Any deviation breaks this.
 
@@ -371,11 +404,22 @@ APIs are not transpiled. Your effective JS API floor is determined by which poly
 
 > **For LLM agents — STOP AND ASK:**
 >
-> Before proceeding to Phase 3, **present findings to the user** and ask:
+> Before proceeding to Phase 3, **present findings to the user** and ask for explicit decisions on all of these points:
 >
-> 1. Summarize what was found (pass/fail for CSS, JS syntax, JS APIs)
-> 2. List any gaps between current support and TARGET_BROWSERS
-> 3. Ask: _"Would you like me to set up enforcement (linting + CI scripts) to catch future compatibility issues? This is optional but recommended if gaps were found."_
+> 1. **Support claim:** Which browser target should the project actually claim and enforce now?
+>    - Keep the original `TARGET_BROWSERS`
+>    - Adopt the measured effective floor from Phase 1/2
+>    - Choose a new custom target
+> 2. **Gap handling:** For each Phase 1/2 failure, warning, or inconclusive result, should it be fixed now, accepted/documented, or deferred to follow-up work?
+> 3. **Phase 3A scope:** Should source-level enforcement be configured in the editor/linting flow? If yes, which target should 3A enforce: declared target, effective floor, or a custom target?
+> 4. **Phase 3B scope:** Should repeatable build-output checks be configured? If yes, which dimensions should be added: CSS, JS syntax, JS APIs? Omit any dimension that is not technically reliable on this stack.
+> 5. **Hardcoded floor conflicts:** If the stack has non-negotiable floors higher than the desired target, should the project raise its support claim, change tooling/code to meet the lower target, or keep the mismatch documented for now?
+>
+> The real decision after Phase 2 is **not just whether to run Phase 3**. It is whether to:
+>
+> - keep or revise the support claim,
+> - fix or accept discovered gaps,
+> - and choose what Phase 3 should actually enforce.
 >
 > **Only proceed to Phase 3 if the user confirms.** Phase 3 installs additional dev dependencies and modifies config files.
 
@@ -418,6 +462,8 @@ baseline widely available
 ### 3A: Development (Source Code)
 
 Real-time warnings in your editor as you write code.
+
+> **Why Lightning CSS is not part of 3A:** Lightning CSS operates on CSS files passed through a build/transform step. It is useful as a build-output or build-pipeline check, but it is not an editor-time unsupported-feature warning system like Stylelint.
 
 #### 3A.1: CSS features → Stylelint
 
@@ -520,7 +566,7 @@ Add npm scripts to re-run Phase 1 checks on demand.
 >
 > 1. Use the browser targets you discovered (or `baseline widely available`)
 > 2. Use the ES level floor you found (e.g., ES2022)
-> 3. Use the correct STACK paths (nextjs vs vite)
+> 3. Use the actual emitted build-output paths discovered in Phase 1, not assumed framework defaults
 >
 > Keep it simple — just inline the commands directly in package.json:
 
@@ -528,6 +574,7 @@ Add npm scripts to re-run Phase 1 checks on demand.
 {
   "scripts": {
     "compat:css": "npx doiuse --browsers \"baseline widely available\" \".next/static/**/*.css\"",
+    "compat:css:lightning": "<lightningcss command or script over emitted CSS files>",
     "compat:syntax": "npx es-check es2022 \".next/static/chunks/**/*.js\"",
     "compat:apis": "npx eslint --config eslint.compat-check.mjs \".next/static/chunks/**/*.js\""
   }
@@ -539,12 +586,15 @@ Add npm scripts to re-run Phase 1 checks on demand.
 > - Replace `es2022` with the ES floor discovered in Phase 1.3
 > - Replace paths for vite: `dist/assets/**/*.js`, `dist/assets/**/*.css`
 > - Replace browser query if project uses explicit targets instead of Baseline
+> - If `doiuse` is unreliable on emitted CSS for your stack, add an optional Lightning CSS-based script that attempts to parse/transform each emitted CSS file directly
 
-> ⚠️ **Tailwind v4 — `compat:css` cannot check build output.** `doiuse` crashes on Tailwind v4 build output with the same parse error as in Phase 1. **There is no available tool that can check Tailwind v4 CSS build output for browser compatibility.** For Tailwind v4 projects:
+> ⚠️ **Tailwind v4 — `compat:css` may be unreliable.** `doiuse` crashes on Tailwind v4 build output with the same parse error as in Phase 1. For Tailwind v4 projects:
 >
-> - **Omit `compat:css` from 3B** (or add it with a comment that it will always fail)
-> - **Phase 3A stylelint covers source-level CSS** — that's the only CSS compatibility check available
-> - **Document this gap** in the findings file Phase 3 section
+> - Keep `compat:css` only if `doiuse` actually works on the emitted CSS for your stack
+> - Otherwise add an optional `compat:css:lightning` script as a secondary emitted-CSS parse/transform check
+> - Do **not** treat `compat:css:lightning` as equivalent to a full compatibility pass; it is supporting evidence only
+> - Keep **Phase 3A stylelint** for source-level feedback regardless
+> - Document any remaining emitted-CSS uncertainty in the findings file Phase 3 section
 
 ---
 
@@ -565,6 +615,7 @@ Add npm scripts to re-run Phase 1 checks on demand.
 - [ ] Get explicit browser string: `npx browserslist "baseline widely available"`
 - [ ] `npm run build`
 - [ ] CSS features: `npx doiuse --browsers "<EXPLICIT_BROWSERS>" "<CSS_PATH>"`
+- [ ] If `doiuse` cannot parse emitted CSS, optionally run Lightning CSS on emitted CSS files as a secondary build-output check
 - [ ] JS syntax: Test ES levels (es2023 → es2022 → es2020) to find build floor
 - [ ] JS APIs: `npx eslint` with eslint-plugin-compat on build output
 - [ ] Copy `FINDINGS_TEMPLATE.md` to project root as `browser-compat-findings.md`
@@ -589,5 +640,6 @@ Add npm scripts to re-run Phase 1 checks on demand.
 ### Phase 3B: Build output (repeatable npm scripts)
 
 - [ ] Add `compat:css` script (doiuse with target browsers)
+- [ ] If `compat:css` is unreliable for emitted CSS on this stack, optionally add `compat:css:lightning` as a secondary emitted-CSS parse/transform check
 - [ ] Add `compat:syntax` script (es-check with discovered ES floor)
 - [ ] Add `compat:apis` script (eslint-plugin-compat on build output)

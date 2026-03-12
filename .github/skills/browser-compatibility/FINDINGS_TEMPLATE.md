@@ -36,6 +36,8 @@
 
 ## Phase 1: Measurement Results
 
+> **Phase 1 is build output only.** Fill this section using emitted JS/CSS assets from a production build, not source files, editor warnings, or dev-server-only artifacts.
+
 ### Pre-existing Browser Config
 
 > Document what existed **before** running this skill (not what was created during analysis).
@@ -57,7 +59,9 @@
 
 ### Build Output Paths
 
-> **Reference paths (not filled in — delete rows that don't apply):**
+> **Reference paths below are examples only, not guarantees.** Delete rows that don't apply.
+> Discover the actual emitted JS/CSS files for your project after build and record those in the `Used` row.
+> This may be Next.js, Vite, Astro, SvelteKit, Webpack, or another build system.
 >
 > | Stack   | JS Path                       | CSS Path                    |
 > | ------- | ----------------------------- | --------------------------- |
@@ -72,18 +76,29 @@
 
 ### 1.1 CSS Features
 
-**Tool:** doiuse (or stylelint if doiuse fails — see note below)  
-**Command:** `npx doiuse --browsers "<EXPLICIT_BROWSERS>" "<CSS_PATH>"`  
+**Primary Tool:** doiuse  
+**Primary Command:** `npx doiuse --browsers "<EXPLICIT_BROWSERS>" "<CSS_PATH>"`  
+**Secondary Tool (optional, when doiuse cannot parse emitted CSS):** Lightning CSS emitted-CSS transform  
+**Secondary Command:** `npx lightningcss "<CSS_FILE>" --browserslist -o "<TEMP_OUTPUT_CSS_FILE>"`  
 **Passes target?** ✅ Pass / ⚠️ Warnings / ❌ Fail / ⚠️ Inconclusive (tool error)
 
 > ⚠️ **Tailwind v4 note:** `doiuse` crashes on Tailwind v4 build output regardless of browser targets. The failure is a **parse error**, not a compatibility result — doiuse's bundled PostCSS is too old to parse Tailwind v4's `@layer properties { @supports (...) { } }` syntax. Changing `--browsers` does not help. If the project uses Tailwind v4, expect a `CssSyntaxError: Unclosed block` at line 1. In that case:
 >
 > - Mark result as ⚠️ Inconclusive
+> - Optionally run Lightning CSS on emitted CSS files as a secondary build-output method
 > - Document Tailwind v4's known hardcoded floors in Phase 2.1 instead
 > - Use `stylelint` + `stylelint-no-unsupported-browser-features` for ongoing CSS checks (Phase 3A)
+>
+> **Important:** If `doiuse` fails, do not substitute a source-level CSS result into Phase 1. Any fallback used here must analyze the emitted CSS files directly; otherwise keep the result as ⚠️ Inconclusive.
+>
+> **Important:** Lightning CSS is a parser/transpiler, not a full unsupported-feature reporter. If it succeeds, record it as secondary emitted-CSS evidence only. Do not treat a successful Lightning CSS transform as equivalent to a `doiuse` compatibility pass.
 
 ```
 <paste doiuse output here, or document the parse error>
+```
+
+```
+<paste lightningcss output here, or document whether the emitted CSS parsed and whether output changed>
 ```
 
 ---
@@ -193,6 +208,40 @@
 - [ ] **Gaps exist but acceptable** → Document limitations below
 - [ ] **Gaps must be fixed** → Proceed to Phase 3
 
+**Questions for User Before Phase 3:**
+
+1. **What browser target should Phase 3 enforce?**
+
+- [ ] Keep original `TARGET_BROWSERS`
+- [ ] Use the measured effective floor from Phase 1/2
+- [ ] Use a new custom target: `<CUSTOM_TARGETS>`
+
+2. **How should current Phase 1/2 problems be handled?**
+
+- [ ] Fix now before Phase 3
+- [ ] Accept and document as limitations
+- [ ] Defer to follow-up work
+
+3. **Configure 3A development-time checks?**
+
+- [ ] Yes
+- [ ] No
+- If yes, enforce: `<declared target / effective floor / custom>`
+
+4. **Configure 3B build-output checks?**
+
+- [ ] Yes
+- [ ] No
+- If yes, add: `[ ] CSS  [ ] JS syntax  [ ] JS APIs`
+- If CSS build checks are unreliable with `doiuse`, optionally add a Lightning CSS emitted-CSS step and record that it is supporting evidence only
+- If a check is not technically reliable on this stack, omit it and note the replacement or limitation
+
+5. **If hardcoded tool/framework floors conflict with desired support, what should win?**
+
+- [ ] Raise the support claim to match the effective floor
+- [ ] Change tooling / code / polyfills to meet the lower target
+- [ ] Keep the mismatch documented for now
+
 **Accepted Limitations (if any):**
 
 - **Next Steps:**
@@ -209,15 +258,18 @@
 - [ ] Editor integration verified
 - [ ] `lint:compat` script added
 
+> **Note:** Lightning CSS does not normally belong in 3A. Use 3A for source-level/editor-time checks, and use Lightning CSS only if you intentionally wire it into the build pipeline or 3B emitted-CSS verification.
+
 ### 3B: Repeatable npm Scripts Added
 
 > Based on Phase 1 findings, add npm scripts to re-run checks on demand.
 
-| Script          | Command                                                                                                                                                     |
-| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `compat:css`    | `<doiuse command>` — ⚠️ **Tailwind v4:** omit this script; build output cannot be checked (parse error); Phase 3A stylelint is the only CSS check available |
-| `compat:syntax` | `<es-check command with discovered ES floor>`                                                                                                               |
-| `compat:apis`   | `<eslint-plugin-compat command on build path>`                                                                                                              |
+| Script                 | Command                                                                                                                                    |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `compat:css`           | `<doiuse command>` — primary emitted-CSS compatibility check when `doiuse` can parse the stack's emitted CSS                               |
+| `compat:css:lightning` | `<lightningcss command or script over emitted CSS files>` — optional secondary emitted-CSS parse/transform check; supportive evidence only |
+| `compat:syntax`        | `<es-check command with discovered ES floor>`                                                                                              |
+| `compat:apis`          | `<eslint-plugin-compat command on build path>`                                                                                             |
 
 ---
 
