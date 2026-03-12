@@ -190,6 +190,14 @@ npx doiuse --browsers "$EXPLICIT_BROWSERS" "<BUILD_OUTPUT_CSS_PATH>"
 
 > **Note:** `doiuse` doesn't support Baseline queries directly—you must resolve to explicit browsers first.
 
+> ⚠️ **Tailwind v4 limitation:** If the project uses Tailwind v4, `doiuse` will **crash with a parse error** (`CssSyntaxError: Unclosed block`) before doing any browser comparison. This happens **regardless of what browsers you pass via `--browsers`** — the failure is caused by doiuse's bundled PostCSS being too old to parse Tailwind v4's `@layer properties { @supports (...) { } }` syntax. Changing targets will not fix it.
+>
+> **If `doiuse` crashes:**
+>
+> 1. Mark the CSS check as ⚠️ Inconclusive in the findings file
+> 2. Document Tailwind v4's known hardcoded browser floors in Phase 2.1 instead (Safari 16.4+, Chrome 111+, Firefox 128+)
+> 3. For ongoing CSS checks (Phase 3A), use `stylelint` + `stylelint-no-unsupported-browser-features` instead of doiuse
+
 **Output:** Lists unsupported features, e.g.: `CSS Container Queries not supported by: Chrome < 105`
 
 ### Step 1.3: JS syntax
@@ -457,7 +465,9 @@ Create `.stylelintrc.json`:
 
 #### 3A.2: JS syntax → Not needed
 
-No dev-time check required. Build tools (Vite/Next.js) transpile syntax automatically based on their target config. Syntax is verified on build output in 3B.
+No dev-time check required, and none is possible. During development you write TypeScript/JSX — there is no compiled `.js` output to check ES level against. `es-check` only works on real build output (after `npm run build`). Syntax verification belongs exclusively in 3B/CI.
+
+> **Why `es-check` still matters in 3B:** It is not primarily a check on _your_ code — it is a **dependency regression gate**. Next.js/SWC transpiles your source correctly, but packages in `node_modules/` are bundled as-is (not re-transpiled). A dependency that ships pre-compiled ES2022+ code in its `dist/` will silently raise your bundle's syntax floor after `npm update`. `es-check` on build output in CI is the only way to catch this before users do.
 
 #### 3A.3: JS APIs → ESLint
 
@@ -529,6 +539,12 @@ Add npm scripts to re-run Phase 1 checks on demand.
 > - Replace `es2022` with the ES floor discovered in Phase 1.3
 > - Replace paths for vite: `dist/assets/**/*.js`, `dist/assets/**/*.css`
 > - Replace browser query if project uses explicit targets instead of Baseline
+
+> ⚠️ **Tailwind v4 — `compat:css` cannot check build output.** `doiuse` crashes on Tailwind v4 build output with the same parse error as in Phase 1. **There is no available tool that can check Tailwind v4 CSS build output for browser compatibility.** For Tailwind v4 projects:
+>
+> - **Omit `compat:css` from 3B** (or add it with a comment that it will always fail)
+> - **Phase 3A stylelint covers source-level CSS** — that's the only CSS compatibility check available
+> - **Document this gap** in the findings file Phase 3 section
 
 ---
 
