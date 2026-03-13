@@ -37,6 +37,8 @@
 ## Phase 1: Measurement Results
 
 > **Phase 1 is build output only.** Fill this section using emitted JS/CSS assets from a production build, not source files, editor warnings, or dev-server-only artifacts.
+>
+> **Evidence Status values:** `Verified` = measured directly with a working tool on emitted output, `Inferred` = derived from framework/tool documentation or hardcoded floors, `Inconclusive` = attempted but tool could not give a reliable result.
 
 ### Pre-existing Browser Config
 
@@ -81,6 +83,7 @@
 **Secondary Tool (optional, when doiuse cannot parse emitted CSS):** Lightning CSS emitted-CSS transform  
 **Secondary Command:** `npx lightningcss "<CSS_FILE>" --browserslist -o "<TEMP_OUTPUT_CSS_FILE>"`  
 **Passes target?** ✅ Pass / ⚠️ Warnings / ❌ Fail / ⚠️ Inconclusive (tool error)
+**Evidence Status:** Verified / Inferred / Inconclusive
 
 > ⚠️ **Tailwind v4 note:** `doiuse` crashes on Tailwind v4 build output regardless of browser targets. The failure is a **parse error**, not a compatibility result — doiuse's bundled PostCSS is too old to parse Tailwind v4's `@layer properties { @supports (...) { } }` syntax. Changing `--browsers` does not help. If the project uses Tailwind v4, expect a `CssSyntaxError: Unclosed block` at line 1. In that case:
 >
@@ -109,6 +112,7 @@
 **Command:** `npx es-check es20XX "<JS_PATH>"`  
 **Baseline ES target:** ES20XX (calculated: current year − 2.5, e.g. 2026 → ES2023)  
 **Passes target?** ✅ Pass / ❌ Fail
+**Evidence Status:** Verified / Inconclusive
 
 > **Note:** This check is primarily a **dependency regression gate**, not a check on your own code. The build tool (SWC/esbuild) transpiles your source correctly, but `node_modules/` packages are bundled as-is. A dependency shipping pre-compiled ES2022+ syntax will silently raise the floor after `npm update`. No dev-time equivalent exists — `es-check` requires compiled `.js` files, so it belongs in 3B/CI only.
 
@@ -137,6 +141,7 @@
 **Tool:** eslint-plugin-compat  
 **Command:** `npx eslint --config eslint.compat-check.mjs "<JS_PATH>"` (temp config file; reads `.browserslistrc` for targets)  
 **Passes target?** ✅ Pass / ⚠️ Warnings / ❌ Fail
+**Evidence Status:** Verified / Inconclusive
 
 ```
 <paste eslint output here>
@@ -277,11 +282,11 @@
 
 **Overall Status:** ✅ Pass / ⚠️ Acceptable with limitations / ❌ Needs fixes
 
-| Dimension    | Result  | Effective Floor                   |
-| ------------ | ------- | --------------------------------- |
-| CSS features | ✅ / ⚠️ | (e.g., Safari 16.4+)              |
-| JS syntax    | ✅ / ❌ | (e.g., ES2022 / Chrome 94+)       |
-| JS APIs      | ✅ / ⚠️ | (e.g., baseline widely available) |
+| Dimension    | Result  | Evidence Status                    | Effective Floor                   |
+| ------------ | ------- | ---------------------------------- | --------------------------------- |
+| CSS features | ✅ / ⚠️ | Verified / Inferred / Inconclusive | (e.g., Safari 16.4+)              |
+| JS syntax    | ✅ / ❌ | Verified / Inconclusive            | (e.g., ES2022 / Chrome 94+)       |
+| JS APIs      | ✅ / ⚠️ | Verified / Inconclusive            | (e.g., baseline widely available) |
 
 **Key Findings:**
 
