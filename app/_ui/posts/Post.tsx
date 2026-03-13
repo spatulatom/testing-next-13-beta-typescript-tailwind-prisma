@@ -1,6 +1,5 @@
 // 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { cookies } from 'next/headers';
 // import { motion } from 'framer-motion';
@@ -23,20 +22,14 @@ export default function Post({
   postTitle,
   comments,
 }: PostProps) {
-  let whenNull;
-  if (avatar === null) {
-    whenNull = '';
-  } else {
-    whenNull = (
-      <Image
-        className="rounded-full"
-        width={32}
-        height={32}
-        src={avatar}
-        alt="avatar"
-      />
-    );
-  }
+  // Using regular img tag - Next.js Image component has inconsistent behavior in v0 sandbox
+  const avatarElement = avatar ? (
+    <img
+      className="size-8 rounded-full"
+      src={avatar}
+      alt="avatar"
+    />
+  ) : null;
   // void cookies();
   const d = new Date(date).toLocaleString().toString();
 
@@ -61,7 +54,7 @@ export default function Post({
       }}
     >
       <div className="flex items-center rounded-t-lg bg-white p-4">
-        {whenNull}
+        {avatarElement}
         <div className="">
           {' '}
           <h3 className="pl-2 font-bold text-gray-700">{name}</h3>

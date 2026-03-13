@@ -19,12 +19,13 @@ export default function Logged({ image }: User) {
       </button>
       <Link href={'/userposts'}>
         <Image
-          width={96}
-          height={96}
-          className="aspect-square h-10 w-10 rounded-full"
+          width={40}
+          height={40}
+          className="size-10 rounded-full"
           src={image}
-          alt="Google Aviator image"
+          alt="Google Avatar image"
           priority
+          style={{ width: 'auto', height: 'auto' }}
         />
       </Link>
     </div>
