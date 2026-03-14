@@ -11,6 +11,9 @@
     "start": "next start",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "lint:compat": "eslint . && stylelint \"**/*.css\" --ignore-path .gitignore",
+    "compat:syntax": "es-check es2022 \".next/static/chunks/**/*.js\"",
+    "compat:apis": "eslint --config eslint.compat-check.mjs \".next/static/chunks/**/*.js\"",
     "debug": "next build --debug"
   },
   "dependencies": {
@@ -57,6 +60,8 @@
     "prettier": "^3.8.1",
     "prisma": "^7.4.2",
     "rimraf": "^6.1.3",
+    "stylelint": "^17.4.0",
+    "stylelint-no-unsupported-browser-features": "^8.1.1",
     "tailwindcss": "^4.2.1"
   },
   "engines": {

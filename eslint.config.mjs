@@ -5,12 +5,16 @@ import compat from 'eslint-plugin-compat';
 export default defineConfig([
   ...nextVitals,
   {
-    plugins: {
-      compat,
-    },
     rules: {
       'react/no-unescaped-entities': 'off',
       'react/jsx-key': 'error',
+    },
+  },
+  // Phase 3A: Browser compatibility — JS API checks on source files (reads .browserslistrc)
+  {
+    files: ['app/**/*.{js,ts,jsx,tsx}'],
+    plugins: { compat },
+    rules: {
       'compat/compat': 'warn',
     },
   },
