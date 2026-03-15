@@ -20,6 +20,14 @@
       "source": "vercel-labs/agent-skills",
       "sourceType": "github",
       "computedHash": "ff602214356ac15c65aa8702aff5a2aedaf958d66d301e3279f1dfeaf18c94e9"
+    },
+    "nextjs-docs-sync": {
+      "source": "local",
+      "sourceType": "local"
+    },
+    "browser-compatibility": {
+      "source": "local",
+      "sourceType": "local"
     }
   }
 }
