@@ -18,7 +18,7 @@
   - [Scenario 2: React Router](#scenario-2-react-router)
   - [Scenario 3: Next.js App Router](#scenario-3-nextjs-app-router)
   - [What I would now say differently](#what-i-would-now-say-differently)
-- [4. A Major Point: Definition Phase vs Invocation Phase](#4-a-major-point-definition-phase-vs-invocation-phase)
+- [4. A Major Point: Definition, Declaration, and Invocation](#4-a-major-point-definition-declaration-and-invocation)
 
 ---
 
@@ -555,28 +555,44 @@ So the final answer to your question is:
 
 ---
 
-## 4. A Major Point: Definition Phase vs Invocation Phase
+## 4. A Major Point: Definition, Declaration, and Invocation
 
-**Understanding the Separation Between Defining and Invoking Components**
+**Understanding the Difference Between Defining a Component, Declaring Its Use, and Actually Invoking It**
 
-The key insight is the separation between **defining** a component and the moment it is actually **invoked**. Here are four critical points:
+The refinement here is important: it is usually more accurate to think in **three** layers, not just two:
 
-1. **Components are functions, not just declarations**
-   - When you write `export default function Page() { ... }`, you are defining a function.
-   - That function must be invoked by someone (React, Next.js, or you directly) for anything to happen.
-   - Many developers overlook this because the invocation is hidden.
+1. **definition**: you write the component function,
+2. **declaration**: you write `<Helper />` or configure a route that points to that component,
+3. **invocation**: React, Next.js, or the router actually executes the function during rendering.
 
-2. **JSX is declarative, which hides the invocation moment**
-   - When you write `<Helper />` inside your component, it looks like a tag, not a function call.
-   - Under the hood, React will invoke `Helper()` later during rendering.
-   - You are not manually calling `Helper()`; you are describing a tree, and React decides when to invoke it.
+Here are four critical points:
 
-3. **Top-level route components (pages and layouts) are invoked by the framework, not by you**
-   - In Next.js, you define `page.tsx`, `layout.tsx`, etc., but **Next.js decides when and how to invoke them**.
-   - You do not write code that calls these components directly.
-   - This is true even for helper components placed inside a declarative tree—they also wait for React to invoke them.
+1. **Components are functions, but writing them only defines them**
 
-4. **This hidden invocation is why routing can feel mysterious**
-   - The functions are still there, and invocation is still happening.
-   - But the framework owns more of that process than in plain JavaScript.
-   - Understanding that definition and invocation are separate phases clarifies why such components behave the way they do.
+- When you write `export default function Page() { ... }`, you are defining a function.
+- At that moment, nothing has been rendered yet just because the function exists.
+- The function still has to be invoked by React, Next.js, the router, or by you directly in plain JavaScript.
+
+2. **JSX is a declaration of use, not a normal manual function call**
+
+- When you write `<Helper />`, it looks a little like a call site, but it is better understood as a declarative description.
+- You are saying, in effect, "this component should appear here in the tree."
+- React later decides when that component function is actually invoked.
+- So the more accurate wording is not usually "developers call helper components declaratively."
+- The more accurate wording is: developers **declare** helper component usage in JSX, and React later **invokes** those components during rendering.
+
+3. **Top-level route components are both selected and invoked for you by the framework**
+
+- In Next.js, you define `page.tsx`, `layout.tsx`, `loading.tsx`, and similar files, but you do not manually call those components in your app code.
+- Next.js decides which top-level route components belong in the tree for the current URL.
+- After that, React executes them as part of rendering.
+- React Router works similarly: you declare route components, the router matches the URL, and the matched component is then rendered for you.
+- So there is a real distinction here:
+- helper components are usually **declared directly by the developer** in JSX and then invoked by React,
+- top-level route components are usually **selected by the router/framework** for the current URL and then invoked for you.
+
+4. **This is why routing can feel more mysterious than plain component composition**
+
+- With helper components, you at least see `<Helper />` directly in your JSX.
+- With routed top-level components, even the decision that they belong in the tree is often made by the router/framework.
+- So the real takeaway is not just "definition vs invocation," but "definition, declaration, and framework-controlled invocation."
