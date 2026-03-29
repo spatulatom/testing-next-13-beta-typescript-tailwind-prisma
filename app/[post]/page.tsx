@@ -4,11 +4,27 @@ import Image from 'next/image';
 
 import { notFound } from 'next/navigation';
 import singlePost from '@/server-cache/singlepost';
+import type { Metadata } from 'next';
 
+type PostParams = { params: Promise<{ post: string }> };
 
-export default async function PostDetail({params}: {
-  params: Promise<{ post: string }>;
-}) {
+export async function generateMetadata({
+  params,
+}: PostParams): Promise<Metadata> {
+  const { post } = await params;
+  const data = await singlePost(post);
+
+  if (!data) {
+    return { title: 'Post Not Found' };
+  }
+
+  return {
+    title: data.title,
+    description: `Post by ${data.user.name}`,
+  };
+}
+
+export default async function PostDetail({ params }: PostParams) {
   const { post } = await params;
   // const response: PostType= await fetchDetails(url.params.post);
   const response: any = await singlePost(post);
