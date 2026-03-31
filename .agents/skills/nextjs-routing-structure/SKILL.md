@@ -40,7 +40,7 @@ If a file is not in this list, it does not belong directly in `app/`.
 
 Components used by **2 or more routes** live in `components/` at the project root.
 
-Organize by **UI domain or feature** — what the component _is_ — not by route name.
+Organize by **feature** — what the component _is_ — not by route name.
 
 Example for a blog/social app:
 
@@ -64,7 +64,7 @@ components/
   ui/             ← generic primitives
 ```
 
-The exact subfolder names depend on your project's domain. The principle is: name after _what it is_, not _which route uses it_.
+The exact subfolder names depend on your project's features. The principle is: name after _what it is_, not _which route uses it_.
 
 Do NOT mirror the route structure (no `components/home/`, `components/about/`). The moment you name a folder after a route, you create a redundant shadow of `app/` that breaks when a component gets shared.
 
