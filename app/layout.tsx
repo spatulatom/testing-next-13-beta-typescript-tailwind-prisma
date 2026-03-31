@@ -1,6 +1,6 @@
 import './globals.css';
-import Nav from './_ui/navigation/Nav';
-import QueryWrapper from './_providers/QueryWrapper';
+import Nav from '@/components/navigation/Nav';
+import QueryWrapper from '@/components/providers/QueryWrapper';
 import { Inter, Moon_Dance } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
 import { Suspense } from 'react';

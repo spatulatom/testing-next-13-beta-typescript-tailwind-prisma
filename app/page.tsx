@@ -1,4 +1,4 @@
-import Post from './_ui/posts/Post';
+import Post from '@/components/posts/Post';
 import AddPost from './_ui/home/AddPost';
 import Counter from './_ui/home/Counter';
 import allPosts from '@/server-cache/allPosts';

@@ -1,4 +1,4 @@
-import { auth } from '../../../auth';
+import { auth } from '@/auth';
 import Login from './Login';
 import Logged from './Logged';
 import Link from 'next/link';
