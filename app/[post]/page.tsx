@@ -1,5 +1,5 @@
 import Post from '@/components/posts/Post';
-import AddComment from './_ui/AddComment';
+import AddComment from './_components/AddComment';
 import Image from 'next/image';
 
 import { notFound } from 'next/navigation';

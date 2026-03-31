@@ -2,7 +2,7 @@
 
 import {delay} from '@/app/lib/utils'
 import {Suspense} from 'react'
-import Ssr from './_ui/testing-ssr'
+import Ssr from './_components/testing-ssr'
 
 
 export default async function Home() {
