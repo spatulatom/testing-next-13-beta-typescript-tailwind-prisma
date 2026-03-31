@@ -3,7 +3,7 @@ import AddComment from './_components/AddComment';
 import Image from 'next/image';
 
 import { notFound } from 'next/navigation';
-import singlePost from '@/server-cache/singlepost';
+import singlePost from '@/lib/cache/singlepost';
 import type { Metadata } from 'next';
 
 type PostParams = { params: Promise<{ post: string }> };

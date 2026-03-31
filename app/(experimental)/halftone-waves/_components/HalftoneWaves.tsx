@@ -1,5 +1,5 @@
 'use client';
-import { delay } from '@/app/lib/utils';
+import { delay } from '@/lib/utils';
 
 import { useEffect, useRef } from 'react';
 import { use } from 'react';
