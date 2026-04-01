@@ -1,120 +1,423 @@
-# Chat Room - Next.js App Router migration sandbox
+# Chat Room - Updated for Next.js 15 and Beyond
 
-[View the deployed app on Vercel](https://testing-next-13-beta-typescript-tailwind-prisma.vercel.app/)
+[View the Updated Deployed App on Vercel](#)
 
 ## Table of Contents
 
-- [Current State](#current-state)
-- [What the App Does](#what-the-app-does)
-- [Current Routes](#current-routes)
-- [Stack and Architecture](#stack-and-architecture)
-- [Local Development](#local-development)
+- [About the Project](#about-the-project)
+- [New Features in Next.js 15](#new-features-in-nextjs-15)
+- [Detailed Upgrade Examples](#detailed-upgrade-examples)
+- [Backend](#backend)
+- [Authentication](#authentication)
+- [Error Handling and UI Loading](#error-handling-and-ui-loading)
+- [Built With](#built-with)
+- [Getting Started](#getting-started)
+- [Legacy](#legacy)
 - [Modernization Tracks](#modernization-tracks)
-- [Legacy Migration Notes](#legacy-migration-notes)
 
-## Current State
+## About the Project
 
-This repository keeps the original "Chat Room" identity, but today it is best read as a full-stack Next.js migration sandbox rather than a real-time chat product. The app started as a Next.js 13 beta experiment in 2023 and has been carried forward through the later App Router releases; the current codebase runs on Next.js 16.2.1, React 19.2.4, Prisma 7.4.2, NextAuth.js v5 beta, and Tailwind CSS 4.2.1.
+'Chat Room' has been updated to leverage the latest features from Next.js 15. This project now:
 
-The goal of this README is to make the current state obvious without deleting the older notes that show the learning process. The original Next.js 13 beta write-up is preserved later in this file as legacy migration history.
+- Fully integrates with the latest TanStack Query for smoother data fetching and caching.
+- Adopts new features introduced in Next.js 15 for improved performance and developer experience.
 
-## What the App Does
+## Project Structure Conventions
 
-Authenticated users can:
+- In `app/`, a folder is routable only if it contains `page.tsx` or `route.ts`.
+- Folders wrapped in parentheses (e.g. `(experimental)`) are route groups and do not change URLs.
+- Underscore-prefixed folders are private implementation details (not routes):
+  - `app/_ui` for shared UI used across routes
+  - `app/_providers` for app-wide providers
+  - `app/<route>/_ui` for route-local UI
+- `prisma/` stays at project root for schema and migrations.
+- `public/` stays at project root for static assets.
+- `types/` stays at project root for shared TypeScript types.
+- `server-cache/` (formerly `unstableCache/`) stores shared server-side cached data helpers.
 
-- sign in with Google
-- create short posts on the home feed
-- open a single post page and add comments
-- view and manage their own posts on `/userposts`
+## New Features in Next.js 15
 
-All visitors can browse the feed and use the app as a reference project for App Router patterns, Server Components, Cache Components, Prisma-backed data access, and a few experimental rendering demos.
+- **Enhanced Server Actions**: Further improvements in data mutation and server-side logic.
+- **Streaming Updates**: Real-time updates with server-side streaming capabilities.
+- **Improved Middleware**: Simplified and more powerful middleware for handling requests.
 
-## Current Routes
+## Upgrade Highlights
 
-| Route | Purpose |
-| --- | --- |
-| `/` | Home feed with cached server-rendered posts and the add-post form |
-| `/[post]` | Single-post page with comments |
-| `/userposts` | Protected dashboard for the signed-in user's posts |
-| `/halftone-waves` | Experimental route for server rendering and visual loading demos |
-| `/deep-galaxy` | Experimental route for async rendering and Suspense behavior |
-| `/edit-suggestions` | Placeholder route for future editing workflows |
-| `/privacypolicy` | Google privacy policy page |
+### Upgrade from Next.js 14 to 15
 
-## Stack and Architecture
+- Adopted new server-side streaming features for real-time updates.
+- Improved middleware handling for better request management.
 
-### Runtime stack
+### Upgrade from React Query to TanStack Query
 
-- Next.js 16.2.1
-- React 19.2.4
-- TypeScript 5.9.3
-- NextAuth.js 5.0.0-beta.25 with Google OAuth
-- Prisma 7.4.2 with PostgreSQL
-- Tailwind CSS 4.2.1
-- TanStack Query 5.90.21
+- Migrated from React Query to TanStack Query (v5.68.0) for enhanced caching and data synchronization.
+- Leveraged TanStack Query's improved API for better developer experience and performance.
 
-### App shape
+### Other Upgrades
 
-- `app/` holds the App Router routes.
-- Route groups such as `(experimental)` keep demo routes organized without changing URLs.
-- Private underscore-prefixed folders are reserved for colocated implementation details.
-- `lib/cache/` holds cached server-side data helpers.
-- `prisma/` holds the schema and migrations.
-- `types/` holds shared TypeScript types.
-- `public/` holds static assets.
+- Updated Prisma to version 5.9.1 for compatibility with the latest PostgreSQL connection methods.
+- Upgraded NextAuth.js to version 5.0.0-beta.25 for better integration with the App Router.
+- Adopted the latest version of Tailwind CSS (v3.2.7) for styling improvements.
 
-### Current implementation notes
+_Add more details here based on what you've implemented or improved._
 
-- Cache Components are enabled in `next.config.ts`.
-- The home feed uses `'use cache'` together with `cacheLife('max')`.
-- Authentication uses a shared `auth.js` config plus App Router route handlers.
-- The project still keeps some `.js` files alongside TypeScript, so `allowJs` remains enabled.
+## Detailed Upgrade Examples
 
-## Local Development
+### Upgrade from Next.js 14 to 15
 
-1. Install dependencies with `npm install`.
-2. Add the required database and Google auth environment variables to `.env`.
-3. Start the dev server with `npm run dev`.
-4. Open [http://localhost:3000](http://localhost:3000).
+#### Server Components and Data Fetching
 
-Useful scripts:
+**Before (Next.js 14):**
 
-- `npm run dev` - Next.js dev server with Turbopack
-- `npm run dev:webpack` - force Webpack dev mode
-- `npm run dev:inspect` - start dev mode with Node inspector support
-- `npm run lint`
-- `npm run build`
+```tsx
+// In a server component
+export default async function PostList() {
+  const posts = await fetch('https://api.example.com/posts', {
+    cache: 'no-store',
+  }).then((res) => res.json());
 
-### Windows note for Turbopack
+  return (
+    <div>
+      {posts.map((post) => (
+        <PostItem key={post.id} post={post} />
+      ))}
+    </div>
+  );
+}
+```
 
-If Windows blocks symlink creation for Turbopack, enable Developer Mode or run the terminal as Administrator before starting `npm run dev`.
+**After (Next.js 15):**
 
-## Modernization Tracks
+```tsx
+// In a server component
+export default async function PostList() {
+  // Using the new parallel data fetching pattern
+  const posts = await fetch('https://api.example.com/posts', {
+    next: { revalidate: 60 }, // New revalidation API
+  }).then((res) => res.json());
 
-This repo keeps the upgrade history visible instead of rewriting it away. Each major pass gets its own issue thread so the cleanup work stays reviewable and the learning trail stays intact.
+  return (
+    <div>
+      {posts.map((post) => (
+        <PostItem key={post.id} post={post} />
+      ))}
+    </div>
+  );
+}
+```
 
-### Completed tracks
+#### Server Actions
 
-- Next.js 13 -> 14: stabilized App Router adoption and early experimental APIs
-- Next.js 14 -> 15: refreshed data patterns and dependency alignment
-- Next.js 15 -> 16: React 19 migration and Cache Components adoption
+**Before (Next.js 14):**
 
-### Current follow-up issues
+```tsx
+'use server';
 
-1. [#34 Reconcile dependency and build tooling](https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma/issues/34)
-2. [#35 Migrate metadata and head handling to the Metadata API](https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma/issues/35)
-3. [#36 Reduce client-only surface area and adopt modern Server Actions patterns](https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma/issues/36)
-4. [#37 Modernize auth integration and route handler contracts](https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma/issues/37)
-5. [#38 Standardize Cache Components and revalidation strategy](https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma/issues/38)
-6. [#39 Clean repo hygiene, TypeScript config, and docs](https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma/issues/39)
-7. [#51 Finish Tailwind 4 migration and verify UI](https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma/issues/51)
-8. [#52 Resolve remaining ESLint backlog](https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma/issues/52)
+export async function createPost(formData: FormData) {
+  const title = formData.get('title');
+  const content = formData.get('content');
 
-## Legacy Migration Notes
+  await prisma.post.create({
+    data: { title, content },
+  });
 
-The sections below are intentionally preserved from the original Next.js 13 beta era so the repo still shows the learning path from the first App Router experiments to the current codebase.
+  revalidatePath('/posts');
+}
+```
 
-### Original README from the Next.js 13 beta phase
+**After (Next.js 15):**
+
+```tsx
+'use server';
+
+export async function createPost(formData: FormData) {
+  const title = formData.get('title');
+  const content = formData.get('content');
+
+  // Enhanced error handling in Server Actions
+  try {
+    await prisma.post.create({
+      data: { title, content },
+    });
+
+    revalidatePath('/posts');
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: 'Failed to create post' };
+  }
+}
+```
+
+### Upgrade from React Query to TanStack Query
+
+#### Data Fetching
+
+**Before (React Query v3):**
+
+```tsx
+import { useQuery } from 'react-query';
+
+function PostsList() {
+  const { data, isLoading } = useQuery('posts', fetchPosts);
+
+  if (isLoading) return <div>Loading...</div>;
+
+  return (
+    <ul>
+      {data.map((post) => (
+        <li key={post.id}>{post.title}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+**After (TanStack Query v5):**
+
+```tsx
+import { useQuery } from '@tanstack/react-query';
+
+function PostsList() {
+  // New improved API with type safety
+  const { data, isPending } = useQuery({
+    queryKey: ['posts'],
+    queryFn: fetchPosts,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+
+  if (isPending) return <div>Loading...</div>;
+
+  return (
+    <ul>
+      {data?.map((post) => (
+        <li key={post.id}>{post.title}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+#### Data Mutations
+
+**Before (React Query v3):**
+
+```tsx
+import { useMutation, useQueryClient } from 'react-query';
+
+function CreatePost() {
+  const queryClient = useQueryClient();
+  const mutation = useMutation(createPost, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('posts');
+    },
+  });
+
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        mutation.mutate({ title: 'New Post', content: 'Content' });
+      }}
+    >
+      <button type="submit">Create Post</button>
+    </form>
+  );
+}
+```
+
+**After (TanStack Query v5):**
+
+```tsx
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+function CreatePost() {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: createPost,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['posts'] });
+    },
+  });
+
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        mutation.mutate({ title: 'New Post', content: 'Content' });
+      }}
+    >
+      <button type="submit" disabled={mutation.isPending}>
+        {mutation.isPending ? 'Creating...' : 'Create Post'}
+      </button>
+    </form>
+  );
+}
+```
+
+### NextAuth.js Upgrade
+
+**Before (NextAuth.js v4):**
+
+```tsx
+// pages/api/auth/[...nextauth].ts
+import NextAuth from 'next-auth';
+import GoogleProvider from 'next-auth/providers/google';
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import prisma from '../../../lib/prisma';
+
+export default NextAuth({
+  adapter: PrismaAdapter(prisma),
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
+  ],
+});
+```
+
+**After (NextAuth.js v5):**
+
+```tsx
+// app/api/auth/[...nextauth]/route.ts
+import NextAuth from 'next-auth';
+import GoogleProvider from 'next-auth/providers/google';
+import { PrismaAdapter } from '@auth/prisma-adapter';
+import prisma from '@/lib/prisma';
+
+export const { handlers, auth, signIn, signOut } = NextAuth({
+  adapter: PrismaAdapter(prisma),
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
+  ],
+});
+
+export const GET = handlers.GET;
+export const POST = handlers.POST;
+```
+
+### React 18 to React 19 Upgrade
+
+**Before (React 18):**
+
+```tsx
+import { useState, useEffect } from 'react';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    document.title = `Count: ${count}`;
+  }, [count]);
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+    </div>
+  );
+}
+```
+
+**After (React 19):**
+
+```tsx
+import { useState, useEffect } from 'react';
+import { useDocumentTitle } from 'react/use-document';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  // Using the new useDocumentTitle hook from React 19
+  useDocumentTitle(`Count: ${count}`);
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+    </div>
+  );
+}
+```
+
+### Other Upgrades
+
+#### Prisma Connection (Before - 2023)
+
+```typescript
+// prisma/client.ts
+import { PrismaClient } from '@prisma/client';
+
+let prisma: PrismaClient;
+
+if (process.env.NODE_ENV === 'production') {
+  prisma = new PrismaClient();
+} else {
+  if (!global.prisma) {
+    global.prisma = new PrismaClient();
+  }
+  prisma = global.prisma;
+}
+
+export default prisma;
+```
+
+#### Prisma Connection (After - 2024 with Supavisor)
+
+```typescript
+// prisma/client.ts
+import { PrismaClient } from '@prisma/client';
+
+const prismaClientSingleton = () => {
+  return new PrismaClient({
+    datasources: {
+      db: {
+        url: process.env.DATABASE_URL_SUPAVISOR, // Using Supavisor connection pooler
+      },
+    },
+  });
+};
+
+const globalForPrisma = globalThis as unknown as {
+  prisma: ReturnType<typeof prismaClientSingleton> | undefined;
+};
+
+const prisma = globalForPrisma.prisma ?? prismaClientSingleton();
+
+export default prisma;
+
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+```
+
+## Backend
+
+- **Route Handlers**: Now fully stable, enhancing API route management.
+- **Database**: Continued use of Prisma with PostgreSQL on Supabase, now with the latest connection methods.
+
+## Authentication
+
+- **NextAuth.js**: Fully compatible with the new App Router, simplifying authentication flows.
+
+## Error Handling and UI Loading
+
+- **Error Boundary**: Utilized `error.tsx` for better error management.
+- **Suspense for Loading**: Improved user experience with `loading.tsx`.
+
+## Built With
+
+- Next.js 15
+- TypeScript
+- Tailwind CSS, CSS Modules
+- Prisma, PostgreSQL
+- TanStack Query
+- [List other tools or libraries you've added or changed]
+
+_(Below we have a legacy Readme before the project got updated to Next.js 14.)_
+
+## LEGACY README WHEN THE PROJECT WAS USING NEXT.JS VERSION NUMBER 13:
 
 This is a Next.js 13 Beta project integrated with TypeScript, styled with combination of <a href='https://tailwindcss.com/'>Tailwind CSS</a> and CSS modules. The application is named 'Chat Room'.
 <a name="readme-top"></a>
@@ -376,4 +679,3 @@ This keeps the active track always visible at a glance while preserving the upgr
 [bootstrap-url]: https://getbootstrap.com
 [jquery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
 [jquery-url]: https://jquery.com
-
