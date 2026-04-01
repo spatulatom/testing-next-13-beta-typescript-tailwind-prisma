@@ -36,16 +36,19 @@ export default function RootLayout({
             <Suspense
               fallback={
                 <nav className="mb-4 flex w-screen items-center gap-6 p-3 font-medium">
-                  <Link href="/" className="text-white hover:underline">
+                  <Link
+                    href="/"
+                    className="text-brand-accent hover:text-brand-accent-strong hover:underline"
+                  >
                     Home
                   </Link>
                   <Link
                     href="/deep-galaxy"
-                    className="text-white hover:underline"
+                    className="text-brand-accent hover:text-brand-accent-strong hover:underline"
                   >
                     Galaxy
                   </Link>
-                  <span className="text-white">Menu loading...</span>
+                  <span className="text-gray-600">Menu loading...</span>
                 </nav>
               }
             >
