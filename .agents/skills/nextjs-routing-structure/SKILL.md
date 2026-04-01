@@ -1,20 +1,20 @@
 ---
 name: nextjs-routing-structure
 description: "Opinionated Next.js App Router folder structure and project organization. Use when: setting up a new Next.js project, reorganizing an existing project's folders, deciding where to put components/utils/types, auditing folder structure for clarity, resolving 'where should this file go' questions."
-argument-hint: 'Describe the project or reorganization goal'
+disable-model-invocation: true
 ---
 
 # Next.js App Router Folder Structure
 
-Opinionated conventions for organizing Next.js App Router projects so that any developer can immediately distinguish routes from application code.
+Opinionated conventions for organizing Next.js App Router projects so that routes stay separate from application code. The guidance below follows the Next.js project-structure recommendation to store project files outside of app, and the examples are illustrative rather than prescriptive.
 
 ## Core Principle
 
 > `app/` is for routing. Everything else goes outside.
 
-A folder inside `app/` should only exist if it contributes to a URL. All shared application code — components, utilities, types — lives at the project root in clearly named folders.
+A folder inside `app/` should only exist if it contributes to a URL or is one of the supported Next.js file conventions. All shared application code — components, utilities, types — lives outside `app/` in clearly named folders.
 
-This follows **Strategy 1** from the [Next.js Project Structure docs](https://nextjs.org/docs/app/getting-started/project-structure#store-project-files-outside-of-app) and matches `vercel/commerce`, the canonical App Router reference.
+This follows **Strategy 1** from the [Next.js Project Structure docs](https://nextjs.org/docs/app/getting-started/project-structure#store-project-files-outside-of-app) and matches common App Router reference projects such as `vercel/commerce`.
 
 ## Rules
 
@@ -38,16 +38,16 @@ If a file is not in this list, it does not belong directly in `app/`.
 
 ### Rule 2: All UI → `components/`
 
-**All** React components — whether used by one route or many — live in `components/` at the project root. This matches `vercel/commerce`, `shadcn/taxonomy`, and `cal.com`.
+**All** React components — whether used by one route or many — live in `components/` at the project root.
 
 Use a **hybrid flat + subfolder** approach:
 
 - **Standalone components** → flat files directly in `components/`
-- **2-3+ related components** → group in a feature subfolder
+- **2-3+ related components** → group in a subfolder for that UI feature or concern
 
-Organize subfolders by **feature** — what the component _is_ — not by route name.
+Organize subfolders by **feature** or UI concern — what the component is for — not by route name.
 
-Example for a blog/social app:
+Examples only, for illustration:
 
 ```
 components/
@@ -57,7 +57,7 @@ components/
   ui/             ← generic primitives (buttons, modals, inputs)
 ```
 
-Example for an e-commerce app:
+Another example:
 
 ```
 components/
@@ -74,12 +74,12 @@ Do NOT mirror the route structure (no `components/home/`, `components/about/`). 
 
 ### Rule 3: Application code → `lib/`
 
-Non-component, non-UI code lives in `lib/` at the project root. Use a **hybrid flat + subfolder** approach (matching `vercel/commerce` and `nextjs/saas-starter`):
+Non-component, non-UI code lives in `lib/` at the project root. Use a **hybrid flat + subfolder** approach:
 
 - **Generic, small helpers** → flat files directly in `lib/`
 - **Domain-specific logic** with 2+ related files → subfolder
 
-Example for a SaaS app:
+Examples only:
 
 ```
 lib/
@@ -90,7 +90,7 @@ lib/
   payments/        ← grouped: Stripe integration
 ```
 
-Example for a content app:
+Another example:
 
 ```
 lib/
@@ -113,7 +113,7 @@ auth.js              ← NextAuth (if used)
 prisma/              ← Prisma schema + client (if used)
 ```
 
-The general rule: if an external tool needs to find the file at a conventional path, keep it there.
+The general rule: if an external tool needs to find the file at a conventional path, keep it there. These are examples, not a fixed list.
 
 ### Rule 5: Types stay at root
 
@@ -138,16 +138,16 @@ project-root/
 │   ├── error.tsx
 │   ├── not-found.tsx
 │   ├── globals.css
-│   ├── [slug]/               ← dynamic route
+│   ├── [slug]/               ← dynamic route example
 │   │   ├── page.tsx
 │   │   └── loading.tsx
-│   ├── dashboard/            ← static route
+│   ├── dashboard/            ← static route example
 │   │   ├── page.tsx
 │   │   └── layout.tsx
 │   └── api/                  ← API routes
 │       └── ...
 ├── components/               ← ALL UI (by feature)
-│   ├── <feature-a>/          ← e.g. navigation, cart, posts
+│   ├── <feature-a>/          ← example UI feature folder
 │   ├── <feature-b>/
 │   ├── providers/
 │   ├── ui/
@@ -200,12 +200,12 @@ Is it framework/tooling config?
 
 ## References
 
-- [Next.js Project Structure](https://nextjs.org/docs/app/getting-started/project-structure)
-- [vercel/commerce](https://github.com/vercel/commerce) — canonical example of Strategy 1 (e-commerce)
-- [shadcn/taxonomy](https://github.com/shadcn-ui/taxonomy) — App Router reference with flat + grouped components
-- [cal.com](https://github.com/calcom/cal.com) — large-scale App Router project, Strategy 1 with feature modules
-- [nextjs/saas-starter](https://github.com/nextjs/saas-starter) — official SaaS template
+- [Next.js Project Structure](https://nextjs.org/docs/app/getting-started/project-structure#store-project-files-outside-of-app) — official guidance with Strategy 1 recommendation
+- [vercel/commerce](https://github.com/vercel/commerce) — example of Strategy 1 (e-commerce)
+- [shadcn/taxonomy](https://github.com/shadcn-ui/taxonomy) — example App Router reference with flat + grouped components
+- [cal.com](https://github.com/calcom/cal.com) — example large-scale App Router project with feature modules
+- [nextjs/saas-starter](https://github.com/vercel/nextjs/saas-starter) — example SaaS template
 
 ## Note
 
-This skill captures opinionated conventions derived from the Next.js docs, Vercel reference repos, and practical experience. The exact subfolder names, tooling files, and domain groupings will vary per project — the _rules and decision framework_ are what stays constant.
+This skill captures opinionated conventions derived from the Next.js docs, reference repos, and practical experience. The exact subfolder names, tooling files, and domain groupings will vary per project — the rules and decision framework are what stays constant.
