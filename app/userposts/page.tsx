@@ -1,6 +1,6 @@
 import { auth } from '../../auth';
 import { redirect } from 'next/navigation';
-import UserOwnPosts from '../_ui/userposts/UserOwnPosts';
+import UserOwnPosts from '@/components/posts/UserOwnPosts';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {

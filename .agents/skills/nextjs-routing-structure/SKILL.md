@@ -1,20 +1,20 @@
 ---
 name: nextjs-routing-structure
 description: "Opinionated Next.js App Router folder structure and project organization. Use when: setting up a new Next.js project, reorganizing an existing project's folders, deciding where to put components/utils/types, auditing folder structure for clarity, resolving 'where should this file go' questions."
-argument-hint: 'Describe the project or reorganization goal'
+disable-model-invocation: true
 ---
 
 # Next.js App Router Folder Structure
 
-Opinionated conventions for organizing Next.js App Router projects so that any developer can immediately distinguish routes from application code.
+Opinionated conventions for organizing Next.js App Router projects so that routes stay separate from application code. The guidance below follows the Next.js project-structure recommendation to store project files outside of app, and the examples are illustrative rather than prescriptive.
 
 ## Core Principle
 
 > `app/` is for routing. Everything else goes outside.
 
-A folder inside `app/` should only exist if it contributes to a URL. All shared application code — components, utilities, types — lives at the project root in clearly named folders.
+A folder inside `app/` should only exist if it contributes to a URL or is one of the supported Next.js file conventions. All shared application code — components, utilities, types — lives outside `app/` in clearly named folders.
 
-This follows **Strategy 1** from the [Next.js Project Structure docs](https://nextjs.org/docs/app/getting-started/project-structure#store-project-files-outside-of-app) and matches `vercel/commerce`, the canonical App Router reference.
+This follows **Strategy 1** from the [Next.js Project Structure docs](https://nextjs.org/docs/app/getting-started/project-structure#store-project-files-outside-of-app) and matches common App Router reference projects such as `vercel/commerce`.
 
 ## Rules
 
@@ -36,24 +36,28 @@ This follows **Strategy 1** from the [Next.js Project Structure docs](https://ne
 
 If a file is not in this list, it does not belong directly in `app/`.
 
-### Rule 2: Shared UI → `components/`
+### Rule 2: All UI → `components/`
 
-Components used by **2 or more routes** live in `components/` at the project root.
+**All** React components — whether used by one route or many — live in `components/` at the project root.
 
-Organize by **feature** — what the component _is_ — not by route name.
+Use a **hybrid flat + subfolder** approach:
 
-Example for a blog/social app:
+- **Standalone components** → flat files directly in `components/`
+- **2-3+ related components** → group in a subfolder for that UI feature or concern
+
+Organize subfolders by **feature** or UI concern — what the component is for — not by route name.
+
+Examples only, for illustration:
 
 ```
 components/
-  navigation/     ← nav bars, menus, breadcrumbs
-  posts/          ← post cards, comment threads
-  auth/           ← login forms, user menus
+  navigation/     ← nav bars, menus, breadcrumbs (4 related files)
+  posts/          ← post cards, comment threads (5+ related files)
   providers/      ← React context providers
   ui/             ← generic primitives (buttons, modals, inputs)
 ```
 
-Example for an e-commerce app:
+Another example:
 
 ```
 components/
@@ -68,30 +72,14 @@ The exact subfolder names depend on your project's features. The principle is: n
 
 Do NOT mirror the route structure (no `components/home/`, `components/about/`). The moment you name a folder after a route, you create a redundant shadow of `app/` that breaks when a component gets shared.
 
-### Rule 3: Route-specific components → colocate with `_components/`
+### Rule 3: Application code → `lib/`
 
-Components used by **exactly 1 route** stay colocated inside that route using a `_components/` private folder:
-
-```
-app/[slug]/
-  page.tsx
-  loading.tsx
-  _components/
-    DetailView.tsx
-```
-
-The `_` prefix opts the folder out of Next.js routing. Without it, a folder like `components/` inside a route _technically_ wouldn't be routable (no `page.tsx`), but visually it's ambiguous — it could be mistaken for a nested route. The underscore removes all doubt: `_components/` clearly signals "helper components, not a route."
-
-**Promotion rule**: When a colocated component starts being used by a second route, move it to `components/`.
-
-### Rule 4: Application code → `lib/`
-
-Non-component, non-UI code lives in `lib/` at the project root. Use a **hybrid flat + subfolder** approach (matching `vercel/commerce` and `nextjs/saas-starter`):
+Non-component, non-UI code lives in `lib/` at the project root. Use a **hybrid flat + subfolder** approach:
 
 - **Generic, small helpers** → flat files directly in `lib/`
 - **Domain-specific logic** with 2+ related files → subfolder
 
-Example for a SaaS app:
+Examples only:
 
 ```
 lib/
@@ -102,7 +90,7 @@ lib/
   payments/        ← grouped: Stripe integration
 ```
 
-Example for a content app:
+Another example:
 
 ```
 lib/
@@ -113,7 +101,7 @@ lib/
 
 The subfolder threshold is practical: once a concern has 2-3+ related files, group them. A single `utils.ts` doesn't need its own folder.
 
-### Rule 5: Tooling config stays at project root
+### Rule 4: Tooling config stays at project root
 
 Files that frameworks or tools expect at the root by convention do not move. Common examples:
 
@@ -125,13 +113,13 @@ auth.js              ← NextAuth (if used)
 prisma/              ← Prisma schema + client (if used)
 ```
 
-The general rule: if an external tool needs to find the file at a conventional path, keep it there.
+The general rule: if an external tool needs to find the file at a conventional path, keep it there. These are examples, not a fixed list.
 
-### Rule 6: Types stay at root
+### Rule 5: Types stay at root
 
 `types/` stays at the project root. It is already outside `app/` and universally understood.
 
-### Rule 7: `_` prefix — only meaningful inside `app/`
+### Rule 6: `_` prefix — only meaningful inside `app/`
 
 - Inside `app/`: `_folderName` opts the folder out of the router (Next.js behavior)
 - Outside `app/`: `_` has zero special meaning to Next.js — unnecessary
@@ -150,20 +138,20 @@ project-root/
 │   ├── error.tsx
 │   ├── not-found.tsx
 │   ├── globals.css
-│   ├── [slug]/               ← dynamic route
+│   ├── [slug]/               ← dynamic route example
 │   │   ├── page.tsx
-│   │   ├── loading.tsx
-│   │   └── _components/      ← route-specific, private
-│   ├── dashboard/            ← static route
+│   │   └── loading.tsx
+│   ├── dashboard/            ← static route example
 │   │   ├── page.tsx
 │   │   └── layout.tsx
 │   └── api/                  ← API routes
 │       └── ...
-├── components/               ← SHARED UI (by domain)
-│   ├── <domain-a>/           ← e.g. navigation, cart, posts
-│   ├── <domain-b>/
+├── components/               ← ALL UI (by feature)
+│   ├── <feature-a>/          ← example UI feature folder
+│   ├── <feature-b>/
 │   ├── providers/
-│   └── ui/
+│   ├── ui/
+│   └── StandaloneWidget.tsx  ← flat file for standalone components
 ├── lib/                      ← UTILITIES & HELPERS
 │   ├── utils.ts
 │   └── ...
@@ -178,19 +166,17 @@ project-root/
 ### For a new project
 
 1. Create `app/` with only routing files
-2. Create `components/` for shared UI, organized by domain
+2. Create `components/` for all UI, organized by feature
 3. Create `lib/` for utilities and helpers
 4. Create `types/` for TypeScript definitions
-5. Colocate route-specific components in `app/[route]/_components/`
 
 ### For an existing project
 
 1. Audit `app/`: identify all non-routing files and folders
-2. Move shared components → `components/` (organize by domain)
+2. Move all components → `components/` (organize by feature)
 3. Move utilities → `lib/`
-4. Rename colocated private folders to `_components/` for consistency
-5. Update all import paths
-6. Run build to verify no broken imports
+4. Update all import paths
+5. Run build to verify no broken imports
 
 ### Decision: where does this file go?
 
@@ -200,9 +186,7 @@ Is it a Next.js file convention (page, layout, route, loading, error)?
   → NO: continue
 
 Is it a React component?
-  → Used by 1 route only?  → app/[route]/_components/
-  → Used by 2+ routes?     → components/
-  → NO: continue
+  → components/ (subfolder by feature, or flat if standalone)
 
 Is it a utility, helper, server action, or data function?
   → lib/
@@ -216,10 +200,12 @@ Is it framework/tooling config?
 
 ## References
 
-- [Next.js Project Structure](https://nextjs.org/docs/app/getting-started/project-structure)
-- [vercel/commerce](https://github.com/vercel/commerce) — canonical example of Strategy 1 (e-commerce)
-- [nextjs/saas-starter](https://github.com/nextjs/saas-starter) — official SaaS template
+- [Next.js Project Structure](https://nextjs.org/docs/app/getting-started/project-structure#store-project-files-outside-of-app) — official guidance with Strategy 1 recommendation
+- [vercel/commerce](https://github.com/vercel/commerce) — example of Strategy 1 (e-commerce)
+- [shadcn/taxonomy](https://github.com/shadcn-ui/taxonomy) — example App Router reference with flat + grouped components
+- [cal.com](https://github.com/calcom/cal.com) — example large-scale App Router project with feature modules
+- [nextjs/saas-starter](https://github.com/vercel/nextjs/saas-starter) — example SaaS template
 
 ## Note
 
-This skill captures opinionated conventions derived from the Next.js docs, Vercel reference repos, and practical experience. The exact subfolder names, tooling files, and domain groupings will vary per project — the _rules and decision framework_ are what stays constant.
+This skill captures opinionated conventions derived from the Next.js docs, reference repos, and practical experience. The exact subfolder names, tooling files, and domain groupings will vary per project — the rules and decision framework are what stays constant.

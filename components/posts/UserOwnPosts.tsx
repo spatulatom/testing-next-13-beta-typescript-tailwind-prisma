@@ -3,7 +3,7 @@
 import DeletePost from './DeletePost';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { UserPosts } from '../../../types/UserPosts';
+import { UserPosts } from '@/types/UserPosts';
 import Image from 'next/image';
 
 const fetchAuthPost = async () => {

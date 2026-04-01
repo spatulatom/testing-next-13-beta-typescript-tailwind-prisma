@@ -1,8 +1,8 @@
 // export const dynamic = 'force-static' // This will force the page to be dynamic and not cached
 
-import {delay} from '@/app/lib/utils'
+import {delay} from '@/lib/utils'
 import {Suspense} from 'react'
-import Ssr from './_ui/testing-ssr'
+import Ssr from '@/components/testing-ssr'
 
 
 export default async function Home() {
