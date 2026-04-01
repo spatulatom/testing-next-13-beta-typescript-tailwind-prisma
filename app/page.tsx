@@ -1,6 +1,6 @@
 import Post from '@/components/posts/Post';
-import AddPost from './_components/AddPost';
-import Counter from './_components/Counter';
+import AddPost from '@/components/posts/AddPost';
+import Counter from '@/components/posts/Counter';
 import allPosts from '@/lib/cache/allPosts';
 import type { Post as PrismaPost, User, Comment } from '@prisma/client';
 import { cacheLife } from 'next/cache';
