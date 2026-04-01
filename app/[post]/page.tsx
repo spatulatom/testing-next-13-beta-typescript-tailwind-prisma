@@ -20,31 +20,29 @@ export async function generateMetadata({
 
   return {
     title: data.title,
-    description: `Post by ${data.user.name}`,
+    description: `Post by ${data.user.name ?? 'Unknown user'}`,
   };
 }
 
 export default async function PostDetail({ params }: PostParams) {
   const { post } = await params;
-  // const response: PostType= await fetchDetails(url.params.post);
-  const response: any = await singlePost(post);
+  const response = await singlePost(post);
   if (!response) {
-    // for http.../random number - we can use:
     notFound();
   }
   return (
     <div>
       <Post
         date={response.createdAt}
-        id={response?.id}
-        name={response?.user.name}
-        avatar={response?.user.image}
-        postTitle={response?.title}
-        comments={response?.comments.length}
+        id={response.id}
+        name={response.user.name}
+        avatar={response.user.image}
+        postTitle={response.title}
+        comments={response.comments.length}
       />
-      <AddComment id={response?.id} />
+      <AddComment id={response.id} />
       <h2>Comments:</h2>
-      {response.comments?.map((comment: any) => (
+      {response.comments.map((comment) => (
         <div
           key={comment.id}
           className="mt-2 rounded-md bg-gray-300 p-2 text-black"
@@ -53,11 +51,11 @@ export default async function PostDetail({ params }: PostParams) {
             <Image
               width={24}
               height={24}
-              src={comment.user?.image}
+              src={comment.user.image ?? '/next13beta.png'}
               alt="avatar"
               className="rounded-full"
             />
-            <h3 className="font-bold">{comment?.user?.name},</h3>
+            <h3 className="font-bold">{comment.user.name},</h3>
             {/* <h2 className="text-sm">commented at {comment.createdAt?.substring(11, 19)}, {comment.createdAt?.substring(0,10)}</h2> */}
           </div>
           <div className="italic"> - {comment.title}</div>

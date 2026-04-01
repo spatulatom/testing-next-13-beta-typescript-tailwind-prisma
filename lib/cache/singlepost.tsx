@@ -1,18 +1,27 @@
 import { unstable_noStore as noStore } from 'next/cache';
+import type { Prisma } from '@prisma/client';
 import prisma from '@/prisma/client';
 
-export default async function singlePost(id: any) {
-  noStore();
+export type SinglePost = Prisma.PostGetPayload<{
+  include: {
+    user: true;
+    hearts: true;
+    comments: {
+      include: {
+        user: true;
+      };
+    };
+  };
+}>;
 
-  // i am using next 14 feature here for data revalidation
-  // when grabbing data directly form database andand whanting to opt out of
-  //  caching(the verison this app is build is    "next": "^13.2.3",)
+export default async function singlePost(id: string): Promise<SinglePost | null> {
+  noStore();
 
   console.log('DATA FETCH UNSATBLE STORE- SINGLE POST');
 
   const data = await prisma.post.findUnique({
     where: {
-      id: id,
+      id,
     },
     include: {
       user: true,

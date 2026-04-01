@@ -1,11 +1,11 @@
-"use client"
+'use client';
+
+import type { Dispatch, SetStateAction } from 'react';
 
 type ToggleProps = {
-  // deletePost: () => void
-  // setToggle: (toggle: boolean) => void
-  deletePost: any
-  setToggle: any
-}
+  deletePost: () => void;
+  setToggle: Dispatch<SetStateAction<boolean>>;
+};
 
 export default function Toggle({ deletePost, setToggle }: ToggleProps) {
   return (
@@ -31,5 +31,5 @@ export default function Toggle({ deletePost, setToggle }: ToggleProps) {
         </button>
       </div>
     </div>
-  )
+  );
 }
