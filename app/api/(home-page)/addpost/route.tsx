@@ -2,8 +2,7 @@ import prisma from '../../../../prisma/client';
 import { NextRequest } from 'next/server';
 import { auth } from '../../../../auth';
 import { NextResponse } from 'next/server';
-
-import { revalidatePath, revalidateTag } from 'next/cache';
+import type { User } from '@prisma/client';
 
 // 1. This GET route is moved here from api/allposts
 export async function GET() {
@@ -46,7 +45,7 @@ export async function POST(request: NextRequest) {
   let session;
   try {
     session = await auth();
-  } catch (err) {
+  } catch {
     return NextResponse.json(
       { error: 'An error has occured while getting user session!' },
       {
@@ -95,7 +94,7 @@ export async function POST(request: NextRequest) {
     title = title.replace(/[<>]/g, '');
     // Finally trim whitespace
     title = title.trim();
-  } catch (err) {
+  } catch {
     return NextResponse.json(
       { error: 'Invalid request format.' },
       { status: 400 }
@@ -124,7 +123,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Get User
-  let prismaUser: any;
+  let prismaUser: User | null = null;
   try {
     prismaUser = await prisma.user.findUnique({
       where: { email: session?.user?.email ?? undefined },

@@ -3,7 +3,7 @@ type PostType = {
   title: string
   createdAt: string
   updatedAt?: string
-  published: Boolean
+  published: boolean
   userId: string
   user: {
     email: string

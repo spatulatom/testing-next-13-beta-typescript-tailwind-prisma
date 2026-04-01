@@ -3,7 +3,7 @@ export type PostType = {
   title: string
   createdAt: Date
   updatedAt?: string
-  published: Boolean
+  published: boolean
   userId: string
   user: {
     email: string

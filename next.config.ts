@@ -1,12 +1,9 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+import type { NextConfig } from 'next';
+
+const nextConfig: NextConfig = {
   cacheComponents: true,
-    experimental: {
-    // Enable filesystem caching for `next dev`- till the default is switched 
-    // to `true` in a future release
+  experimental: {
     turbopackFileSystemCacheForDev: true,
-    // Enable filesystem caching for `next build`
-    // turbopackFileSystemCacheForBuild: true,
   },
   turbopack: {
     root: __dirname,
@@ -32,4 +29,4 @@ const nextConfig = {
   serverExternalPackages: ['@prisma/client', 'prisma'],
 };
 
-module.exports = nextConfig;
+export default nextConfig;
