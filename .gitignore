@@ -38,3 +38,4 @@ next-env.d.ts
 # next-agents-md
 # .next-docs/ is intentionally tracked so agents and fresh clones have version-matched docs
 .next-docs/
+.playwright-mcp/

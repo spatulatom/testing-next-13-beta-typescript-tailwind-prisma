@@ -1,6 +1,12 @@
 @import 'tailwindcss';
 
 @theme {
+  --color-app-foreground: #000000;
+  --color-app-foreground-dark: #ffffff;
+  --color-app-background-start: #d6dbdc;
+  --color-app-background-end: #ffffff;
+  --color-app-background-start-dark: #000000;
+  --color-app-background-end-dark: #000000;
   --color-app-inverse: #ffffff;
   --color-brand-accent: #0d9488;
   --color-brand-accent-strong: #0f766e;
@@ -23,12 +29,6 @@
   --radius-nature-button: 4px;
 }
 
-:root {
-  --app-foreground: #000000;
-  --app-background-start: #d6dbdc;
-  --app-background-end: #ffffff;
-}
-
 @layer base {
   * {
     box-sizing: border-box;
@@ -46,10 +46,10 @@
     background: linear-gradient(
         to bottom,
         transparent,
-        var(--app-background-end)
+        var(--color-app-background-end)
       )
-      var(--app-background-start);
-    color: var(--app-foreground);
+      var(--color-app-background-start);
+    color: var(--color-app-foreground);
     @apply antialiased;
   }
 
@@ -60,14 +60,18 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --app-foreground: #ffffff;
-    --app-background-start: #000000;
-    --app-background-end: #000000;
-  }
-
   html {
     color-scheme: dark;
+  }
+
+  body {
+    background: linear-gradient(
+        to bottom,
+        transparent,
+        var(--color-app-background-end-dark)
+      )
+      var(--color-app-background-start-dark);
+    color: var(--color-app-foreground-dark);
   }
 }
 

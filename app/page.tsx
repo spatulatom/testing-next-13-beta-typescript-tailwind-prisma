@@ -24,7 +24,7 @@ export default async function Home() {
     if (!data || data.length === 0) {
       return (
         <div className="mb-20">
-          <h1 className="mb-2 mt-10 bg-gradient-to-r from-teal-600 via-black to-white bg-clip-text text-center text-xl font-bold text-transparent md:text-5xl">
+          <h1 className="mb-2 mt-10 bg-gradient-to-r from-teal-600 via-black to-white bg-clip-text text-center text-xl font-bold md:text-5xl">
             Chat Room
           </h1>
 
@@ -42,7 +42,7 @@ export default async function Home() {
     return (
       <div className="">
         {/* <h1 className="text-center text-2xl font-bold  mt-10 animate-shimmer bg-gradient-to-r from-teal-600 via-black to-white text-transparent bg-clip-text capitalize">chat Room</h1> */}
-        <h1 className="mb-2 mt-10 bg-gradient-to-r from-teal-600 via-black to-white bg-clip-text text-center text-xl font-bold text-transparent">
+        <h1 className="mb-2 mt-10 bg-gradient-to-r from-teal-600 via-black to-white bg-clip-text text-center text-xl font-bold">
           Chat Room - crud app with{' '}
           <a
             className="text-teal-600 hover:underline focus:underline"
