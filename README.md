@@ -35,6 +35,12 @@
 - `types/` stays at project root for shared TypeScript types.
 - `server-cache/` (formerly `unstableCache/`) stores shared server-side cached data helpers.
 
+## Tailwind 4 Styling Baseline
+
+- `postcss.config.js` is the active Tailwind integration point and loads `@tailwindcss/postcss`.
+- `app/globals.css` is the CSS-first source of truth for Tailwind imports, shared tokens, base styles, and custom utilities.
+- The repo no longer relies on `tailwind.config.js` for theme extension or content scanning.
+
 ## New Features in Next.js 15
 
 - **Enhanced Server Actions**: Further improvements in data mutation and server-side logic.
