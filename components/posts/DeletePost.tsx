@@ -39,7 +39,7 @@ export default function DeletePost({
   const [toggle, setToggle] = useState(false);
   const queryClient = useQueryClient();
   let deleteToastID: string;
-  const router = useRouter();
+
   const toastIdRef = useRef<string>('');
 
   const { mutate } = useMutation({
@@ -60,7 +60,7 @@ export default function DeletePost({
       console.log(data);
       queryClient.invalidateQueries({ queryKey: ['getAuthPosts'] });
       toast.success('Post has been deleted.', { id: toastIdRef.current });
-      router.refresh();
+      
     },
   });
 
