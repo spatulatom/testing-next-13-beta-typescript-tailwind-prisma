@@ -82,22 +82,46 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    if (prismaUser) {
-      const result = await prisma.comment.create({
-        data: {
-          title: body.title,
-          userId: prismaUser.id,
-          postId: body.id,
-        },
-      });
-      revalidatePath('/');
+    if (!prismaUser) {
       return NextResponse.json(
-        { result },
-        {
-          status: 200,
-        }
+        { error: 'Please sign in to comment.' },
+        { status: 403 }
       );
     }
+
+    // SECURITY: Validate postId exists before creating comment
+    if (!body.id) {
+      return NextResponse.json(
+        { error: 'Post ID is required.' },
+        { status: 400 }
+      );
+    }
+
+    const post = await prisma.post.findUnique({
+      where: { id: body.id },
+    });
+
+    if (!post) {
+      return NextResponse.json(
+        { error: 'Post not found.' },
+        { status: 404 }
+      );
+    }
+
+    const result = await prisma.comment.create({
+      data: {
+        title: body.title,
+        userId: prismaUser.id,
+        postId: body.id,
+      },
+    });
+    revalidatePath('/');
+    return NextResponse.json(
+      { result },
+      {
+        status: 200,
+      }
+    );
   } catch (err) {
     return NextResponse.json(
       { error: 'Sorry, an error has occured while adding your comment!' },
