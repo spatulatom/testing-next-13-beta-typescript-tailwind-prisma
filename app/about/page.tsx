@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import type { ReactNode } from 'react';
 
 export const metadata: Metadata = {
   title: 'About',
@@ -16,10 +17,10 @@ const techStack = [
   { name: 'TanStack Query v5', description: 'Client-side data fetching and cache invalidation alongside React Server Components.' },
 ];
 
-const milestones = [
+const milestones: { version: string; highlight: ReactNode }[] = [
   { version: 'Next.js 13 Beta', highlight: 'First exploration of the App Router and React Server Components (RSC).' },
   { version: 'Next.js 14', highlight: 'Adopted server actions for mutations and removed the old pages-based API routes.' },
-  { version: 'Next.js 15', highlight: 'Leveraged the new <code>unstable_cache</code> / <code>use cache</code> directive and improved streaming.' },
+  { version: 'Next.js 15', highlight: <>Leveraged the new <code className="rounded bg-gray-700 px-1 text-xs">unstable_cache</code> / <code className="rounded bg-gray-700 px-1 text-xs">use cache</code> directive and improved streaming.</> },
   { version: 'Next.js 16+', highlight: 'Testing Cached Components, updated caching APIs, and Turbopack dev server.' },
 ];
 
@@ -61,10 +62,12 @@ export default function AboutPage() {
           {techStack.map(({ name, description }) => (
             <li
               key={name}
-              className="rounded-xl border border-gray-700 p-4 space-y-1"
+              className="rounded-xl border border-gray-700 p-4"
             >
-              <span className="font-medium text-white">{name}</span>
-              <p className="text-sm text-gray-400">{description}</p>
+              <div className="space-y-1">
+                <span className="font-medium text-white">{name}</span>
+                <p className="text-sm text-gray-400">{description}</p>
+              </div>
             </li>
           ))}
         </ul>
@@ -78,10 +81,7 @@ export default function AboutPage() {
             <li key={version} className="relative">
               <span className="absolute -left-[9px] top-1 h-3 w-3 rounded-full bg-teal-500" />
               <p className="font-medium text-white">{version}</p>
-              <p
-                className="mt-1 text-sm text-gray-400"
-                dangerouslySetInnerHTML={{ __html: highlight }}
-              />
+              <p className="mt-1 text-sm text-gray-400">{highlight}</p>
             </li>
           ))}
         </ol>
