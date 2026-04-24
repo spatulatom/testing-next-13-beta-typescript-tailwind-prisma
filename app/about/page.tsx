@@ -76,12 +76,19 @@ export default function AboutPage() {
       {/* Version milestones */}
       <section className="space-y-4">
         <h2 className="text-xl font-semibold text-teal-500">Version Milestones</h2>
-        <ol className="relative border-l border-gray-700 space-y-6 pl-6">
-          {milestones.map(({ version, highlight }) => (
-            <li key={version} className="relative">
-              <span className="absolute -left-[9px] top-1 h-3 w-3 rounded-full bg-teal-500" />
-              <p className="font-medium text-white">{version}</p>
-              <p className="mt-1 text-sm text-gray-400">{highlight}</p>
+        <ol className="space-y-0">
+          {milestones.map(({ version, highlight }, i) => (
+            <li key={version} className="flex gap-4">
+              <div className="flex flex-col items-center">
+                <span className="mt-[5px] h-3 w-3 shrink-0 rounded-full bg-teal-500" />
+                {i < milestones.length - 1 && (
+                  <span className="my-1 w-px flex-1 bg-gray-700" />
+                )}
+              </div>
+              <div className="pb-6">
+                <p className="font-medium text-white">{version}</p>
+                <p className="mt-1 text-sm text-gray-400">{highlight}</p>
+              </div>
             </li>
           ))}
         </ol>
