@@ -136,6 +136,15 @@ export default function HamburgerMenu({ isLoggedIn }: HamburgerMenuProps) {
                 Edit Suggestions
               </Link>
             </li>
+            <li className="relative z-50">
+              <Link
+                href="/about"
+                className="block w-full text-white transition-all hover:text-teal-600"
+                onClick={toggleMenu}
+              >
+                About
+              </Link>
+            </li>
           </ul>
         </nav>
       )}

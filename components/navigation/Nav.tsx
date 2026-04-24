@@ -50,6 +50,9 @@ export default async function Nav() {
         <li>
           <Link href={'/edit-suggestions'}>Edit Suggestions</Link>
         </li>
+        <li>
+          <Link href={'/about'}>About</Link>
+        </li>
       </ul>
 
       <div className="flex items-center gap-4">
