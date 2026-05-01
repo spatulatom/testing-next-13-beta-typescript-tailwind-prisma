@@ -4,7 +4,7 @@ import { useRef, useState, useTransition } from 'react';
 
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-import { addComment } from '@/lib/actions/post';
+import { addComment as addCommentAction } from '@/lib/actions/post';
 
 type PostProps = {
   id: string;
@@ -44,7 +44,7 @@ export default function AddComment({ id }: PostProps) {
     });
 
     startTransition(async () => {
-      const result = await addComment(title, id);
+      const result = await addCommentAction(title, id);
       if (result.success) {
         setTitle('');
         setIsDisabled(false);

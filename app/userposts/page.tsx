@@ -30,20 +30,23 @@ export default async function Dashboard() {
     redirect('/api/auth/signin');
   }
 
-  const userData = await prisma.user.findUnique({
-    where: { email: session.user?.email ?? undefined },
-    include: {
-      posts: {
-        orderBy: { createdAt: 'desc' },
+  const email = session.user?.email;
+  const userData = email
+    ? await prisma.user.findUnique({
+        where: { email },
         include: {
-          comments: {
+          posts: {
             orderBy: { createdAt: 'desc' },
-            include: { user: true },
+            include: {
+              comments: {
+                orderBy: { createdAt: 'desc' },
+                include: { user: true },
+              },
+            },
           },
         },
-      },
-    },
-  });
+      })
+    : null;
 
   return (
     <main>

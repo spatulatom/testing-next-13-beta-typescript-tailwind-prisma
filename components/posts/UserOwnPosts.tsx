@@ -18,7 +18,16 @@ export default function UserOwnPosts({ userData }: Props) {
           Go back to the &apos;Chat Room&apos; and create your first post!
         </h1>
       )}
-      {userData.posts.map((post) => (
+      {userData.posts.map((post) => {
+        // Pre-convert comment dates to strings once; required for the
+        // server→client boundary (DeletePost is a client component) and
+        // reused for inline comment display to keep formatting consistent.
+        const commentsForClient = post.comments.map((c) => ({
+          ...c,
+          createdAt: c.createdAt.toLocaleDateString(),
+        }));
+
+        return (
         <div key={post.id} className="mt-2 rounded-md bg-gray-200 p-2">
           <DeletePost
             id={post.id}
@@ -26,12 +35,9 @@ export default function UserOwnPosts({ userData }: Props) {
             avatar={userData.image ?? ''}
             name={userData.name ?? ''}
             title={post.title}
-            comments={post.comments.map((c) => ({
-              ...c,
-              createdAt: c.createdAt.toISOString(),
-            }))}
+            comments={commentsForClient}
           />
-          {post.comments?.map((comment) => (
+          {commentsForClient.map((comment) => (
             <div
               key={comment.id}
               className="mt-2 rounded-md bg-gray-300 p-2 text-black"
@@ -45,15 +51,14 @@ export default function UserOwnPosts({ userData }: Props) {
                   className="rounded-full"
                 />
                 <h3 className="font-bold">{comment.user.name}</h3>
-                <h2 className="text-sm">
-                  {comment.createdAt.toLocaleDateString()}
-                </h2>
+                <h2 className="text-sm">{comment.createdAt}</h2>
               </div>
               <div className="italic"> - {comment.title}</div>
             </div>
           ))}
         </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

@@ -14,7 +14,9 @@ type EditProps = {
   name: string;
   title: string;
   comments: {
-    createdAt?: string;
+    // ISO string – the parent server component serialises Date → string
+    // before crossing the server/client boundary to this client component.
+    createdAt: string;
     id: string;
     postId: string;
     title: string;

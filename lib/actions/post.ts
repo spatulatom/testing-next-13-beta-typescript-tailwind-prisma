@@ -6,16 +6,19 @@ import { revalidatePath } from 'next/cache';
 
 type ActionResult = { success: true } | { success: false; error: string };
 
-/** Shared input sanitiser – strips HTML tags and trims whitespace. */
+/** Shared input sanitiser – removes all angle brackets and trims whitespace.
+ *  React auto-escapes on render; this is a defence-in-depth layer to prevent
+ *  raw HTML from being stored in the database.
+ */
 function sanitize(input: string): string {
-  let out = input.replace(/<[^>]*>?/gm, '');
-  out = out
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#x27;/g, "'")
-    .replace(/&#x2F;/g, '/');
-  return out.replace(/[<>]/g, '').trim();
+  return input.replace(/[<>]/g, '').trim();
+}
+
+/** Extract a verified email from the session or return null. */
+function sessionEmail(
+  session: Awaited<ReturnType<typeof auth>>
+): string | null {
+  return session?.user?.email ?? null;
 }
 
 /** Create a new post for the currently authenticated user. */
@@ -48,8 +51,12 @@ export async function createPost(title: string): Promise<ActionResult> {
 
   let prismaUser;
   try {
+    const email = sessionEmail(session);
+    if (!email) {
+      return { success: false, error: 'Session has no email. Please log in again.' };
+    }
     prismaUser = await prisma.user.findUnique({
-      where: { email: session.user?.email ?? undefined },
+      where: { email },
     });
   } catch {
     return { success: false, error: 'Database error while finding user.' };
@@ -109,8 +116,12 @@ export async function addComment(
 
   let prismaUser;
   try {
+    const email = sessionEmail(session);
+    if (!email) {
+      return { success: false, error: 'Session has no email. Please log in again.' };
+    }
     prismaUser = await prisma.user.findUnique({
-      where: { email: session.user?.email ?? undefined },
+      where: { email },
     });
   } catch {
     return { success: false, error: 'Database error while finding user.' };
@@ -162,8 +173,12 @@ export async function deletePost(postId: string): Promise<ActionResult> {
 
   let prismaUser;
   try {
+    const email = sessionEmail(session);
+    if (!email) {
+      return { success: false, error: 'Session has no email. Please log in again.' };
+    }
     prismaUser = await prisma.user.findUnique({
-      where: { email: session.user?.email ?? undefined },
+      where: { email },
     });
   } catch {
     return { success: false, error: 'Database connection error.' };
@@ -177,6 +192,16 @@ export async function deletePost(postId: string): Promise<ActionResult> {
   }
 
   try {
+    const post = await prisma.post.findUnique({ where: { id: postId } });
+    if (!post) {
+      return { success: false, error: 'Post not found.' };
+    }
+    if (post.userId !== prismaUser.id) {
+      return {
+        success: false,
+        error: 'You can only delete your own posts.',
+      };
+    }
     await prisma.post.delete({ where: { id: postId } });
     revalidatePath('/');
     revalidatePath('/userposts');
