@@ -1,42 +1,16 @@
 'use client';
 
 import toast from 'react-hot-toast';
-import { useRef, useState } from 'react';
+import { useRef, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
+import { createPost } from '@/lib/actions/post';
 
 export default function CreatePost() {
   const router = useRouter();
   const [title, setTitle] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
+  const [, startTransition] = useTransition();
   const toastPostID = useRef<string | undefined>(undefined);
-
-  const addPost = async (param: string) => {
-    try {
-      const response = await fetch('/api/addpost', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(param),
-      });
-      const data = await response.json();
-      router.refresh();
-      if (response.ok) {
-        setTitle('');
-        setIsDisabled(false);
-        return toast.success('Post has been made 🔥', {
-          id: toastPostID.current,
-        });
-      }
-      setIsDisabled(false);
-      toast.error(data.error, { id: toastPostID.current });
-    } catch (err) {
-      setIsDisabled(false);
-      return toast.error('Database connection error. Try again in minute!', {
-        id: toastPostID.current,
-      });
-    }
-  };
 
   const submitPost = (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,12 +32,23 @@ export default function CreatePost() {
       return;
     }
 
-    console.log('CLICK');
     setIsDisabled(true);
     toastPostID.current = toast.loading('Creating your post', {
       id: toastPostID.current,
     });
-    addPost(title);
+
+    startTransition(async () => {
+      const result = await createPost(title);
+      if (result.success) {
+        setTitle('');
+        setIsDisabled(false);
+        router.refresh();
+        toast.success('Post has been made 🔥', { id: toastPostID.current });
+      } else {
+        setIsDisabled(false);
+        toast.error(result.error, { id: toastPostID.current });
+      }
+    });
   };
 
   return (

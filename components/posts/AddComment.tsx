@@ -1,58 +1,20 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useTransition } from 'react';
 
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+import { addComment } from '@/lib/actions/post';
 
-type Comment = {
-  postId?: string;
-  title: string;
-};
 type PostProps = {
   id: string;
 };
 export default function AddComment({ id }: PostProps) {
   const router = useRouter();
   const commentToastId = useRef<string | undefined>(undefined);
-  console.log(id);
   const [title, setTitle] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
-
-  const addComment = async (arg1: string, arg2: string) => {
-    const param = {
-      title: arg1,
-      id: arg2,
-    };
-
-    try {
-      const response = await fetch('/api/addcomment', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(param),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        router.refresh();
-        setTitle('');
-        setIsDisabled(false);
-        router.refresh();
-        return toast.success('Added your comment', {
-          id: commentToastId.current,
-        });
-      }
-      toast.error(data.error, { id: commentToastId.current });
-      setIsDisabled(false);
-    } catch (err) {
-      toast.error('Database connection error.', { id: commentToastId.current });
-      setIsDisabled(false);
-    }
-  };
-  // we can set title like this - not recommended - but only in clinet component
-  // we shloud never update out dom using pure javaScript
-  // document.title = "JavaScript DOM Update"
+  const [, startTransition] = useTransition();
 
   const submitPost = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,7 +42,19 @@ export default function AddComment({ id }: PostProps) {
     commentToastId.current = toast.loading('Adding your comment', {
       id: commentToastId.current,
     });
-    addComment(title, id);
+
+    startTransition(async () => {
+      const result = await addComment(title, id);
+      if (result.success) {
+        setTitle('');
+        setIsDisabled(false);
+        router.refresh();
+        toast.success('Added your comment', { id: commentToastId.current });
+      } else {
+        setIsDisabled(false);
+        toast.error(result.error, { id: commentToastId.current });
+      }
+    });
   };
   return (
     <form onSubmit={submitPost} className="my-8">
