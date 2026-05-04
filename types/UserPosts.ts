@@ -1,27 +1,21 @@
 type PostType = {
   id: string
   title: string
-  createdAt: string
-  updatedAt?: string
-  published: boolean
+  createdAt: Date
+  updatedAt?: Date
+  published?: boolean
   userId: string
-  user: {
-    email: string
-    id: string
-    image: string
-    name: string
-  }
   comments: {
-    createdAt?: string
+    createdAt?: Date | string
     id: string
     postId: string
     title: string
     userId: string
     user: {
-      email: string
+      email: string | null
       id: string
-      image: string
-      name: string
+      image: string | null
+      name: string | null
     }
   }[]
 }
@@ -29,10 +23,9 @@ type PostType = {
 
 export type UserPosts={
     id: string,
-    name: string,
-    email:string,
-    emailVerified: boolean,
-    image: string,
+    name: string | null,
+    email: string | null,
+    emailVerified: Date | null,
+    image: string | null,
     posts: PostType[]
-  
-  }
+}
