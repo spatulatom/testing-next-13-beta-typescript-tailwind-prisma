@@ -4,6 +4,7 @@ import prisma from '@/prisma/client';
 import { auth } from '@/auth';
 import { revalidatePath } from 'next/cache';
 import { ResponseType, successResponse, errorResponse } from '@/lib/response';
+import { validatePostTitle, sanitizeText } from '@/lib/validation';
 import type { Post } from '@prisma/client';
 
 export async function createPost(title: string): Promise<ResponseType<Post>> {
@@ -20,28 +21,14 @@ export async function createPost(title: string): Promise<ResponseType<Post>> {
     return errorResponse('User not found. Please sign in again.');
   }
 
-  if (!title?.trim().length) {
-    return errorResponse('Please write something before posting.');
-  }
-
-  if (title.length > 50) {
-    return errorResponse('Your post is too long. Please keep it under 50 characters.');
-  }
-
-  if (/<[^>]*>/.test(title)) {
-    return errorResponse('HTML tags are not allowed in posts.');
+  // Validate post title
+  const titleError = validatePostTitle(title);
+  if (titleError) {
+    return errorResponse(titleError);
   }
 
   try {
-    const sanitizedTitle = title
-      .replace(/<[^>]*>?/gm, '')
-      .replace(/&lt;/g, '<')
-      .replace(/&gt;/g, '>')
-      .replace(/&quot;/g, '"')
-      .replace(/&#x27;/g, "'")
-      .replace(/&#x2F;/g, '/')
-      .replace(/[<>]/g, '')
-      .trim();
+    const sanitizedTitle = sanitizeText(title);
 
     const result = await prisma.post.create({
       data: {

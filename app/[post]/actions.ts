@@ -4,6 +4,7 @@ import prisma from '@/prisma/client';
 import { auth } from '@/auth';
 import { revalidatePath } from 'next/cache';
 import { ResponseType, successResponse, errorResponse } from '@/lib/response';
+import { validateCommentText, sanitizeText } from '@/lib/validation';
 import type { Comment } from '@prisma/client';
 
 export async function createComment(postId: string, title: string): Promise<ResponseType<Comment>> {
@@ -22,17 +23,10 @@ export async function createComment(postId: string, title: string): Promise<Resp
     return errorResponse('Please sign in to comment.');
   }
 
-  // Sanitize and validate
-  if (!title?.trim().length) {
-    return errorResponse('Please write something before posting.');
-  }
-
-  if (title.length > 30) {
-    return errorResponse('Please write shorter comment.');
-  }
-
-  if (/<[^>]*>/.test(title)) {
-    return errorResponse('HTML tags are not allowed in comments.');
+  // Validate comment text
+  const commentError = validateCommentText(title);
+  if (commentError) {
+    return errorResponse(commentError);
   }
 
   try {
@@ -46,15 +40,7 @@ export async function createComment(postId: string, title: string): Promise<Resp
     }
 
     // Sanitize comment text
-    const sanitizedTitle = title
-      .replace(/<[^>]*>?/gm, '')
-      .replace(/&lt;/g, '<')
-      .replace(/&gt;/g, '>')
-      .replace(/&quot;/g, '"')
-      .replace(/&#x27;/g, "'")
-      .replace(/&#x2F;/g, '/')
-      .replace(/[<>]/g, '')
-      .trim();
+    const sanitizedTitle = sanitizeText(title);
 
     const result = await prisma.comment.create({
       data: {
