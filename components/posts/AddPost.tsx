@@ -2,43 +2,14 @@
 
 import toast from 'react-hot-toast';
 import { useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { createPost } from '@/app/actions';
 
 export default function CreatePost() {
-  const router = useRouter();
   const [title, setTitle] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
   const toastPostID = useRef<string | undefined>(undefined);
 
-  const addPost = async (param: string) => {
-    try {
-      const response = await fetch('/api/addpost', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(param),
-      });
-      const data = await response.json();
-      router.refresh();
-      if (response.ok) {
-        setTitle('');
-        setIsDisabled(false);
-        return toast.success('Post has been made 🔥', {
-          id: toastPostID.current,
-        });
-      }
-      setIsDisabled(false);
-      toast.error(data.error, { id: toastPostID.current });
-    } catch {
-      setIsDisabled(false);
-      return toast.error('Database connection error. Try again in minute!', {
-        id: toastPostID.current,
-      });
-    }
-  };
-
-  const submitPost = (e: React.FormEvent) => {
+  const submitPost = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Client-side validation
@@ -58,12 +29,24 @@ export default function CreatePost() {
       return;
     }
 
-    console.log('CLICK');
     setIsDisabled(true);
     toastPostID.current = toast.loading('Creating your post', {
       id: toastPostID.current,
     });
-    addPost(title);
+
+    const result = await createPost(title);
+
+    if (result.error) {
+      toast.error(result.error, { id: toastPostID.current });
+      setIsDisabled(false);
+      return;
+    }
+
+    setTitle('');
+    setIsDisabled(false);
+    toast.success('Post has been made 🔥', {
+      id: toastPostID.current,
+    });
   };
 
   return (
