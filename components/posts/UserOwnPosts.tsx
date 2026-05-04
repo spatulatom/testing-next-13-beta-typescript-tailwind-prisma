@@ -6,12 +6,8 @@ import Image from 'next/image';
 export default async function UserOwnPosts() {
   const result = await getUserPosts();
 
-  if (result.error) {
+  if (!result.success) {
     throw new Error(result.error);
-  }
-
-  if (!result.success || !result.data) {
-    throw new Error('Failed to fetch posts');
   }
 
   const response: UserPosts = result.data;

@@ -39,7 +39,7 @@ export default function AddComment({ id }: AddCommentProps) {
 
     const result = await createComment(id, title);
 
-    if (result.error) {
+    if (!result.success) {
       toast.error(result.error, { id: commentToastId.current });
       setIsDisabled(false);
       return;

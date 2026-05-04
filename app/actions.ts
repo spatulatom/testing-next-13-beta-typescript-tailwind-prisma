@@ -3,11 +3,13 @@
 import prisma from '@/prisma/client';
 import { auth } from '@/auth';
 import { revalidatePath } from 'next/cache';
+import { ResponseType, successResponse, errorResponse } from '@/lib/response';
+import type { Post } from '@prisma/client';
 
-export async function createPost(title: string) {
+export async function createPost(title: string): Promise<ResponseType<Post>> {
   const session = await auth();
   if (!session) {
-    return { error: 'Please sign in to create a post.' };
+    return errorResponse('Please sign in to create a post.');
   }
 
   const prismaUser = await prisma.user.findUnique({
@@ -15,19 +17,19 @@ export async function createPost(title: string) {
   });
 
   if (!prismaUser) {
-    return { error: 'User not found. Please sign in again.' };
+    return errorResponse('User not found. Please sign in again.');
   }
 
   if (!title?.trim().length) {
-    return { error: 'Please write something before posting.' };
+    return errorResponse('Please write something before posting.');
   }
 
   if (title.length > 50) {
-    return { error: 'Your post is too long. Please keep it under 50 characters.' };
+    return errorResponse('Your post is too long. Please keep it under 50 characters.');
   }
 
   if (/<[^>]*>/.test(title)) {
-    return { error: 'HTML tags are not allowed in posts.' };
+    return errorResponse('HTML tags are not allowed in posts.');
   }
 
   try {
@@ -49,16 +51,16 @@ export async function createPost(title: string) {
     });
 
     revalidatePath('/');
-    return { success: true, result };
+    return successResponse(result);
   } catch {
-    return { error: 'Failed to create post. Please try again.' };
+    return errorResponse('Failed to create post. Please try again.');
   }
 }
 
-export async function deletePost(postId: string) {
+export async function deletePost(postId: string): Promise<ResponseType<Post>> {
   const session = await auth();
   if (!session) {
-    return { error: 'Please signin to delete a post.' };
+    return errorResponse('Please signin to delete a post.');
   }
 
   const prismaUser = await prisma.user.findUnique({
@@ -66,7 +68,7 @@ export async function deletePost(postId: string) {
   });
 
   if (!prismaUser) {
-    return { error: 'Error has occured while checking your details in a database.' };
+    return errorResponse('Error has occured while checking your details in a database.');
   }
 
   try {
@@ -76,8 +78,8 @@ export async function deletePost(postId: string) {
 
     revalidatePath('/');
     revalidatePath('/userposts');
-    return { success: true, result };
+    return successResponse(result);
   } catch {
-    return { error: 'Error has occured while deleting your post.' };
+    return errorResponse('Error has occured while deleting your post.');
   }
 }

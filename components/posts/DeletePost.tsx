@@ -22,7 +22,7 @@ export default function DeletePost({
     toastIdRef.current = toast.loading('Deleting your post.');
     const result = await deletePost(id);
 
-    if (result.error) {
+    if (!result.success) {
       toast.error(result.error, { id: toastIdRef.current });
       return;
     }

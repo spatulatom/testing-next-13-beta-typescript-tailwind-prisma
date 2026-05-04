@@ -3,12 +3,14 @@
 import prisma from '@/prisma/client';
 import { auth } from '@/auth';
 import { revalidatePath } from 'next/cache';
+import { ResponseType, successResponse, errorResponse } from '@/lib/response';
+import type { Comment } from '@prisma/client';
 
-export async function createComment(postId: string, title: string) {
+export async function createComment(postId: string, title: string): Promise<ResponseType<Comment>> {
   // Get session
   const session = await auth();
   if (!session) {
-    return { error: 'Please sign in to post a comment.' };
+    return errorResponse('Please sign in to post a comment.');
   }
 
   // Get user
@@ -17,20 +19,20 @@ export async function createComment(postId: string, title: string) {
   });
 
   if (!prismaUser) {
-    return { error: 'Please sign in to comment.' };
+    return errorResponse('Please sign in to comment.');
   }
 
   // Sanitize and validate
   if (!title?.trim().length) {
-    return { error: 'Please write something before posting.' };
+    return errorResponse('Please write something before posting.');
   }
 
   if (title.length > 30) {
-    return { error: 'Please write shorter comment.' };
+    return errorResponse('Please write shorter comment.');
   }
 
   if (/<[^>]*>/.test(title)) {
-    return { error: 'HTML tags are not allowed in comments.' };
+    return errorResponse('HTML tags are not allowed in comments.');
   }
 
   try {
@@ -40,7 +42,7 @@ export async function createComment(postId: string, title: string) {
     });
 
     if (!post) {
-      return { error: 'Post not found.' };
+      return errorResponse('Post not found.');
     }
 
     // Sanitize comment text
@@ -63,8 +65,8 @@ export async function createComment(postId: string, title: string) {
     });
 
     revalidatePath('/');
-    return { success: true, result };
+    return successResponse(result);
   } catch {
-    return { error: 'Failed to add comment. Please try again.' };
+    return errorResponse('Failed to add comment. Please try again.');
   }
 }
