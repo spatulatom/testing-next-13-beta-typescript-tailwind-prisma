@@ -1,8 +1,5 @@
-// 'use client';
-
 import Image from 'next/image';
 import Link from 'next/link';
-import { cookies } from 'next/headers';
 // import { motion } from 'framer-motion';
 import type { Post as PrismaPost, User } from '@prisma/client';
 

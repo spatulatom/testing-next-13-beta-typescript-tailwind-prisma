@@ -1,13 +1,12 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import Toggle from './Toggle';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import axios, { AxiosError } from 'axios';
 import { motion } from 'framer-motion';
-import { useRouter } from 'next/navigation';
 
 type EditProps = {
   id: string;
@@ -38,7 +37,6 @@ export default function DeletePost({
 }: EditProps) {
   const [toggle, setToggle] = useState(false);
   const queryClient = useQueryClient();
-  let deleteToastID: string;
 
   const toastIdRef = useRef<string>('');
 

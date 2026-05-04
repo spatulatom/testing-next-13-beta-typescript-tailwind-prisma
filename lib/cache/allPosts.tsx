@@ -1,7 +1,6 @@
 'use cache';
 
 import prisma from '@/prisma/client';
-import { cacheTag, cacheLife } from 'next/cache';
 
 const allPosts = async () => {
   // cacheLife('max'); // Cache indefinitely

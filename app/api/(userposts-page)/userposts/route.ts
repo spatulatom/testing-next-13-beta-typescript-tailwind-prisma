@@ -1,9 +1,8 @@
 import prisma from '../../../../prisma/client';
-import { NextRequest } from 'next/server';
 import { auth } from '../../../../auth';
 import { NextResponse } from 'next/server';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   console.log('USER POSTS');
 
   const session = await auth();
@@ -33,7 +32,7 @@ export async function GET(request: NextRequest) {
     });
     // no need for curly braces here around data
     return NextResponse.json(data, { status: 200 });
-  } catch (err) {
+  } catch {
     return NextResponse.json(
       { error: 'Sorry, an error has occured while getting user posts.' },
       {

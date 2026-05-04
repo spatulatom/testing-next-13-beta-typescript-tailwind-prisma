@@ -1,7 +1,6 @@
 import prisma from '../../../../prisma/client';
 import { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
-import { revalidateTag } from 'next/cache';
 
 type URL = {
   params: Promise<{
@@ -35,7 +34,7 @@ export async function GET(request: NextRequest, url: URL) {
         status: 200,
       }
     );
-  } catch (err) {
+  } catch {
     return NextResponse.json(
       { error: 'An error has occured while getting your post!' },
       {
