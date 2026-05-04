@@ -62,7 +62,9 @@ export async function deletePost(postId: string): Promise<ResponseType<Post>> {
   });
 
   if (!prismaUser) {
-    return errorResponse('Error has occured while checking your details in a database.');
+    return errorResponse(
+      'Error has occured while checking your details in a database.'
+    );
   }
 
   try {

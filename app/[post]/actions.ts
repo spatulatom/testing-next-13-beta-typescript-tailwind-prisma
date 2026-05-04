@@ -8,7 +8,10 @@ import { validateCommentText, sanitizeText } from '@/lib/validation';
 import { logError } from '@/lib/error-handling';
 import type { Comment } from '@prisma/client';
 
-export async function createComment(postId: string, title: string): Promise<ResponseType<Comment>> {
+export async function createComment(
+  postId: string,
+  title: string
+): Promise<ResponseType<Comment>> {
   // Get session
   const session = await auth();
   if (!session) {

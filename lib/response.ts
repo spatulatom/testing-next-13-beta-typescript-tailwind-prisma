@@ -52,13 +52,17 @@ export function errorResponse(error: string): ErrorResponse {
 /**
  * Type guard to check if response is successful
  */
-export function isSuccess<T>(response: ResponseType<T>): response is SuccessResponse<T> {
+export function isSuccess<T>(
+  response: ResponseType<T>
+): response is SuccessResponse<T> {
   return response.success === true;
 }
 
 /**
  * Type guard to check if response is an error
  */
-export function isError<T>(response: ResponseType<T>): response is ErrorResponse {
+export function isError<T>(
+  response: ResponseType<T>
+): response is ErrorResponse {
   return response.success === false;
 }
