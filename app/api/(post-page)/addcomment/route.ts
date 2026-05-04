@@ -122,7 +122,7 @@ export async function POST(request: NextRequest) {
         status: 200,
       }
     );
-  } catch (err) {
+  } catch {
     return NextResponse.json(
       { error: 'Sorry, an error has occured while adding your comment!' },
       {

@@ -18,7 +18,7 @@ export async function DELETE(request: NextRequest, url: URL) {
   let session;
   try {
     session = await auth()
-  } catch (err) {
+  } catch {
     return NextResponse.json(
       { message: 'Database connection error 1.' },
       {
@@ -41,7 +41,7 @@ export async function DELETE(request: NextRequest, url: URL) {
     prismaUser = await prisma.user.findUnique({
       where: { email: session?.user?.email ?? undefined },
     });
-  } catch (err) {
+  } catch {
     return NextResponse.json(
       { message: 'Database connection error 2.' },
       {
@@ -68,7 +68,7 @@ export async function DELETE(request: NextRequest, url: URL) {
     });
     revalidatePath('/');
     return NextResponse.json({ result }, { status: 201 });
-  } catch (err) {
+  } catch {
     console.log('ERROR', err);
     return NextResponse.json(
       { message: 'Error has occured while deleting your post.' },

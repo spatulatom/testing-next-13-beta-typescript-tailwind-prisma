@@ -1,19 +1,11 @@
 'use client';
-import { delay } from '@/lib/utils';
 
 import { useEffect, useRef } from 'react';
-import { use } from 'react';
 
 export default function HalftoneWaves() {
-  // use(delay(5000)); // 2 second delay
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    async function delayed() {
-      console.log('DEKLAYED');
-      // await delay(5000);
-    }
-    // delayed();
     const canvas = canvasRef.current;
     if (!canvas) return;
     

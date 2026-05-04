@@ -3,12 +3,7 @@
 import { useRef, useState } from 'react';
 
 import toast from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
 
-type Comment = {
-  postId?: string;
-  title: string;
-};
 type PostProps = {
   id: string;
 };
@@ -45,7 +40,7 @@ export default function AddComment({ id }: PostProps) {
       }
       toast.error(data.error, { id: commentToastId.current });
       setIsDisabled(false);
-    } catch (err) {
+    } catch {
       toast.error('Database connection error.', { id: commentToastId.current });
       setIsDisabled(false);
     }

@@ -30,7 +30,7 @@ export default function CreatePost() {
       }
       setIsDisabled(false);
       toast.error(data.error, { id: toastPostID.current });
-    } catch (err) {
+    } catch {
       setIsDisabled(false);
       return toast.error('Database connection error. Try again in minute!', {
         id: toastPostID.current,
