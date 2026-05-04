@@ -1,18 +1,12 @@
-export type AuthPosts = {
-  email: string
-  id: string
-  image: string
-  name: string
-  posts: {
-    createdAt: string
-    id: string
-    title: string
-    comments?: {
-      createdAt: string
-      id: string
-      postId: string
-      title: string
-      userId: string
-    }[]
-  }[]
-}
+import { Prisma } from '@prisma/client';
+
+// User with posts (simpler version, posts without nested user in comments)
+export type AuthPosts = Prisma.UserGetPayload<{
+  include: {
+    posts: {
+      include: {
+        comments: true;
+      };
+    };
+  };
+}>;
