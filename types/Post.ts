@@ -1,27 +1,13 @@
-export type PostType = {
-  id: string
-  title: string
-  createdAt: Date
-  updatedAt?: string
-  published: boolean
-  userId: string
-  user: {
-    email: string
-    id: string
-    image: string
-    name: string
-  }
-  comments: {
-    createdAt?: Date
-    id: string
-    postId: string
-    title: string
-    userId: string
-    user: {
-      email: string
-      id: string
-      image: string
-      name: string
-    }
-  }[]
-}
+import { Prisma } from '@prisma/client';
+
+// Post with user and comments (each comment includes the user who made it)
+export type PostType = Prisma.PostGetPayload<{
+  include: {
+    user: true;
+    comments: {
+      include: {
+        user: true;
+      };
+    };
+  };
+}>;

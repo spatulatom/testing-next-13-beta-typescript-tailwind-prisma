@@ -1,16 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 // import { motion } from 'framer-motion';
-import type { Post as PrismaPost, User } from '@prisma/client';
-
-interface PostProps {
-  id: PrismaPost['id'];
-  date: PrismaPost['createdAt'];
-  name: User['name'];
-  avatar: User['image'];
-  postTitle: PrismaPost['title'];
-  comments: number; // Keep as is - it's a computed value
-}
+import type { PostCardProps } from '@/types/ComponentProps';
 
 export default function Post({
   id,
@@ -19,7 +10,7 @@ export default function Post({
   avatar,
   postTitle,
   comments,
-}: PostProps) {
+}: PostCardProps) {
   let whenNull;
   if (avatar === null) {
     whenNull = '';

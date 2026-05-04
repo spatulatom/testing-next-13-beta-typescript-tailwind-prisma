@@ -5,9 +5,7 @@ import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
 
-type HamburgerMenuProps = {
-  isLoggedIn: boolean;
-};
+import type { HamburgerMenuProps } from '@/types/ComponentProps';
 
 export default function HamburgerMenu({ isLoggedIn }: HamburgerMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -84,7 +82,7 @@ export default function HamburgerMenu({ isLoggedIn }: HamburgerMenuProps) {
       {isOpen && (
         <nav
           aria-label="mobile navigation"
-          className="absolute left-0 right-0 top-full z-50 mt-2 w-screen bg-gray-800 p-6"
+          className="absolute top-full right-0 left-0 z-50 mt-2 w-screen bg-gray-800 p-6"
         >
           <ul className="space-y-6">
             <li className="relative z-50">

@@ -3,16 +3,13 @@
 import Image from 'next/image';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
+import type { LoggedUserProps } from '@/types/ComponentProps';
 
-type User = {
-  image: string;
-};
-
-export default function Logged({ image }: User) {
+export default function Logged({ image }: LoggedUserProps) {
   return (
     <div className="flex items-center gap-2">
       <button
-        className="cursor-pointer whitespace-nowrap rounded-md bg-gray-700 px-2 py-2 text-sm font-bold text-white transition-all hover:bg-slate-600"
+        className="cursor-pointer rounded-md bg-gray-700 px-2 py-2 text-sm font-bold whitespace-nowrap text-white transition-all hover:bg-slate-600"
         onClick={() => signOut()}
       >
         Sign Out

@@ -6,26 +6,7 @@ import Toggle from './Toggle';
 import toast from 'react-hot-toast';
 import { motion } from 'framer-motion';
 import { deletePost } from '@/app/actions';
-
-type EditProps = {
-  id: string;
-  avatar: string | null;
-  name: string | null;
-  title: string;
-  comments: {
-    createdAt?: string | Date;
-    id: string;
-    postId: string;
-    title: string;
-    userId: string;
-    user: {
-      email: string | null;
-      id: string;
-      image: string | null;
-      name: string | null;
-    };
-  }[];
-};
+import type { DeletePostProps } from '@/types/ComponentProps';
 
 export default function DeletePost({
   avatar,
@@ -33,7 +14,7 @@ export default function DeletePost({
   title,
   comments,
   id,
-}: EditProps) {
+}: DeletePostProps) {
   const [toggle, setToggle] = useState(false);
   const toastIdRef = useRef<string>('');
 
@@ -73,18 +54,13 @@ export default function DeletePost({
               e.stopPropagation();
               setToggle(true);
             }}
-            className="text-sm font-bold uppercase text-red-500"
+            className="text-sm font-bold text-red-500 uppercase"
           >
             Delete
           </button>
         </div>
       </motion.div>
-      {toggle && (
-        <Toggle
-          deletePost={handleDelete}
-          setToggle={setToggle}
-        />
-      )}
+      {toggle && <Toggle deletePost={handleDelete} setToggle={setToggle} />}
     </>
   );
 }

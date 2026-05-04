@@ -1,31 +1,16 @@
-type PostType = {
-  id: string
-  title: string
-  createdAt: Date
-  updatedAt?: Date
-  published?: boolean
-  userId: string
-  comments: {
-    createdAt?: Date | string
-    id: string
-    postId: string
-    title: string
-    userId: string
-    user: {
-      email: string | null
-      id: string
-      image: string | null
-      name: string | null
-    }
-  }[]
-}
-  
+import { Prisma } from '@prisma/client';
 
-export type UserPosts={
-    id: string,
-    name: string | null,
-    email: string | null,
-    emailVerified: Date | null,
-    image: string | null,
-    posts: PostType[]
-}
+// User with posts (posts include comments with nested user data)
+export type UserPosts = Prisma.UserGetPayload<{
+  include: {
+    posts: {
+      include: {
+        comments: {
+          include: {
+            user: true;
+          };
+        };
+      };
+    };
+  };
+}>;
