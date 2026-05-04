@@ -5,6 +5,7 @@ import { auth } from '@/auth';
 import { revalidatePath } from 'next/cache';
 import { ResponseType, successResponse, errorResponse } from '@/lib/response';
 import { validatePostTitle, sanitizeText } from '@/lib/validation';
+import { logError } from '@/lib/error-handling';
 import type { Post } from '@prisma/client';
 
 export async function createPost(title: string): Promise<ResponseType<Post>> {
@@ -39,7 +40,13 @@ export async function createPost(title: string): Promise<ResponseType<Post>> {
 
     revalidatePath('/');
     return successResponse(result);
-  } catch {
+  } catch (error) {
+    logError({
+      action: 'createPost',
+      userId: prismaUser?.id,
+      error,
+      context: { titleLength: title.length },
+    });
     return errorResponse('Failed to create post. Please try again.');
   }
 }
@@ -66,7 +73,13 @@ export async function deletePost(postId: string): Promise<ResponseType<Post>> {
     revalidatePath('/');
     revalidatePath('/userposts');
     return successResponse(result);
-  } catch {
+  } catch (error) {
+    logError({
+      action: 'deletePost',
+      userId: prismaUser?.id,
+      postId,
+      error,
+    });
     return errorResponse('Error has occured while deleting your post.');
   }
 }

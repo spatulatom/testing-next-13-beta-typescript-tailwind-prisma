@@ -3,6 +3,7 @@
 import prisma from '@/prisma/client';
 import { auth } from '@/auth';
 import { ResponseType, successResponse, errorResponse } from '@/lib/response';
+import { logError } from '@/lib/error-handling';
 import { UserPosts } from '@/types/UserPosts';
 
 export async function getUserPosts(): Promise<ResponseType<UserPosts>> {
@@ -38,7 +39,12 @@ export async function getUserPosts(): Promise<ResponseType<UserPosts>> {
     }
 
     return successResponse(user);
-  } catch {
+  } catch (error) {
+    logError({
+      action: 'getUserPosts',
+      error,
+      context: { email: session?.user?.email },
+    });
     return errorResponse('Failed to fetch user posts');
   }
 }

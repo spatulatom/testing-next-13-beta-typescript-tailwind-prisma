@@ -5,6 +5,7 @@ import { auth } from '@/auth';
 import { revalidatePath } from 'next/cache';
 import { ResponseType, successResponse, errorResponse } from '@/lib/response';
 import { validateCommentText, sanitizeText } from '@/lib/validation';
+import { logError } from '@/lib/error-handling';
 import type { Comment } from '@prisma/client';
 
 export async function createComment(postId: string, title: string): Promise<ResponseType<Comment>> {
@@ -52,7 +53,14 @@ export async function createComment(postId: string, title: string): Promise<Resp
 
     revalidatePath('/');
     return successResponse(result);
-  } catch {
+  } catch (error) {
+    logError({
+      action: 'createComment',
+      userId: prismaUser?.id,
+      postId,
+      error,
+      context: { commentLength: title.length },
+    });
     return errorResponse('Failed to add comment. Please try again.');
   }
 }
