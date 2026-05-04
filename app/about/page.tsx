@@ -80,7 +80,7 @@ export default function AboutPage() {
           {milestones.map(({ version, highlight }, i) => (
             <li key={version} className="flex gap-4">
               <div className="flex flex-col items-center">
-                <span className="mt-[5px] h-3 w-3 shrink-0 rounded-full bg-teal-500" />
+                <span className="mt-1.25 h-3 w-3 shrink-0 rounded-full bg-teal-500" />
                 {i < milestones.length - 1 && (
                   <span className="my-1 w-px flex-1 bg-gray-700" />
                 )}
