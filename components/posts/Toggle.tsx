@@ -1,11 +1,6 @@
 'use client';
 
-import type { Dispatch, SetStateAction } from 'react';
-
-type ToggleProps = {
-  deletePost: () => void;
-  setToggle: Dispatch<SetStateAction<boolean>>;
-};
+import type { ToggleProps } from '@/types/ComponentProps';
 
 export default function Toggle({ deletePost, setToggle }: ToggleProps) {
   return (

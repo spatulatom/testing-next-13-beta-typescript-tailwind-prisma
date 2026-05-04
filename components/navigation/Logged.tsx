@@ -3,12 +3,9 @@
 import Image from 'next/image';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
+import type { LoggedUserProps } from '@/types/ComponentProps';
 
-type User = {
-  image: string;
-};
-
-export default function Logged({ image }: User) {
+export default function Logged({ image }: LoggedUserProps) {
   return (
     <div className="flex items-center gap-2">
       <button

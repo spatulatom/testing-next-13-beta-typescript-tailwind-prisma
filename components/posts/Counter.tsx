@@ -1,8 +1,6 @@
-type count = {
-  count: number;
-};
+import type { CounterProps } from '@/types/ComponentProps';
 
-const Counter = ({ count }: count) => {
+const Counter = ({ count }: CounterProps) => {
   return <h2 className="m-2">All posts: {count}</h2>;
 };
 

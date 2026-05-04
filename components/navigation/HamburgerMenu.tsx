@@ -5,9 +5,7 @@ import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
 
-type HamburgerMenuProps = {
-  isLoggedIn: boolean;
-};
+import type { HamburgerMenuProps } from '@/types/ComponentProps';
 
 export default function HamburgerMenu({ isLoggedIn }: HamburgerMenuProps) {
   const [isOpen, setIsOpen] = useState(false);

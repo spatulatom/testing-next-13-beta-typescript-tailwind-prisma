@@ -3,12 +3,9 @@
 import { useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { createComment } from '@/app/[post]/actions';
+import type { AddCommentProps } from '@/types/ComponentProps';
 
-type PostProps = {
-  id: string;
-};
-
-export default function AddComment({ id }: PostProps) {
+export default function AddComment({ id }: AddCommentProps) {
   const commentToastId = useRef<string | undefined>(undefined);
   const [title, setTitle] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
