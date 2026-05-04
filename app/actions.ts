@@ -5,13 +5,11 @@ import { auth } from '@/auth';
 import { revalidatePath } from 'next/cache';
 
 export async function createPost(title: string) {
-  // Get session
   const session = await auth();
   if (!session) {
     return { error: 'Please sign in to create a post.' };
   }
 
-  // Get user
   const prismaUser = await prisma.user.findUnique({
     where: { email: session?.user?.email ?? undefined },
   });
@@ -20,7 +18,6 @@ export async function createPost(title: string) {
     return { error: 'User not found. Please sign in again.' };
   }
 
-  // Sanitize and validate
   if (!title?.trim().length) {
     return { error: 'Please write something before posting.' };
   }
@@ -58,79 +55,12 @@ export async function createPost(title: string) {
   }
 }
 
-export async function createComment(postId: string, title: string) {
-  // Get session
-  const session = await auth();
-  if (!session) {
-    return { error: 'Please sign in to post a comment.' };
-  }
-
-  // Get user
-  const prismaUser = await prisma.user.findUnique({
-    where: { email: session?.user?.email ?? undefined },
-  });
-
-  if (!prismaUser) {
-    return { error: 'Please sign in to comment.' };
-  }
-
-  // Sanitize and validate
-  if (!title?.trim().length) {
-    return { error: 'Please write something before posting.' };
-  }
-
-  if (title.length > 30) {
-    return { error: 'Please write shorter comment.' };
-  }
-
-  if (/<[^>]*>/.test(title)) {
-    return { error: 'HTML tags are not allowed in comments.' };
-  }
-
-  try {
-    // Validate post exists
-    const post = await prisma.post.findUnique({
-      where: { id: postId },
-    });
-
-    if (!post) {
-      return { error: 'Post not found.' };
-    }
-
-    // Sanitize comment text
-    const sanitizedTitle = title
-      .replace(/<[^>]*>?/gm, '')
-      .replace(/&lt;/g, '<')
-      .replace(/&gt;/g, '>')
-      .replace(/&quot;/g, '"')
-      .replace(/&#x27;/g, "'")
-      .replace(/&#x2F;/g, '/')
-      .replace(/[<>]/g, '')
-      .trim();
-
-    const result = await prisma.comment.create({
-      data: {
-        title: sanitizedTitle,
-        userId: prismaUser.id,
-        postId: postId,
-      },
-    });
-
-    revalidatePath('/');
-    return { success: true, result };
-  } catch {
-    return { error: 'Failed to add comment. Please try again.' };
-  }
-}
-
 export async function deletePost(postId: string) {
-  // Get session
   const session = await auth();
   if (!session) {
     return { error: 'Please signin to delete a post.' };
   }
 
-  // Get user
   const prismaUser = await prisma.user.findUnique({
     where: { email: session?.user?.email ?? undefined },
   });
@@ -141,52 +71,13 @@ export async function deletePost(postId: string) {
 
   try {
     const result = await prisma.post.delete({
-      where: {
-        id: postId,
-      },
+      where: { id: postId },
     });
 
     revalidatePath('/');
+    revalidatePath('/userposts');
     return { success: true, result };
   } catch {
     return { error: 'Error has occured while deleting your post.' };
-  }
-}
-
-export async function getUserPosts() {
-  const session = await auth();
-  if (!session) {
-    return { error: 'Not authenticated' };
-  }
-
-  try {
-    const user = await prisma.user.findUnique({
-      where: { email: session?.user?.email ?? undefined },
-      include: {
-        posts: {
-          orderBy: {
-            createdAt: 'desc',
-          },
-          include: {
-            comments: {
-              orderBy: {
-                createdAt: 'desc',
-              },
-              include: {
-                user: true,
-              },
-            },
-          },
-        },
-      },
-    });
-
-    if (!user) {
-      return { error: 'User not found' };
-    }
-
-    return { success: true, data: user };
-  } catch {
-    return { error: 'Failed to fetch user posts' };
   }
 }

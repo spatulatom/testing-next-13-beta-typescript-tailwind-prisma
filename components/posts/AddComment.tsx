@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react';
 import toast from 'react-hot-toast';
-import { createComment } from '@/app/actions';
+import { createComment } from '@/app/[post]/actions';
 
 type PostProps = {
   id: string;

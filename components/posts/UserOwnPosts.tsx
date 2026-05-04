@@ -1,5 +1,5 @@
 import DeletePost from './DeletePost';
-import { getUserPosts } from '@/app/actions';
+import { getUserPosts } from '@/app/userposts/actions';
 import { UserPosts } from '@/types/UserPosts';
 import Image from 'next/image';
 
