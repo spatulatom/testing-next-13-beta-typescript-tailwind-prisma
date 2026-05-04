@@ -34,7 +34,27 @@ This follows **Strategy 1** from the [Next.js Project Structure docs](https://ne
 | `default.tsx`   | Parallel route fallback     |
 | `globals.css`   | Global styles (root only)   |
 
-If a file is not in this list, it does not belong directly in `app/`.
+#### Colocating Route-Specific Code (Practical Pattern)
+
+If application code (server actions, helpers, queries) is **used only by one route**, colocate it with that route for clarity and maintainability:
+
+```
+app/
+  ├── page.tsx                 ← / home
+  ├── actions.ts              ← shared by home (createPost) and multiple routes (deletePost)
+  ├── [post]/
+  │   ├── page.tsx            ← /[post]
+  │   └── actions.ts          ← createComment() — used ONLY in /[post]
+  └── userposts/
+      ├── page.tsx            ← /userposts
+      └── actions.ts          ← getUserPosts() — used ONLY in /userposts
+```
+
+**Decision rule**: 
+- **Route-specific code** (1 route only) → colocate in `app/[route]/actions.ts` or similar
+- **Shared code** (2+ routes or external access) → move to `lib/` outside `app/`
+
+This makes dependencies explicit: code lives where it's used.
 
 ### Rule 2: All UI → `components/`
 
@@ -132,17 +152,20 @@ Generic skeleton — adapt folder names to your project's domain:
 
 ```
 project-root/
-├── app/                      ← ROUTING ONLY
+├── app/                      ← ROUTING + ROUTE-SPECIFIC CODE
 │   ├── page.tsx              ← /
 │   ├── layout.tsx
 │   ├── error.tsx
 │   ├── not-found.tsx
 │   ├── globals.css
+│   ├── actions.ts            ← shared by multiple routes (createPost, deletePost)
 │   ├── [slug]/               ← dynamic route example
 │   │   ├── page.tsx
+│   │   ├── actions.ts        ← route-specific: createComment (used only here)
 │   │   └── loading.tsx
 │   ├── dashboard/            ← static route example
 │   │   ├── page.tsx
+│   │   ├── actions.ts        ← route-specific: getDashboardData (used only here)
 │   │   └── layout.tsx
 │   └── api/                  ← API routes
 │       └── ...
@@ -152,9 +175,10 @@ project-root/
 │   ├── providers/
 │   ├── ui/
 │   └── StandaloneWidget.tsx  ← flat file for standalone components
-├── lib/                      ← UTILITIES & HELPERS
+├── lib/                      ← SHARED UTILITIES & HELPERS
 │   ├── utils.ts
-│   └── ...
+│   ├── cache/                ← grouped: server-side cache helpers
+│   └── db/                   ← grouped: database queries
 ├── types/                    ← TYPE DEFINITIONS
 ├── public/                   ← STATIC ASSETS
 ├── next.config.js            ← TOOLING CONFIG
@@ -183,16 +207,23 @@ project-root/
 1. **Is it a Next.js file convention** (`page.tsx`, `layout.tsx`, `route.ts`, `loading.tsx`, `error.tsx`, etc.)?
    → `app/[route]/`
 
-2. **Is it a React component?**
+2. **Is it application code (server actions, helpers, queries) used by ONLY one route?**
+   → Colocate in `app/[route]/actions.ts` (or similar) — makes dependencies explicit
+   
+   Example: `app/[post]/actions.ts` if `createComment()` is only used in `/[post]`
+
+3. **Is it application code (server actions, helpers) used by 2+ routes or external clients?**
+   → `lib/` — subfolder by domain if 2+ related files, flat otherwise
+   
+   Example: `lib/actions/posts.ts` if `createPost()` is used by both `/` and exposed to clients
+
+4. **Is it a React component?**
    → `components/` — subfolder by feature if 2-3+ related files, flat otherwise
 
-3. **Is it a utility, helper, server action, or data function?**
-   → `lib/` — subfolder by domain if 2+ related files, flat otherwise
-
-4. **Is it a TypeScript type or interface?**
+5. **Is it a TypeScript type or interface?**
    → `types/`
 
-5. **Is it framework or tooling config?**
+6. **Is it framework or tooling config?**
    → project root
 
 ## References
