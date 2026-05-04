@@ -54,18 +54,13 @@ export default function DeletePost({
               e.stopPropagation();
               setToggle(true);
             }}
-            className="text-sm font-bold uppercase text-red-500"
+            className="text-sm font-bold text-red-500 uppercase"
           >
             Delete
           </button>
         </div>
       </motion.div>
-      {toggle && (
-        <Toggle
-          deletePost={handleDelete}
-          setToggle={setToggle}
-        />
-      )}
+      {toggle && <Toggle deletePost={handleDelete} setToggle={setToggle} />}
     </>
   );
 }
