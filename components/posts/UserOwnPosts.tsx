@@ -6,12 +6,8 @@ import Image from 'next/image';
 export default async function UserOwnPosts() {
   const result = await getUserPosts();
 
-  if (result.error) {
+  if (!result.success) {
     throw new Error(result.error);
-  }
-
-  if (!result.success || !result.data) {
-    throw new Error('Failed to fetch posts');
   }
 
   const response: UserPosts = result.data;
@@ -48,8 +44,14 @@ export default async function UserOwnPosts() {
                     className="rounded-full"
                   />
                 )}
-                <h3 className="font-bold">{comment.user.name || 'Anonymous'}</h3>
-                <h2 className="text-sm">{typeof comment.createdAt === 'string' ? comment.createdAt : comment.createdAt?.toLocaleDateString()}</h2>
+                <h3 className="font-bold">
+                  {comment.user.name || 'Anonymous'}
+                </h3>
+                <h2 className="text-sm">
+                  {typeof comment.createdAt === 'string'
+                    ? comment.createdAt
+                    : comment.createdAt?.toLocaleDateString()}
+                </h2>
               </div>
               <div className="italic"> - {comment.title}</div>
             </div>

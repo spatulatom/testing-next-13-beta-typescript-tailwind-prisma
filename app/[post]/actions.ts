@@ -3,12 +3,19 @@
 import prisma from '@/prisma/client';
 import { auth } from '@/auth';
 import { revalidatePath } from 'next/cache';
+import { ResponseType, successResponse, errorResponse } from '@/lib/response';
+import { validateCommentText, sanitizeText } from '@/lib/validation';
+import { logError } from '@/lib/error-handling';
+import type { Comment } from '@prisma/client';
 
-export async function createComment(postId: string, title: string) {
+export async function createComment(
+  postId: string,
+  title: string
+): Promise<ResponseType<Comment>> {
   // Get session
   const session = await auth();
   if (!session) {
-    return { error: 'Please sign in to post a comment.' };
+    return errorResponse('Please sign in to post a comment.');
   }
 
   // Get user
@@ -17,20 +24,13 @@ export async function createComment(postId: string, title: string) {
   });
 
   if (!prismaUser) {
-    return { error: 'Please sign in to comment.' };
+    return errorResponse('Please sign in to comment.');
   }
 
-  // Sanitize and validate
-  if (!title?.trim().length) {
-    return { error: 'Please write something before posting.' };
-  }
-
-  if (title.length > 30) {
-    return { error: 'Please write shorter comment.' };
-  }
-
-  if (/<[^>]*>/.test(title)) {
-    return { error: 'HTML tags are not allowed in comments.' };
+  // Validate comment text
+  const commentError = validateCommentText(title);
+  if (commentError) {
+    return errorResponse(commentError);
   }
 
   try {
@@ -40,19 +40,11 @@ export async function createComment(postId: string, title: string) {
     });
 
     if (!post) {
-      return { error: 'Post not found.' };
+      return errorResponse('Post not found.');
     }
 
     // Sanitize comment text
-    const sanitizedTitle = title
-      .replace(/<[^>]*>?/gm, '')
-      .replace(/&lt;/g, '<')
-      .replace(/&gt;/g, '>')
-      .replace(/&quot;/g, '"')
-      .replace(/&#x27;/g, "'")
-      .replace(/&#x2F;/g, '/')
-      .replace(/[<>]/g, '')
-      .trim();
+    const sanitizedTitle = sanitizeText(title);
 
     const result = await prisma.comment.create({
       data: {
@@ -63,8 +55,15 @@ export async function createComment(postId: string, title: string) {
     });
 
     revalidatePath('/');
-    return { success: true, result };
-  } catch {
-    return { error: 'Failed to add comment. Please try again.' };
+    return successResponse(result);
+  } catch (error) {
+    logError({
+      action: 'createComment',
+      userId: prismaUser?.id,
+      postId,
+      error,
+      context: { commentLength: title.length },
+    });
+    return errorResponse('Failed to add comment. Please try again.');
   }
 }

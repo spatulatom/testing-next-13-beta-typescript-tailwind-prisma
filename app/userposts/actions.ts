@@ -2,11 +2,14 @@
 
 import prisma from '@/prisma/client';
 import { auth } from '@/auth';
+import { ResponseType, successResponse, errorResponse } from '@/lib/response';
+import { logError } from '@/lib/error-handling';
+import { UserPosts } from '@/types/UserPosts';
 
-export async function getUserPosts() {
+export async function getUserPosts(): Promise<ResponseType<UserPosts>> {
   const session = await auth();
   if (!session) {
-    return { error: 'Not authenticated' };
+    return errorResponse('Not authenticated');
   }
 
   try {
@@ -32,11 +35,16 @@ export async function getUserPosts() {
     });
 
     if (!user) {
-      return { error: 'User not found' };
+      return errorResponse('User not found');
     }
 
-    return { success: true, data: user };
-  } catch {
-    return { error: 'Failed to fetch user posts' };
+    return successResponse(user);
+  } catch (error) {
+    logError({
+      action: 'getUserPosts',
+      error,
+      context: { email: session?.user?.email },
+    });
+    return errorResponse('Failed to fetch user posts');
   }
 }

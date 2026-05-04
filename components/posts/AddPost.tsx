@@ -36,7 +36,7 @@ export default function CreatePost() {
 
     const result = await createPost(title);
 
-    if (result.error) {
+    if (!result.success) {
       toast.error(result.error, { id: toastPostID.current });
       setIsDisabled(false);
       return;
