@@ -59,6 +59,6 @@ export function isSuccess<T>(response: ResponseType<T>): response is SuccessResp
 /**
  * Type guard to check if response is an error
  */
-export function isError(response: ResponseType<any>): response is ErrorResponse {
+export function isError<T>(response: ResponseType<T>): response is ErrorResponse {
   return response.success === false;
 }

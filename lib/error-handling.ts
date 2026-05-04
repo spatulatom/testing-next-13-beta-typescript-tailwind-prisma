@@ -8,7 +8,7 @@ export type ErrorContext = {
   userId?: string;
   postId?: string;
   error: unknown;
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
 };
 
 /**
