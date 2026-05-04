@@ -69,7 +69,6 @@ export async function DELETE(request: NextRequest, url: URL) {
     revalidatePath('/');
     return NextResponse.json({ result }, { status: 201 });
   } catch {
-    console.log('ERROR', err);
     return NextResponse.json(
       { message: 'Error has occured while deleting your post.' },
       {
