@@ -9,20 +9,20 @@ import { deletePost } from '@/app/actions';
 
 type EditProps = {
   id: string;
-  avatar: string;
-  name: string;
+  avatar: string | null;
+  name: string | null;
   title: string;
   comments: {
-    createdAt?: string;
+    createdAt?: string | Date;
     id: string;
     postId: string;
     title: string;
     userId: string;
     user: {
-      email: string;
+      email: string | null;
       id: string;
-      image: string;
-      name: string;
+      image: string | null;
+      name: string | null;
     };
   }[];
 };
@@ -58,8 +58,8 @@ export default function DeletePost({
         className="my-8 mb-1 rounded-lg bg-white p-8"
       >
         <div className="flex items-center gap-2">
-          <Image width={32} height={32} src={avatar} alt="avatar" />
-          <h3 className="font-bold text-gray-700">{name}</h3>
+          {avatar && <Image width={32} height={32} src={avatar} alt="avatar" />}
+          <h3 className="font-bold text-gray-700">{name || 'Anonymous'}</h3>
         </div>
         <div className="my-8">
           <p className="break-all text-black">{title}</p>
