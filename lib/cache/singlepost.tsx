@@ -1,4 +1,4 @@
-import { unstable_noStore as noStore } from 'next/cache';
+import { cacheLife, cacheTag } from 'next/cache';
 import type { Prisma } from '@prisma/client';
 import prisma from '@/prisma/client';
 
@@ -15,9 +15,11 @@ export type SinglePost = Prisma.PostGetPayload<{
 }>;
 
 export default async function singlePost(id: string): Promise<SinglePost | null> {
-  noStore();
+  'use cache';
+  cacheLife('hours');
+  cacheTag('posts', `post-${id}`);
 
-  console.log('DATA FETCH UNSATBLE STORE- SINGLE POST');
+  console.log('DATA FETCH - SINGLE POST');
 
   const data = await prisma.post.findUnique({
     where: {
