@@ -2,7 +2,7 @@
 
 import prisma from '@/prisma/client';
 import { auth } from '@/auth';
-import { revalidatePath } from 'next/cache';
+import { updateTag } from 'next/cache';
 
 export async function createPost(title: string) {
   const session = await auth();
@@ -48,7 +48,7 @@ export async function createPost(title: string) {
       },
     });
 
-    revalidatePath('/');
+    updateTag('posts');
     return { success: true, result };
   } catch {
     return { error: 'Failed to create post. Please try again.' };
@@ -74,8 +74,7 @@ export async function deletePost(postId: string) {
       where: { id: postId },
     });
 
-    revalidatePath('/');
-    revalidatePath('/userposts');
+    updateTag('posts');
     return { success: true, result };
   } catch {
     return { error: 'Error has occured while deleting your post.' };

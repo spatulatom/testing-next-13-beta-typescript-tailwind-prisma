@@ -2,7 +2,7 @@
 
 import prisma from '@/prisma/client';
 import { auth } from '@/auth';
-import { revalidatePath } from 'next/cache';
+import { updateTag } from 'next/cache';
 
 export async function createComment(postId: string, title: string) {
   // Get session
@@ -62,7 +62,8 @@ export async function createComment(postId: string, title: string) {
       },
     });
 
-    revalidatePath('/');
+    updateTag('posts');
+    updateTag(`post-${postId}`);
     return { success: true, result };
   } catch {
     return { error: 'Failed to add comment. Please try again.' };
