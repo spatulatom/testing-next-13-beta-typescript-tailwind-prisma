@@ -2,49 +2,42 @@
 
 import prisma from '@/prisma/client';
 import { auth } from '@/auth';
+import { updateTag } from 'next/cache';
 import { ResponseType, successResponse, errorResponse } from '@/lib/response';
 import { logError } from '@/lib/error-handling';
-import { UserPosts } from '@/types/UserPosts';
+import type { Post } from '@prisma/client';
 
-export async function getUserPosts(): Promise<ResponseType<UserPosts>> {
+export async function deletePostFromUserPosts(postId: string): Promise<ResponseType<Post>> {
   const session = await auth();
   if (!session) {
-    return errorResponse('Not authenticated');
+    return errorResponse('Please signin to delete a post.');
+  }
+
+  const prismaUser = await prisma.user.findUnique({
+    where: { email: session?.user?.email ?? undefined },
+  });
+
+  if (!prismaUser) {
+    return errorResponse(
+      'Error has occured while checking your details in a database.'
+    );
   }
 
   try {
-    const user = await prisma.user.findUnique({
-      where: { email: session?.user?.email ?? undefined },
-      include: {
-        posts: {
-          orderBy: {
-            createdAt: 'desc',
-          },
-          include: {
-            comments: {
-              orderBy: {
-                createdAt: 'desc',
-              },
-              include: {
-                user: true,
-              },
-            },
-          },
-        },
-      },
+    const result = await prisma.post.delete({
+      where: { id: postId },
     });
 
-    if (!user) {
-      return errorResponse('User not found');
-    }
-
-    return successResponse(user);
+    // Invalidate this user's cached posts
+    updateTag(`user-${prismaUser.id}-posts`);
+    return successResponse(result);
   } catch (error) {
     logError({
-      action: 'getUserPosts',
+      action: 'deletePostFromUserPosts',
+      userId: prismaUser?.id,
+      postId,
       error,
-      context: { email: session?.user?.email },
     });
-    return errorResponse('Failed to fetch user posts');
+    return errorResponse('Error has occured while deleting your post.');
   }
 }

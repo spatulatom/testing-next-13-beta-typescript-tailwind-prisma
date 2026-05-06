@@ -1,16 +1,16 @@
 import DeletePost from './DeletePost';
-import { getUserPosts } from '@/app/userposts/actions';
+import { auth } from '@/auth';
+import { getCachedUserPosts } from '@/lib/getUserPosts';
 import { UserPosts } from '@/types/UserPosts';
 import Image from 'next/image';
 
 export default async function UserOwnPosts() {
-  const result = await getUserPosts();
-
-  if (!result.success) {
-    throw new Error(result.error);
+  const session = await auth();
+  if (!session) {
+    throw new Error('Not authenticated');
   }
 
-  const response: UserPosts = result.data;
+  const response: UserPosts = await getCachedUserPosts(session.user?.id ?? '');
 
   return (
     <div>
