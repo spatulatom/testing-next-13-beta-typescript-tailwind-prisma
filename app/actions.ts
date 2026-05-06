@@ -2,7 +2,7 @@
 
 import prisma from '@/prisma/client';
 import { auth } from '@/auth';
-import { revalidatePath } from 'next/cache';
+import { updateTag } from 'next/cache';
 import { ResponseType, successResponse, errorResponse } from '@/lib/response';
 import { validatePostTitle, sanitizeText } from '@/lib/validation';
 import { logError } from '@/lib/error-handling';
@@ -38,7 +38,7 @@ export async function createPost(title: string): Promise<ResponseType<Post>> {
       },
     });
 
-    revalidatePath('/');
+    updateTag('posts');
     return successResponse(result);
   } catch (error) {
     logError({
@@ -72,8 +72,7 @@ export async function deletePost(postId: string): Promise<ResponseType<Post>> {
       where: { id: postId },
     });
 
-    revalidatePath('/');
-    revalidatePath('/userposts');
+    updateTag('posts');
     return successResponse(result);
   } catch (error) {
     logError({
