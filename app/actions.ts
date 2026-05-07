@@ -39,6 +39,7 @@ export async function createPost(title: string): Promise<ResponseType<Post>> {
     });
 
     updateTag('posts');
+    updateTag(`user-${prismaUser.id}-posts`);
     return successResponse(result);
   } catch (error) {
     logError({

@@ -4,8 +4,8 @@ import { UserPosts } from '@/types/UserPosts';
 
 export async function getCachedUserPosts(userId: string): Promise<UserPosts> {
   'use cache';
-  cacheLife('hours');
-  cacheTag(``);
+  cacheLife('max');
+  cacheTag(`user-${userId}-posts`);
 
   const user = await prisma.user.findUnique({
     where: { id: userId },

@@ -3,11 +3,14 @@
 import prisma from '@/prisma/client';
 import { auth } from '@/auth';
 import { updateTag } from 'next/cache';
+import { revalidatePath } from 'next/cache';
 import { ResponseType, successResponse, errorResponse } from '@/lib/response';
 import { logError } from '@/lib/error-handling';
 import type { Post } from '@prisma/client';
 
-export async function deletePostFromUserPosts(postId: string): Promise<ResponseType<Post>> {
+export async function deletePostFromUserPosts(
+  postId: string
+): Promise<ResponseType<Post>> {
   const session = await auth();
   if (!session) {
     return errorResponse('Please signin to delete a post.');
@@ -28,8 +31,10 @@ export async function deletePostFromUserPosts(postId: string): Promise<ResponseT
       where: { id: postId },
     });
 
-    // Invalidate this user's cached posts
+    // Invalidate this user's cached posts and refresh the page
     updateTag(`user-${prismaUser.id}-posts`);
+    updateTag('posts'); // Also invalidate the home page post list
+    revalidatePath('/userposts'); // Force immediate re-render for the current user
     return successResponse(result);
   } catch (error) {
     logError({
