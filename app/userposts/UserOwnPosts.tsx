@@ -1,6 +1,6 @@
 import DeletePost from './DeletePost';
 import { auth } from '@/auth';
-import { getCachedUserPosts } from '@/lib/getUserPosts';
+import { getCachedUserPosts } from '@/app/userposts/getUserPosts';
 import { UserPosts } from '@/types/UserPosts';
 import Image from 'next/image';
 

@@ -1,9 +1,9 @@
 import Post from '@/components/posts/Post';
-import AddComment from '@/components/posts/AddComment';
+import AddComment from '@/app/[post]/AddComment';
 import Image from 'next/image';
 
 import { notFound } from 'next/navigation';
-import singlePost from '@/lib/cache/singlepost';
+import singlePost from '@/app/[post]/singlepost';
 import type { Metadata } from 'next';
 
 type PostParams = { params: Promise<{ post: string }> };

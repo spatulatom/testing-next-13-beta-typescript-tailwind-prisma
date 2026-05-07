@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
-import UserOwnPosts from '@/components/posts/UserOwnPosts';
+import UserOwnPosts from './UserOwnPosts';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {

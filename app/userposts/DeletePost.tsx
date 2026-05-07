@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useState, useRef } from 'react';
-import Toggle from './Toggle';
+import Toggle from '@/app/userposts/Toggle';
 import toast from 'react-hot-toast';
 import { motion } from 'framer-motion';
 import { deletePost } from '@/app/actions';
