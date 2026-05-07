@@ -5,7 +5,7 @@ import { useState, useRef } from 'react';
 import Toggle from '@/app/userposts/Toggle';
 import toast from 'react-hot-toast';
 import { motion } from 'framer-motion';
-import { deletePost } from '@/app/actions';
+import { deletePostFromUserPosts } from '@/app/userposts/actions';
 import type { DeletePostProps } from '@/types/ComponentProps';
 
 export default function DeletePost({
@@ -20,7 +20,7 @@ export default function DeletePost({
 
   const handleDelete = async () => {
     toastIdRef.current = toast.loading('Deleting your post.');
-    const result = await deletePost(id);
+    const result = await deletePostFromUserPosts(id);
 
     if (!result.success) {
       toast.error(result.error, { id: toastIdRef.current });
