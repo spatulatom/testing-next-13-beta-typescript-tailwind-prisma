@@ -52,36 +52,3 @@ export async function createPost(title: string): Promise<ResponseType<Post>> {
   }
 }
 
-export async function deletePost(postId: string): Promise<ResponseType<Post>> {
-  const session = await auth();
-  if (!session) {
-    return errorResponse('Please signin to delete a post.');
-  }
-
-  const prismaUser = await prisma.user.findUnique({
-    where: { email: session?.user?.email ?? undefined },
-  });
-
-  if (!prismaUser) {
-    return errorResponse(
-      'Error has occured while checking your details in a database.'
-    );
-  }
-
-  try {
-    const result = await prisma.post.delete({
-      where: { id: postId },
-    });
-
-    updateTag('posts');
-    return successResponse(result);
-  } catch (error) {
-    logError({
-      action: 'deletePost',
-      userId: prismaUser?.id,
-      postId,
-      error,
-    });
-    return errorResponse('Error has occured while deleting your post.');
-  }
-}
