@@ -11,7 +11,7 @@ Your training data is outdated — the docs are the source of truth.
 
 <!-- END:nextjs-agent-rules -->
 
-## ⚠️ ENFORCEMENT RULE (Survives Next.js updates)
+## ⚠️ ENFORCEMENT RULE
 
 **For ANY Next.js work (new features, migrations, debugging, API questions):**
 
