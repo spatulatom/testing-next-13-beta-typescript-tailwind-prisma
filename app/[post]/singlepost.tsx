@@ -14,10 +14,13 @@ export type SinglePost = Prisma.PostGetPayload<{
   };
 }>;
 
-export default async function singlePost(id: string): Promise<SinglePost | null> {
+export default async function singlePost(
+  id: string
+): Promise<SinglePost | null> {
   'use cache';
-  cacheLife('hours');
-  cacheTag('posts', `post-${id}`);
+  cacheLife('max');
+  cacheTag('posts');
+  cacheTag(`post-${id}`);
 
   console.log('DATA FETCH - SINGLE POST');
 
