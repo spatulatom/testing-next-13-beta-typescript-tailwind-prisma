@@ -1,10 +1,10 @@
-import { cacheLife, cacheTag } from 'next/cache';
+import { cacheTag } from 'next/cache';
 import prisma from '@/prisma/client';
 import { UserPosts } from '@/types/UserPosts';
 
 export async function getCachedUserPosts(userId: string): Promise<UserPosts> {
   'use cache';
-  cacheLife('seconds');
+  
   cacheTag(`user-${userId}-posts`);
 
   const user = await prisma.user.findUnique({

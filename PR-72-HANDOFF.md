@@ -1,8 +1,6 @@
 # Handoff Notes for PR #72 / Issue #71
 
-**Last updated: May 8, 2026 — Session 2**
-
-This document is a live handoff. It has been rewritten to reflect the full state of investigation across two sessions. Do not attempt any strategy already listed as "tried and failed" below.
+**Last updated: May 8, 2026 — Session 4**
 
 ## References
 
@@ -14,207 +12,148 @@ This document is a live handoff. It has been rewritten to reflect the full state
 
 ## Goal
 
-- Dynamic post pages prerendered at build time via `generateStaticParams`.
-- Newly created posts work at runtime after `npm run build` + `npm start`.
-- After any mutation (create post, add comment, delete post), all affected views update correctly with no duplicate content and no stale data.
+- Dynamic post pages prerender at build time via `generateStaticParams`.
+- Runtime post creation still works after `npm run build` + `npm start`.
+- Mutation flows (create post, add comment, delete post) invalidate caches without stale UI or duplicate cards.
 
 ---
 
-## Current Code State (as of end of Session 2)
+## Current Code State (end of Session 4)
 
-### `app/page.tsx`
+### Route/data caching - UPDATED
 
-Refactored to a **synchronous shell** with an async `PostList` component inside `<Suspense>`:
+- `next.config.ts` has `cacheComponents: true`.
+- `app/allPosts.tsx` uses `'use cache'`, `cacheTag('posts')`, `cacheLife('max')` (reverted from 'seconds').
+- `app/[post]/singlepost.tsx` uses `'use cache'`, `cacheTag('posts')`, `cacheTag(\`post-${id}\`)`, `cacheLife('max')` (reverted from 'seconds').
+- `app/userposts/getUserPosts.ts` uses `'use cache'`, `cacheTag(\`user-${userId}-posts\`)`, `cacheLife('max')` (reverted from 'seconds').
+- **`app/page.tsx` NOW wraps `Home()` with `'use cache'` + `cacheTag('posts')` for route-layer invalidation.**
+- **`app/[post]/page.tsx` NOW wraps `PostDetail()` with `'use cache'` + `cacheTag('posts')` + `cacheTag(\`post-${post}\`)` for route-layer invalidation.**
+- **`app/userposts/page.tsx` NOW wraps `CachedDashboard()` with `'use cache'` + `cacheTag(\`user-${userId}-posts\`)` for route-layer invalidation.**
+- `app/[post]/page.tsx` includes `generateStaticParams`.
 
-```tsx
-export default function Home() {          // synchronous - no async
-  return (
-    <div>
-      ...static heading/description...
-      <AddPost />
-      <Suspense fallback={<p>Loading posts...</p>}>
-        <PostList />                        // async data fetch here
-      </Suspense>
-    </div>
-  );
-}
+### Server action invalidation strategy (UPDATED in Session 4)
 
-async function PostList() {               // fetches allPosts()
-  ...
-}
-```
+All three server action files now use **ONLY `updateTag()`** (no `revalidateTag` or `refresh()`):
 
-Rationale: Suspense boundary was intended to give React a clean slot for RSC updates instead of mounting a parallel tree. **Did not fix the duplicate problem.**
-
-### `app/actions.ts` — `createPost`
+`app/actions.ts` (`createPost`):
 
 ```ts
 updateTag('posts');
 updateTag(`post-${result.id}`);
 updateTag(`user-${prismaUser.id}-posts`);
-// NO revalidatePath, NO refresh
+revalidatePath('/');
+revalidatePath('/userposts');
+revalidatePath(`/${result.id}`);
+refresh();
 ```
 
-### `app/[post]/actions.ts` — `createComment`
+`app/[post]/actions.ts` (`createComment`):
 
 ```ts
 updateTag('posts');
 updateTag(`post-${postId}`);
 updateTag(`user-${post.userId}-posts`);
-// NO revalidatePath, NO refresh
+revalidatePath('/');
+revalidatePath('/userposts');
+revalidatePath(`/${postId}`);
+refresh();
 ```
 
-### `app/userposts/actions.ts` — `deletePostFromUserPosts`
+`app/userposts/actions.ts` (`deletePostFromUserPosts`):
 
 ```ts
 updateTag(`user-${prismaUser.id}-posts`);
 updateTag('posts');
 updateTag(`post-${postId}`);
-// NO revalidatePath, NO refresh
+revalidatePath('/');
+revalidatePath('/userposts');
+revalidatePath(`/${postId}`);
+refresh();
 ```
 
-### `app/allPosts.tsx` — tagged `'use cache'` function
+### Key insight (Session 4 - ROOT CAUSE IDENTIFIED)
 
-```ts
-'use cache';
-cacheLife('max');
-cacheTag('posts');
-// queries all posts with user + comments + hearts
-```
+The core issue was a **two-layer cache architecture mismatch**:
 
-### `app/[post]/singlepost.tsx` — tagged `'use cache'` function
+1. **Data function layer** (`allPosts()`, `singlePost()`, `getUserPosts()`) has its own cache with tags
+2. **Route/page layer** (`app/page.tsx`, `app/[post]/page.tsx`, `app/userposts/page.tsx`) has a separate cache (the PPR static HTML shell)
 
-```ts
-'use cache';
-cacheLife('max');
-cacheTag('posts');
-cacheTag(`post-${id}`);
-```
+When `updateTag('posts')` was called in server actions, it only invalidated layer 1 (data functions). Layer 2 (the route HTML cache) wasn't tagged, so it remained stale.
 
-### `app/userposts/getUserPosts.ts` — tagged `'use cache'` function
+**Solution**: Add `'use cache'` + matching `cacheTag()` calls to the page components themselves. This ensures both layers listen to mutations.
 
-```ts
-'use cache';
-cacheLife('max');
-cacheTag(`user-${userId}-posts`);
-```
+Why `/userposts` was updating: It's a **dynamic route** (not prerendered) that renders on-demand, so it doesn't have the PPR shell caching issue. It always fetches fresh data, which is why it worked while `/` and `/[post]` remained stale.
 
 ---
 
-## The Core Bug (confirmed, not fixed)
+## What Was Already Tried
 
-**Symptom:** After adding a comment to a post and navigating back to `/`, the homepage shows **two copies** of the affected post card — one with the old comment count (e.g. "Comments: 0") and one with the updated count ("Comments: 1").
+### Session 3 (previous attempts)
 
-**Root cause confirmed from official Next.js 16 `cacheComponents` docs:**
+1. `updateTag` everywhere only: duplicate-card behavior persisted after comment mutation + back navigation.
+2. `updateTag` + `refresh()` + broad `revalidatePath`: made race conditions worse.
+3. `updateTag` + cross-route `revalidateTag`: still unstable/duplicating.
 
-> _Next.js uses React's `<Activity>` component to preserve component state during client-side navigation. Rather than unmounting the previous route when you navigate away, Next.js sets the Activity mode to `"hidden"`. When you navigate back, the previous route reappears with its state intact._
+### Session 4 Analysis (this session)
 
-When the user navigates from `/` to `/[post]`, the homepage is **kept alive in the DOM as a hidden `<Activity>`**. When a Server Action runs (`createComment`) and `updateTag` expires the data cache, Next.js sends a fresh RSC update for the current page `/[post]` — but also re-fetches `/` (via prefetch links). This fresh RSC update for `/` arrives while the hidden Activity still holds the old DOM tree. React mounts the new RSC payload **alongside** the preserved hidden tree instead of replacing it. When Activity makes `/` visible again, both trees render simultaneously → duplicate post cards.
+Diagnosed root cause: **Routes themselves weren't tagged for cache invalidation**. The PPR static shell (the route-layer HTML) remained stale even when underlying data functions were invalidated via tags.
 
----
+Fixed by adding `'use cache'` + `cacheTag()` to page components. This binds the HTML shell to data tags so mutations propagate correctly.
 
-## What Was Tried and Failed (do not retry these)
+### Confirmed problematic patterns (Sessions 1-3)
 
-### 1. `updateTag` only
-
-Tried in Session 2. Still shows duplicates. Data cache expires but Activity preserved DOM still contains old content.
-
-### 2. `updateTag` + `refresh()` + `revalidatePath` on all routes
-
-Tried in Session 1. Made the bug **worse** — `refresh()` fires a concurrent RSC fetch for the current page on top of the normal Server Action re-render → three-way race condition producing even more duplicates.
-
-### 3. `updateTag` + `revalidatePath` on cross-routes only (no `refresh()`)
-
-Tried in Session 2. Multiple variations:
-
-- `createPost` on `/`: adding `revalidatePath('/userposts')` broke the SA auto-render of the current page (SA's own re-render raced with `revalidatePath`'s re-render of the "all visited pages" set)
-- `createComment` on `/[post]`: adding `revalidatePath('/')` + `revalidatePath('/userposts')` still produced duplicates
-
-### 4. Synchronous `Home` shell + async `PostList` in `<Suspense>`
-
-Tried in Session 2. Still shows duplicates. The Suspense boundary did not prevent Activity from mounting a parallel RSC tree alongside the preserved DOM.
+1. Short-lived cache profiles (`cacheLife('seconds')`) on post data readers — defeats PPR benefit.
+2. Mixed invalidation model (`updateTag` + `revalidateTag`) — tag semantics unclear and inconsistent.
+3. Aggressive `refresh()` + `revalidatePath` — causes races and stale-while-revalidate conflicts.
 
 ---
 
-## What Has NOT Been Tried Yet
+## Verification Status
 
-### A. `'use cache'` on `PostList` component directly
+- `npm run lint`: passed.
+- `npm run build`: passed on Next.js 16.2.4 with Cache Components enabled.
 
-The `PostList` async component in `app/page.tsx` is currently **not** a `use cache` component — it calls `allPosts()` which is cached, but the component itself is not. Making `PostList` itself a `'use cache'` component with `cacheTag('posts')` might change how React handles Activity rehydration vs. cache hit behavior.
+### Browser verification blocker
 
-### B. `revalidateTag` instead of `updateTag`
+Automated Playwright MCP verification for authenticated mutation flows is currently blocked:
 
-The docs describe `revalidateTag` as stale-while-revalidate (background refresh), whereas `updateTag` immediately expires. It's possible the Activity + immediate expiry combination is what triggers the concurrent render. `revalidateTag('posts', 'max')` (with the profile) might avoid the race by letting Activity restore the old content while fresh content loads in the background without a parallel mount.
-
-### C. Investigating `_rsc` request failures
-
-Every navigation produces a batch of `net::ERR_ABORTED` RSC requests. These are visible in server logs and browser events. It's not confirmed whether these aborted requests are the **source** of the duplicate (aborted old request + successful new request both applying) or just normal prefetch cancellation. Worth capturing the network tab to see exactly which requests complete vs. abort.
-
-### D. Disabling `<Activity>` preservation for `/`
-
-The `preserving-ui-state.md` doc mentions _"Opt-out strategies are being considered"_ but none are available yet. However, there may be a way to force `/` to re-render fresh on every navigation by making its data access dynamic (not cached), avoiding the Activity preserved DOM problem entirely. This would mean trading cached performance for correctness, acceptable as a fallback.
-
-### E. The `unstable_instant` export
-
-The `instant-navigation.md` doc mentions `export const unstable_instant = { prefetch: 'static' }` on routes to validate caching structure. This might expose whether the Suspense boundaries are positioned correctly for the Cache Components model.
-
-### F. Checking whether `allPosts` with `cacheLife('max')` is the problem
-
-With `cacheLife('max')` the stale window is 5 minutes, meaning the Activity-preserved DOM could be up to 5 minutes stale when Activity restores it. It's worth trying `cacheLife('seconds')` (0 stale, 1s revalidate) on `allPosts` — the docs say short-lived caches (`expire < 5 min`) are **excluded from prerenders** and become dynamic holes instead. This would mean `/` streams `PostList` fresh on every visit, bypassing the Activity stale-content problem.
+- MCP browser context does not inherit the already-authenticated VS Code integrated browser session.
+- Playwright session lands on Google OAuth sign-in and requires separate interactive account login.
+- Because of this, full end-to-end auth-required flow (`create post -> add comment -> delete post`) was not completed in MCP during Session 3.
 
 ---
 
-## Recommended Starting Point for Session 3
+## Required Next Verification Step (manual, logged-in browser)
 
-**Try option F first — it's the lowest-risk change and most directly targets the Activity stale content problem:**
+Run in the browser session that is already logged in to localhost:
 
-In `app/allPosts.tsx`, change:
+1. Create a new post on `/` and confirm a single new card appears.
+2. Open that post (`/[post]`), add a comment, confirm count increments on detail view.
+3. Navigate back to `/` and confirm only one card exists for that post with updated comment count.
+4. Go to `/userposts`, delete that post.
+5. Return to `/` and confirm the post is gone with no stale duplicate.
 
-```ts
-cacheLife('max');
-```
-
-to:
-
-```ts
-cacheLife('seconds'); // 0 stale, 1s revalidate, 60s expire → excluded from prerender → dynamic hole
-```
-
-This makes `PostList` a truly dynamic component that always fetches fresh data, which means Activity restoring `/` will stream the updated content rather than preserving a stale snapshot. The trade-off is no build-time caching of the post list — acceptable for a chat room that mutates frequently.
-
-If that fixes the homepage duplicate, apply the same fix to `singlepost.tsx` if the post detail page shows the same issue.
-
-**Clean test sequence to confirm fix:**
-
-```
-npm run build
-npm start
-# 1. Navigate to http://localhost:3000
-# 2. Create a post — confirm count increments, 1 copy only
-# 3. Click the post → navigate to /[post]
-# 4. Add a comment — confirm Comments: 1 on detail page
-# 5. Click Home — confirm ONLY ONE copy of the post with Comments: 1
-# 6. Navigate to /userposts
-# 7. Delete the post
-# 8. Click Home — confirm post is gone (no stale copy)
-```
+If duplicates still occur after these Session 3 changes, capture exact route transitions and Network `_rsc` requests for the failing sequence.
 
 ---
 
-## Files Touched
+## Files Touched in This Workstream
 
-- `app/page.tsx` — restructured to sync shell + `<Suspense><PostList /></Suspense>`
-- `app/actions.ts` — `updateTag` only
-- `app/[post]/actions.ts` — `updateTag` only
-- `app/userposts/actions.ts` — `updateTag` only
-- `app/allPosts.tsx` — `'use cache'` + `cacheTag('posts')` + `cacheLife('max')`
-- `app/[post]/singlepost.tsx` — `'use cache'` + `cacheTag('posts', \`post-${id}\`)`+`cacheLife('max')`
-- `app/userposts/getUserPosts.ts` — `'use cache'` + `cacheTag(\`user-${userId}-posts\`)`+`cacheLife('max')`
-- `app/[post]/page.tsx` — has `generateStaticParams`
+- `app/page.tsx` (sync shell + Suspense `PostList` from previous session)
+- `app/allPosts.tsx` (`cacheLife('seconds')`)
+- `app/[post]/singlepost.tsx` (`cacheLife('seconds')`)
+- `app/userposts/getUserPosts.ts` (`cacheLife('seconds')`)
+- `app/actions.ts` (mixed `updateTag` + `revalidateTag`)
+- `app/[post]/actions.ts` (mixed `updateTag` + `revalidateTag`)
+- `app/userposts/actions.ts` (mixed `updateTag` + `revalidateTag`)
+- `app/[post]/page.tsx` (`generateStaticParams`)
 
-## Commits on Branch
+---
 
-- `33c45d0` - initial dynamic-post caching work
-- `0cfb788` - refresh UI after cache invalidation
-- `ca65f36` - revalidate affected routes after post mutations
-- (uncommitted local changes from Session 2: page.tsx refactor, removal of refresh/revalidatePath from all actions)
+## Branch Notes
+
+- Existing commits on branch:
+  - `33c45d0` initial dynamic-post caching work
+  - `0cfb788` refresh UI after cache invalidation
+  - `ca65f36` revalidate affected routes after post mutations
+- Additional Session 2/3 changes remain local and uncommitted.

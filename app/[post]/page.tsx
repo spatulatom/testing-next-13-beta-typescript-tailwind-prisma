@@ -2,6 +2,7 @@ import Post from '@/components/posts/Post';
 import AddComment from '@/app/[post]/AddComment';
 import Image from 'next/image';
 import prisma from '@/prisma/client';
+import { cacheTag } from 'next/cache';
 
 import { notFound } from 'next/navigation';
 import singlePost from '@/app/[post]/singlepost';
@@ -38,7 +39,10 @@ export async function generateMetadata({
 }
 
 export default async function PostDetail({ params }: PostParams) {
+  'use cache';
+  cacheTag('posts');
   const { post } = await params;
+  cacheTag(`post-${post}`);
   const response = await singlePost(post);
   if (!response) {
     notFound();

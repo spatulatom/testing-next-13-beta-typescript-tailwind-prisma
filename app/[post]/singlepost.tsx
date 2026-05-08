@@ -1,4 +1,4 @@
-import { cacheLife, cacheTag } from 'next/cache';
+import { cacheTag } from 'next/cache';
 import type { Prisma } from '@prisma/client';
 import prisma from '@/prisma/client';
 
@@ -18,7 +18,7 @@ export default async function singlePost(
   id: string
 ): Promise<SinglePost | null> {
   'use cache';
-  cacheLife('seconds');
+  
   cacheTag('posts');
   cacheTag(`post-${id}`);
 

@@ -3,15 +3,41 @@ import AddPost from '@/components/posts/AddPost';
 import Counter from '@/components/posts/Counter';
 import allPosts from '@/app/allPosts';
 import type { Post as PrismaPost, User, Comment } from '@prisma/client';
-import { Suspense } from 'react';
+import { cacheTag } from 'next/cache';
 
-// Synchronous static shell — Activity can safely preserve this without stale data issues.
-// Mutable post list is isolated in <PostList> behind <Suspense> so React replaces
-// the Suspense slot cleanly when a fresh RSC update arrives after a mutation, instead
-// of mounting a parallel tree alongside the Activity-preserved DOM (which caused duplicates).
-export default function Home() {
+export default async function Home() {
+  'use cache';
+  cacheTag('posts');
+  type PostWithRelations = PrismaPost & {
+    user: User;
+    comments: Comment[];
+  };
+
+  console.log('DATA FETCH HOME PAGE1');
+
+  const data: PostWithRelations[] = await allPosts();
+
+  if (!data || data.length === 0) {
+    return (
+      <div className="mb-20">
+        <h1 className="mt-1 mb-2 bg-linear-to-r from-teal-600 via-black to-white bg-clip-text text-center text-xl font-bold md:text-5xl">
+          Chat Room
+        </h1>
+
+        <AddPost />
+        <div className="flex flex-col items-center justify-center">
+          <h2 className="text-xl font-bold">No Posts Yet</h2>
+          <p className="mt-2 text-gray-600">
+            You haven't created any posts yet.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="">
+      {/* <h1 className="text-center text-2xl font-bold  mt-10 animate-shimmer bg-gradient-to-r from-teal-600 via-black to-white text-transparent bg-clip-text capitalize">chat Room</h1> */}
       <h1 className="mt-10 mb-2 bg-linear-to-r from-teal-600 via-black to-white bg-clip-text text-center text-xl font-bold">
         Chat Room - crud app with{' '}
         <a
@@ -39,37 +65,8 @@ export default function Home() {
       </p>
 
       <AddPost />
-
-      <Suspense
-        fallback={<p className="m-2 text-gray-500">Loading posts...</p>}
-      >
-        <PostList />
-      </Suspense>
-    </div>
-  );
-}
-
-async function PostList() {
-  type PostWithRelations = PrismaPost & {
-    user: User;
-    comments: Comment[];
-  };
-
-  console.log('DATA FETCH HOME PAGE1');
-  const data: PostWithRelations[] = await allPosts();
-
-  if (!data || data.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center">
-        <h2 className="text-xl font-bold">No Posts Yet</h2>
-        <p className="mt-2 text-gray-600">You haven't created any posts yet.</p>
-      </div>
-    );
-  }
-
-  return (
-    <>
       <Counter count={data.length} />
+
       {data.map((post) => (
         <Post
           key={post.id}
@@ -81,6 +78,6 @@ async function PostList() {
           comments={post.comments.length}
         />
       ))}
-    </>
+    </div>
   );
 }

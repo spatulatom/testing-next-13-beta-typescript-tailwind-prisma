@@ -2,7 +2,7 @@
 
 import prisma from '@/prisma/client';
 import { auth } from '@/auth';
-import { revalidateTag, updateTag } from 'next/cache';
+import { updateTag } from 'next/cache';
 import { ResponseType, successResponse, errorResponse } from '@/lib/response';
 import { validateCommentText, sanitizeText } from '@/lib/validation';
 import { logError } from '@/lib/error-handling';
@@ -55,8 +55,8 @@ export async function createComment(
     });
 
     updateTag(`post-${postId}`);
-    revalidateTag('posts', 'max');
-    revalidateTag(`user-${post.userId}-posts`, 'max');
+    updateTag('posts');
+    updateTag(`user-${post.userId}-posts`);
     return successResponse(result);
   } catch (error) {
     logError({

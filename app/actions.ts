@@ -2,7 +2,7 @@
 
 import prisma from '@/prisma/client';
 import { auth } from '@/auth';
-import { revalidateTag, updateTag } from 'next/cache';
+import { updateTag } from 'next/cache';
 import { ResponseType, successResponse, errorResponse } from '@/lib/response';
 import { validatePostTitle, sanitizeText } from '@/lib/validation';
 import { logError } from '@/lib/error-handling';
@@ -40,7 +40,7 @@ export async function createPost(title: string): Promise<ResponseType<Post>> {
 
     updateTag('posts');
     updateTag(`post-${result.id}`);
-    revalidateTag(`user-${prismaUser.id}-posts`, 'max');
+    updateTag(`user-${prismaUser.id}-posts`);
     return successResponse(result);
   } catch (error) {
     logError({
