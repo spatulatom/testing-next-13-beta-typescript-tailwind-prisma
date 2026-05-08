@@ -1,12 +1,25 @@
 import Post from '@/components/posts/Post';
 import AddComment from '@/app/[post]/AddComment';
 import Image from 'next/image';
+import prisma from '@/prisma/client';
 
 import { notFound } from 'next/navigation';
 import singlePost from '@/app/[post]/singlepost';
 import type { Metadata } from 'next';
 
 type PostParams = { params: Promise<{ post: string }> };
+
+export async function generateStaticParams() {
+  const posts = await prisma.post.findMany({
+    select: {
+      id: true,
+    },
+  });
+
+  return posts.map((post) => ({
+    post: post.id,
+  }));
+}
 
 export async function generateMetadata({
   params,
