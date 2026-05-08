@@ -32,10 +32,8 @@ async function AuthCheckLayer() {
 
 // Receives username as prop — cacheable per-user
 async function CachedDashboard({ userName, userId }: { userName?: string | null; userId?: string }) {
-  'use cache';
-  if (userId) {
-    cacheTag(`user-${userId}-posts`);
-  }
+
+ 
   return (
     <main>
       <h1 className="mx-2 text-2xl font-bold">

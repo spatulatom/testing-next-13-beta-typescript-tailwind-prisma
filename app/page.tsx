@@ -3,11 +3,8 @@ import AddPost from '@/components/posts/AddPost';
 import Counter from '@/components/posts/Counter';
 import allPosts from '@/app/allPosts';
 import type { Post as PrismaPost, User, Comment } from '@prisma/client';
-import { cacheTag } from 'next/cache';
 
 export default async function Home() {
-  'use cache';
-  cacheTag('posts');
   type PostWithRelations = PrismaPost & {
     user: User;
     comments: Comment[];
