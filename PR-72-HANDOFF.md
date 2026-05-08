@@ -112,41 +112,46 @@ Fixed by adding `'use cache'` + `cacheTag()` to page components. This binds the 
 
 - `npm run lint`: passed.
 - `npm run build`: passed on Next.js 16.2.4 with Cache Components enabled.
+- All routes prerendered as Partial Prerender (◐) status
+- Route-layer cache tagging added; ready for mutation flow verification
 
-### Browser verification blocker
+### Mutation flow verification (manual, in already-logged-in browser)
 
-Automated Playwright MCP verification for authenticated mutation flows is currently blocked:
+**Test sequence:**
 
-- MCP browser context does not inherit the already-authenticated VS Code integrated browser session.
-- Playwright session lands on Google OAuth sign-in and requires separate interactive account login.
-- Because of this, full end-to-end auth-required flow (`create post -> add comment -> delete post`) was not completed in MCP during Session 3.
+1. Create new post on `/` → verify single card appears (no duplicate)
+2. Open post (`/[post]`), add comment → verify comment count increments on detail page
+3. Return to `/` → verify only ONE card exists for that post with updated comment count (no stale duplicate)
+4. Go to `/userposts` → delete that post
+5. Return to `/` → verify post is gone entirely (no stale copy)
 
----
+**Expected behavior after fix:**
+- All routes (`/`, `/[post]`, `/userposts`) update instantly via tag invalidation
+- No duplicate cards should appear
+- `/userposts` behaves correctly (on-demand render)
+- `/` and `/[post]` now properly react to mutations (route-level cache tagged)
 
-## Required Next Verification Step (manual, logged-in browser)
-
-Run in the browser session that is already logged in to localhost:
-
-1. Create a new post on `/` and confirm a single new card appears.
-2. Open that post (`/[post]`), add a comment, confirm count increments on detail view.
-3. Navigate back to `/` and confirm only one card exists for that post with updated comment count.
-4. Go to `/userposts`, delete that post.
-5. Return to `/` and confirm the post is gone with no stale duplicate.
-
-If duplicates still occur after these Session 3 changes, capture exact route transitions and Network `_rsc` requests for the failing sequence.
+**If duplicates still occur:**
+- Capture Network tab `_rsc` requests
+- Document exact route transition sequence
+- Check browser console for errors
+- See [Cache Components two-layer architecture](#key-insight-session-4---root-cause-identified) explanation
 
 ---
 
 ## Files Touched in This Workstream
 
-- `app/page.tsx` (sync shell + Suspense `PostList` from previous session)
-- `app/allPosts.tsx` (`cacheLife('seconds')`)
-- `app/[post]/singlepost.tsx` (`cacheLife('seconds')`)
-- `app/userposts/getUserPosts.ts` (`cacheLife('seconds')`)
-- `app/actions.ts` (mixed `updateTag` + `revalidateTag`)
-- `app/[post]/actions.ts` (mixed `updateTag` + `revalidateTag`)
-- `app/userposts/actions.ts` (mixed `updateTag` + `revalidateTag`)
-- `app/[post]/page.tsx` (`generateStaticParams`)
+- **`app/page.tsx`** - Added `'use cache'` + `cacheTag('posts')` to `Home()` component
+- **`app/[post]/page.tsx`** - Added `'use cache'` + `cacheTag('posts')` + `cacheTag(\`post-${post}\`)` to `PostDetail()` component
+- **`app/userposts/page.tsx`** - Added `'use cache'` + `cacheTag(\`user-${userId}-posts\`)` to `CachedDashboard()` component
+- `app/allPosts.tsx` - Reverted `cacheLife('seconds')` to `cacheLife('max')`
+- `app/[post]/singlepost.tsx` - Reverted `cacheLife('seconds')` to `cacheLife('max')`
+- `app/userposts/getUserPosts.ts` - Reverted `cacheLife('seconds')` to `cacheLife('max')`
+- `app/actions.ts` - Confirmed `updateTag()` only (no `revalidateTag` or `refresh()`)
+- `app/[post]/actions.ts` - Confirmed `updateTag()` only (no `revalidateTag` or `refresh()`)
+- `app/userposts/actions.ts` - Confirmed `updateTag()` only (no `revalidateTag` or `refresh()`)
+- `PR-72-HANDOFF.md` - Updated with Session 4 findings and root cause analysis
+- `app/[post]/loading.tsx` - Removed (no longer needed with current caching strategy)
 
 ---
 
