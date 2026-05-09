@@ -1,12 +1,26 @@
 import Post from '@/components/posts/Post';
 import AddComment from '@/app/[post]/AddComment';
 import Image from 'next/image';
+import prisma from '@/prisma/client';
+import { cacheTag } from 'next/cache';
 
 import { notFound } from 'next/navigation';
 import singlePost from '@/app/[post]/singlepost';
 import type { Metadata } from 'next';
 
 type PostParams = { params: Promise<{ post: string }> };
+
+export async function generateStaticParams() {
+  const posts = await prisma.post.findMany({
+    select: {
+      id: true,
+    },
+  });
+
+  return posts.map((post) => ({
+    post: post.id,
+  }));
+}
 
 export async function generateMetadata({
   params,
@@ -25,7 +39,12 @@ export async function generateMetadata({
 }
 
 export default async function PostDetail({ params }: PostParams) {
+  'use cache';
+
   const { post } = await params;
+
+  cacheTag('posts');
+  cacheTag(`post-${post}`);
   const response = await singlePost(post);
   if (!response) {
     notFound();

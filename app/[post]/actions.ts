@@ -54,8 +54,9 @@ export async function createComment(
       },
     });
 
-    updateTag('posts');
     updateTag(`post-${postId}`);
+    updateTag('posts');
+    updateTag(`user-${post.userId}-posts`);
     return successResponse(result);
   } catch (error) {
     logError({

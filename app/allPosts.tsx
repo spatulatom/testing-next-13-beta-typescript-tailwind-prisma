@@ -1,10 +1,10 @@
 'use cache';
 
-import { cacheLife, cacheTag } from 'next/cache';
+import { cacheTag } from 'next/cache';
 import prisma from '@/prisma/client';
 
 const allPosts = async () => {
-  cacheLife('max');
+  
   cacheTag('posts');
 
   console.log('DATA FETCH - ALL POSTS');

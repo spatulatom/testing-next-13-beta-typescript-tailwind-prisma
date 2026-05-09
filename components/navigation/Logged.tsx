@@ -14,7 +14,7 @@ export default function Logged({ image }: LoggedUserProps) {
       >
         Sign Out
       </button>
-      <Link href={'/userposts'}>
+      <Link href={'/userposts'} prefetch={false}>
         <Image
           width={96}
           height={96}

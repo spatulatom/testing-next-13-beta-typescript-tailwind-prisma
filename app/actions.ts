@@ -39,6 +39,7 @@ export async function createPost(title: string): Promise<ResponseType<Post>> {
     });
 
     updateTag('posts');
+    updateTag(`post-${result.id}`);
     updateTag(`user-${prismaUser.id}-posts`);
     return successResponse(result);
   } catch (error) {
@@ -51,4 +52,3 @@ export async function createPost(title: string): Promise<ResponseType<Post>> {
     return errorResponse('Failed to create post. Please try again.');
   }
 }
-

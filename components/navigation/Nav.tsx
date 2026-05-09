@@ -29,11 +29,13 @@ export default async function Nav() {
       </Suspense>
       <ul className="relative z-10 hidden flex-wrap items-center gap-4 text-sm md:flex">
         <li>
-          <Link href={'/'}>Home</Link>
+          <Link href={'/'} prefetch={false}>
+            Home
+          </Link>
         </li>
         {session && (
           <li>
-            <Link href={'/userposts'}>
+            <Link href={'/userposts'} prefetch={false}>
               <h2 className="transition-all hover:text-teal-600">
                 User's Posts
               </h2>

@@ -31,10 +31,9 @@ export async function deletePostFromUserPosts(
       where: { id: postId },
     });
 
-    // Invalidate this user's cached posts and refresh the page
     updateTag(`user-${prismaUser.id}-posts`);
-    updateTag('posts'); // Also invalidate the home page post list
-    // revalidatePath('/userposts'); // Force immediate re-render for the current user - no need since server acitions update ui wthout refresh 
+    updateTag('posts');
+    updateTag(`post-${postId}`);
     return successResponse(result);
   } catch (error) {
     logError({
