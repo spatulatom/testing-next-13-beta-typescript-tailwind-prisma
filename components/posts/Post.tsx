@@ -47,6 +47,7 @@ export default function Post({
       href={{
         pathname: `/${id}`,
       }}
+      prefetch={false}
     >
       <div className="flex items-center rounded-t-lg bg-white p-4">
         {whenNull}

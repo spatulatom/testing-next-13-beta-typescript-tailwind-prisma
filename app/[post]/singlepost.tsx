@@ -18,7 +18,7 @@ export default async function singlePost(
   id: string
 ): Promise<SinglePost | null> {
   'use cache';
-  
+
   cacheTag('posts');
   cacheTag(`post-${id}`);
 

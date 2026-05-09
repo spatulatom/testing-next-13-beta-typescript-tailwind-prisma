@@ -2,7 +2,7 @@
 
 import prisma from '@/prisma/client';
 import { auth } from '@/auth';
-import { updateTag, revalidatePath, refresh } from 'next/cache';
+import { updateTag } from 'next/cache';
 
 import { ResponseType, successResponse, errorResponse } from '@/lib/response';
 import { logError } from '@/lib/error-handling';
@@ -34,10 +34,6 @@ export async function deletePostFromUserPosts(
     updateTag(`user-${prismaUser.id}-posts`);
     updateTag('posts');
     updateTag(`post-${postId}`);
-    revalidatePath('/');
-    revalidatePath(`/${postId}`);
-    revalidatePath('/userposts');
-    refresh();
     return successResponse(result);
   } catch (error) {
     logError({
