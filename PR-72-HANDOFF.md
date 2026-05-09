@@ -196,3 +196,112 @@ export async function updateData() {
 - ✅ Pages: `'use cache'` + `cacheTag()` with meaningful tags
 - ✅ Data functions: `'use cache'` + `cacheTag()` with same tags
 - ✅ Server actions: `updateTag()` with the shared tags
+
+---
+
+## Key Learning #2: Link Prefetch Causes Stale Cross-Route UI (CRITICAL DISCOVERY)
+
+### The Problem
+
+Next.js automatically prefetches routes when `<Link>` components enter the viewport (production only). The prefetch stores RSC payload in browser's in-memory cache, keyed by route. After a mutation (create/update/delete), if the user navigates via a prefetched link, the browser reuses the stale cached payload instead of fetching fresh data from the server.
+
+**Observed Symptom: "One-Behind" Lag**
+
+- Add comment #1 on `/[post]` → Navigate to Home → Shows 0 comments (stale prefetch)
+- Add comment #2 on `/[post]` → Navigate to Home → Shows 1 comment (from #1, still stale)
+- Delete post from `/userposts` → Navigate to Home → Post still appears until manual refresh
+
+### Root Cause Analysis
+
+1. User hovers over or enters link zone → Next.js prefetches and caches RSC payload
+2. User makes a mutation (server action runs, `updateTag()` clears server cache)
+3. User clicks link → Browser navigates using **cached payload** (prefetch TTL still valid)
+4. Fresh server data never reaches the browser because cached layer is bypassed
+
+**The prefetch cache is client-side and independent of server invalidation.**
+
+### Solution: Disable Prefetch on Mutation-Sensitive Links
+
+For cross-route links that depend on data mutated by actions, disable prefetch:
+
+```tsx
+// ❌ Before (stale UI after mutations)
+<Link href="/userposts">User's Posts</Link>
+
+// ✅ After (always fetches fresh RSC payload on navigation)
+<Link href="/userposts" prefetch={false}>User's Posts</Link>
+```
+
+### Applied Fixes in This PR
+
+Disabled `prefetch={false}` on all mutation-sensitive cross-route navigation:
+
+1. `components/navigation/Nav.tsx`
+   - Home link
+   - User's Posts link
+
+2. `components/navigation/HamburgerMenu.tsx` (mobile)
+   - Home link
+   - User's Posts link
+
+3. `components/navigation/Logged.tsx`
+   - Avatar image link to User's Posts
+
+4. `components/posts/Post.tsx`
+   - Post card links to detail page `/${id}`
+
+### Trade-off Analysis
+
+| Aspect      | Cost                                                     | Benefit                                                      |
+| ----------- | -------------------------------------------------------- | ------------------------------------------------------------ |
+| **Latency** | +50-100ms per navigation (full RSC fetch)                | Zero stale UI on mutations                                   |
+| **Network** | One extra RSC request per mutation-sensitive navigation  | Guaranteed data consistency                                  |
+| **UX**      | Imperceptible delay (users expect post-mutation to load) | Matches user mental model (my change is immediately visible) |
+
+**Verdict:** The consistency guarantee outweighs the latency cost for post-mutation navigation. Users notice stale UI; they don't notice 50ms extra load time.
+
+### Official Support
+
+This is not a workaround — it's an official, documented pattern:
+
+- [Next.js Link API: prefetch prop](https://nextjs.org/docs/app/api-reference/components/link#prefetch)
+- [Prefetching guide recommends disabling for resource-heavy lists and consistency-critical routes](https://nextjs.org/docs/app/getting-started/prefetching)
+
+**Recommendation for future projects:** Disable prefetch by default on `<Link>` in CRUD-heavy apps; enable it only for read-only navigation (blog posts, landing pages, documentation).
+
+---
+
+## Resolution Checklist (Issue #71)
+
+✅ Implement `generateStaticParams` for dynamic post routes  
+✅ Add `'use cache'` + `cacheTag()` to pages (not just data)  
+✅ Simplify server actions to `updateTag()` only  
+✅ Fix stale cross-route UI via prefetch control  
+✅ Production validation (create → comment → delete flow)
+
+---
+
+## Key Changes
+
+**Files Modified:**
+
+- `app/page.tsx` — Added `'use cache'` + `cacheTag('posts')`
+- `app/[post]/page.tsx` — Added `generateStaticParams`, `'use cache'` + `cacheTag()`
+- `app/[post]/singlepost.tsx` — Simplified cacheTag usage (split into separate calls)
+- `app/allPosts.tsx` — Removed `cacheLife()` (use profile at page level)
+- `app/actions.ts` — Removed `revalidatePath()`, kept minimal `updateTag()`
+- `app/[post]/actions.ts` — Removed `revalidatePath()` + `refresh()`, kept `updateTag()`
+- `app/userposts/actions.ts` — Removed `revalidatePath()`, kept `updateTag()`
+- `app/userposts/getUserPosts.ts` — Removed `cacheLife()` (use profile at page level)
+- `app/userposts/page.tsx` — Added userId prop threading for per-user cache safety
+- `components/navigation/Nav.tsx` — Added `prefetch={false}` on Home, User's Posts links
+- `components/navigation/HamburgerMenu.tsx` — Added `prefetch={false}` on mobile navigation
+- `components/navigation/Logged.tsx` — Added `prefetch={false}` on avatar link
+- `components/posts/Post.tsx` — Added `prefetch={false}` on post card links
+- `app/[post]/loading.tsx` — Deleted (PPR handles loading states)
+
+**Not Changed:**
+
+- No breaking changes to API or component props
+- No changes to data models or schema
+- No changes to auth or permissions
