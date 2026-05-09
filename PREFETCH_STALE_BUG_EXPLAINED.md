@@ -39,7 +39,7 @@ So stale after mutation is not expected behavior. That is why this was treated a
 
 Think of two caches involved in navigation:
 
-1. Server/data cache (tagged with `cacheTag`)  
+1. Server/data cache (tagged with `cacheTag`)
 2. Client prefetched route payload cache (for Link navigation)
 
 Mutation calls `updateTag("items")` and invalidates server-tagged data immediately.
