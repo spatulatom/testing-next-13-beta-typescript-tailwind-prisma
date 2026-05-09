@@ -88,7 +88,6 @@ export default function HamburgerMenu({ isLoggedIn }: HamburgerMenuProps) {
             <li className="relative z-50">
               <Link
                 href="/"
-                prefetch={false}
                 className="block w-full text-white transition-all hover:text-teal-600"
                 onClick={toggleMenu}
               >
@@ -99,7 +98,6 @@ export default function HamburgerMenu({ isLoggedIn }: HamburgerMenuProps) {
               <li className="relative z-50">
                 <Link
                   href="/userposts"
-                  prefetch={false}
                   className="block w-full text-white transition-all hover:text-teal-600"
                   onClick={toggleMenu}
                 >
