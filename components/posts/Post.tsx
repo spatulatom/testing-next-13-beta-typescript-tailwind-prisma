@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 // import { motion } from 'framer-motion';
 import type { PostCardProps } from '@/types/ComponentProps';
+import HeartButton from '@/components/posts/HeartButton';
 
 export default function Post({
   id,
@@ -10,6 +11,9 @@ export default function Post({
   avatar,
   postTitle,
   comments,
+  hearts,
+  heartedByCurrentUser,
+  canToggleHeart,
 }: PostCardProps) {
   let whenNull;
   if (avatar === null) {
@@ -43,24 +47,32 @@ export default function Post({
     //   className="bg-white my-8 p-8 rounded-lg "
     // >
     // </motion.div>
-    <Link
-      href={{
-        pathname: `/${id}`,
-      }}
-      prefetch={false}
-    >
-      <div className="flex items-center rounded-t-lg bg-white p-4">
-        {whenNull}
-        <div className="">
-          {' '}
-          <h3 className="pl-2 font-bold text-gray-700">{name}</h3>
-          <h4 className="pl-2 text-sm text-gray-600">posted on: {d}</h4>
+    <div className="mb-4">
+      <Link
+        href={{
+          pathname: `/${id}`,
+        }}
+        prefetch={false}
+      >
+        <div className="flex items-center rounded-t-lg bg-white p-4">
+          {whenNull}
+          <div className="">
+            {' '}
+            <h3 className="pl-2 font-bold text-gray-700">{name}</h3>
+            <h4 className="pl-2 text-sm text-gray-600">posted on: {d}</h4>
+          </div>
         </div>
-      </div>
-      <div className="mb-4 rounded-b-lg bg-teal-600 py-6">
-        <p className="px-4 text-white">{postTitle}</p>
-        <p className="px-4 pt-6 text-sm text-white">Comments: {comments}</p>
-      </div>
-    </Link>
+        <div className="rounded-b-lg bg-teal-600 py-6">
+          <p className="px-4 text-white">{postTitle}</p>
+          <p className="px-4 pt-6 text-sm text-white">Comments: {comments}</p>
+        </div>
+      </Link>
+      <HeartButton
+        postId={id}
+        initialCount={hearts}
+        initialHearted={heartedByCurrentUser}
+        canHeart={canToggleHeart}
+      />
+    </div>
   );
 }

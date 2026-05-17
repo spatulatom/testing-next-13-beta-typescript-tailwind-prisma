@@ -12,6 +12,9 @@ export interface PostCardProps {
   avatar: User['image'];
   postTitle: PrismaPost['title'];
   comments: number; // Computed value
+  hearts: number;
+  heartedByCurrentUser: boolean;
+  canToggleHeart: boolean;
 }
 
 // Add comment component

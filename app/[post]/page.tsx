@@ -3,6 +3,7 @@ import AddComment from '@/app/[post]/AddComment';
 import Image from 'next/image';
 import prisma from '@/prisma/client';
 import { cacheTag } from 'next/cache';
+import { auth } from '@/auth';
 
 import { notFound } from 'next/navigation';
 import singlePost from '@/app/[post]/singlepost';
@@ -39,9 +40,19 @@ export async function generateMetadata({
 }
 
 export default async function PostDetail({ params }: PostParams) {
-  'use cache';
-
+  const session = await auth();
   const { post } = await params;
+  return <CachedPostDetail post={post} userId={session?.user?.id ?? null} />;
+}
+
+async function CachedPostDetail({
+  post,
+  userId,
+}: {
+  post: string;
+  userId: string | null;
+}) {
+  'use cache';
 
   cacheTag('posts');
   cacheTag(`post-${post}`);
@@ -58,6 +69,11 @@ export default async function PostDetail({ params }: PostParams) {
         avatar={response.user.image}
         postTitle={response.title}
         comments={response.comments.length}
+        hearts={response.hearts.length}
+        heartedByCurrentUser={Boolean(
+          userId && response.hearts.some((heart) => heart.userId === userId)
+        )}
+        canToggleHeart={Boolean(userId)}
       />
       <AddComment id={response.id} />
       <h2>Comments:</h2>
