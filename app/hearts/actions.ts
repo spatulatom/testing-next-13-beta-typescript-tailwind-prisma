@@ -38,12 +38,10 @@ export async function toggleHeart(
       return errorResponse('Post not found.');
     }
 
-    const existingHeart = await prisma.heart.findUnique({
+    const existingHeart = await prisma.heart.findFirst({
       where: {
-        postId_userId: {
-          postId,
-          userId: prismaUser.id,
-        },
+        postId,
+        userId: prismaUser.id,
       },
       select: { id: true },
     });
@@ -86,12 +84,10 @@ export async function toggleHeart(
       error.code === 'P2002'
     ) {
       const [currentHeart, count] = await prisma.$transaction([
-        prisma.heart.findUnique({
+        prisma.heart.findFirst({
           where: {
-            postId_userId: {
-              postId,
-              userId: prismaUser.id,
-            },
+            postId,
+            userId: prismaUser.id,
           },
           select: { id: true },
         }),

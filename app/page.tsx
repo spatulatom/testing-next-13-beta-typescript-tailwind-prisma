@@ -5,8 +5,17 @@ import allPosts from '@/app/allPosts';
 import { cacheTag } from 'next/cache';
 import { auth } from '@/auth';
 import type { Post as PrismaPost, User, Comment, Heart } from '@prisma/client';
+import { Suspense } from 'react';
 
 export default async function Home() {
+  return (
+    <Suspense fallback={<div className="py-6">Loading posts...</div>}>
+      <HomeWithSession />
+    </Suspense>
+  );
+}
+
+async function HomeWithSession() {
   const session = await auth();
   return <CachedHome userId={session?.user?.id ?? null} />;
 }

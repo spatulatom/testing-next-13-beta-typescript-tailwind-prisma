@@ -8,6 +8,7 @@ import { auth } from '@/auth';
 import { notFound } from 'next/navigation';
 import singlePost from '@/app/[post]/singlepost';
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 
 type PostParams = { params: Promise<{ post: string }> };
 
@@ -40,8 +41,16 @@ export async function generateMetadata({
 }
 
 export default async function PostDetail({ params }: PostParams) {
-  const session = await auth();
   const { post } = await params;
+  return (
+    <Suspense fallback={<div className="py-6">Loading post...</div>}>
+      <PostDetailWithSession post={post} />
+    </Suspense>
+  );
+}
+
+async function PostDetailWithSession({ post }: { post: string }) {
+  const session = await auth();
   return <CachedPostDetail post={post} userId={session?.user?.id ?? null} />;
 }
 
