@@ -49,10 +49,9 @@ export async function toggleHeart(
     let hearted = false;
 
     if (existingHeart) {
-      await prisma.heart.deleteMany({
+      await prisma.heart.delete({
         where: {
-          postId,
-          userId: prismaUser.id,
+          id: existingHeart.id,
         },
       });
       hearted = false;
