@@ -36,7 +36,7 @@ export default function HeartButton({
   };
 
   return (
-    <div className="bg-white px-4 pb-3">
+    <div className="bg-white px-4 pb-3" aria-live="polite">
       <button
         type="button"
         onClick={onToggleHeart}
