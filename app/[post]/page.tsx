@@ -3,10 +3,12 @@ import AddComment from '@/app/[post]/AddComment';
 import Image from 'next/image';
 import prisma from '@/prisma/client';
 import { cacheTag } from 'next/cache';
+import { auth } from '@/auth';
 
 import { notFound } from 'next/navigation';
 import singlePost from '@/app/[post]/singlepost';
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 
 type PostParams = { params: Promise<{ post: string }> };
 
@@ -39,9 +41,27 @@ export async function generateMetadata({
 }
 
 export default async function PostDetail({ params }: PostParams) {
-  'use cache';
-
   const { post } = await params;
+  return (
+    <Suspense fallback={<div className="py-6">Loading post...</div>}>
+      <PostDetailWithSession post={post} />
+    </Suspense>
+  );
+}
+
+async function PostDetailWithSession({ post }: { post: string }) {
+  const session = await auth();
+  return <CachedPostDetail post={post} userId={session?.user?.id ?? null} />;
+}
+
+async function CachedPostDetail({
+  post,
+  userId,
+}: {
+  post: string;
+  userId: string | null;
+}) {
+  'use cache';
 
   cacheTag('posts');
   cacheTag(`post-${post}`);
@@ -58,6 +78,11 @@ export default async function PostDetail({ params }: PostParams) {
         avatar={response.user.image}
         postTitle={response.title}
         comments={response.comments.length}
+        hearts={response.hearts.length}
+        heartedByCurrentUser={Boolean(
+          userId && response.hearts.some((heart) => heart.userId === userId)
+        )}
+        canToggleHeart={Boolean(userId)}
       />
       <AddComment id={response.id} />
       <h2>Comments:</h2>

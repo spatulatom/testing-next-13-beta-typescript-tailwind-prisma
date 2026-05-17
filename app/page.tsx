@@ -3,15 +3,31 @@ import AddPost from '@/components/posts/AddPost';
 import Counter from '@/components/posts/Counter';
 import allPosts from '@/app/allPosts';
 import { cacheTag } from 'next/cache';
-import type { Post as PrismaPost, User, Comment } from '@prisma/client';
+import { auth } from '@/auth';
+import type { Post as PrismaPost, User, Comment, Heart } from '@prisma/client';
+import { Suspense } from 'react';
 
 export default async function Home() {
+  return (
+    <Suspense fallback={<div className="py-6">Loading posts...</div>}>
+      <HomeWithSession />
+    </Suspense>
+  );
+}
+
+async function HomeWithSession() {
+  const session = await auth();
+  return <CachedHome userId={session?.user?.id ?? null} />;
+}
+
+async function CachedHome({ userId }: { userId: string | null }) {
   'use cache';
   cacheTag('posts');
 
   type PostWithRelations = PrismaPost & {
     user: User;
     comments: Comment[];
+    hearts: Heart[];
   };
 
   console.log('DATA FETCH HOME PAGE1');
@@ -77,6 +93,11 @@ export default async function Home() {
           avatar={post.user.image}
           postTitle={post.title}
           comments={post.comments.length}
+          hearts={post.hearts.length}
+          heartedByCurrentUser={Boolean(
+            userId && post.hearts.some((heart) => heart.userId === userId)
+          )}
+          canToggleHeart={Boolean(userId)}
         />
       ))}
     </div>
