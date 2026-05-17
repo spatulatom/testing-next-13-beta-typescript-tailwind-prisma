@@ -38,10 +38,12 @@ export async function toggleHeart(
       return errorResponse('Post not found.');
     }
 
-    const existingHeart = await prisma.heart.findFirst({
+    const existingHeart = await prisma.heart.findUnique({
       where: {
-        postId,
-        userId: prismaUser.id,
+        postId_userId: {
+          postId,
+          userId: prismaUser.id,
+        },
       },
       select: { id: true },
     });
@@ -54,7 +56,6 @@ export async function toggleHeart(
           id: existingHeart.id,
         },
       });
-      hearted = false;
     } else {
       await prisma.heart.create({
         data: {
