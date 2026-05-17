@@ -51,7 +51,8 @@ export default function HeartButton({
         aria-pressed={hearted}
         className="rounded-md border border-gray-300 px-3 py-1 text-sm text-black disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {hearted ? '♥' : '♡'} {count} {count === 1 ? 'heart' : 'hearts'}{' '}
+        <span aria-hidden="true">{hearted ? '♥' : '♡'}</span> {count}{' '}
+        {count === 1 ? 'heart' : 'hearts'}{' '}
         {isPending ? (
           <>
             <span aria-hidden="true">...</span>

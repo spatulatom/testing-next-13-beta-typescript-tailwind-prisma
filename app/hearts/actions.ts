@@ -85,9 +85,18 @@ export async function toggleHeart(
       error instanceof Prisma.PrismaClientKnownRequestError &&
       error.code === 'P2002'
     ) {
+      const currentHeart = await prisma.heart.findUnique({
+        where: {
+          postId_userId: {
+            postId,
+            userId: prismaUser.id,
+          },
+        },
+        select: { id: true },
+      });
       const count = await prisma.heart.count({ where: { postId } });
       return successResponse({
-        hearted: true,
+        hearted: Boolean(currentHeart),
         count,
       });
     }
