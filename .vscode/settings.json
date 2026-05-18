@@ -6,5 +6,5 @@
     "npx @next/codemod@canary": true,
     "npm dlx": true
   },
-  "js/ts.tsdk.path": "node_modules\\typescript\\lib"
+  "js/ts.tsdk.path": "node_modules/typescript/lib"
 }
