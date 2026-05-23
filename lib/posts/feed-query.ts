@@ -78,7 +78,11 @@ export function buildPostOrderBy(
   }
 
   if (sort === 'most-commented') {
-    return [{ comments: { _count: 'desc' } }, { createdAt: 'desc' }, { id: 'asc' }];
+    return [
+      { comments: { _count: 'desc' } },
+      { createdAt: 'desc' },
+      { id: 'asc' },
+    ];
   }
 
   return [{ createdAt: 'desc' }, { id: 'asc' }];

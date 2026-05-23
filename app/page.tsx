@@ -33,7 +33,9 @@ async function HomeWithSession({
   const [session, params] = await Promise.all([auth(), searchParams]);
   const feedQuery = normalizeFeedSearchParams(params);
 
-  return <CachedHome userId={session?.user?.id ?? null} feedQuery={feedQuery} />;
+  return (
+    <CachedHome userId={session?.user?.id ?? null} feedQuery={feedQuery} />
+  );
 }
 
 async function CachedHome({
@@ -55,7 +57,9 @@ async function CachedHome({
   console.log('DATA FETCH HOME PAGE1');
 
   const data: PostWithRelations[] = await allPosts(feedQuery);
-  const hasActiveFilters = Boolean(feedQuery.search || feedQuery.sort !== 'newest');
+  const hasActiveFilters = Boolean(
+    feedQuery.search || feedQuery.sort !== 'newest'
+  );
 
   if (!data || data.length === 0) {
     return (

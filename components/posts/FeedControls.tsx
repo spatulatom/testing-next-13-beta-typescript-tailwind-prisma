@@ -141,7 +141,9 @@ export default function FeedControls({ currentQuery }: FeedControlsProps) {
       </form>
 
       {isPending ? (
-        <p className="mt-3 text-sm font-medium text-teal-700">Updating feed...</p>
+        <p className="mt-3 text-sm font-medium text-teal-700">
+          Updating feed...
+        </p>
       ) : null}
     </section>
   );
