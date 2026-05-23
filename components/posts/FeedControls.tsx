@@ -86,7 +86,7 @@ export default function FeedControls({ currentQuery }: FeedControlsProps) {
         onSubmit={submitSearch}
         className="grid gap-3 md:grid-cols-[minmax(0,1fr)_180px_auto] md:items-end"
       >
-        <label className="flex flex-col gap-1 text-sm font-bold text-gray-700">
+        <label className="order-1 flex flex-col gap-1 text-sm font-bold text-gray-700">
           Search posts
           <input
             key={currentQuery.search}
@@ -100,7 +100,7 @@ export default function FeedControls({ currentQuery }: FeedControlsProps) {
           />
         </label>
 
-        <label className="flex flex-col gap-1 text-sm font-bold text-gray-700">
+        <label className="order-3 flex flex-col gap-1 text-sm font-bold text-gray-700 md:order-2">
           Sort by
           <select
             value={currentQuery.sort}
@@ -116,7 +116,7 @@ export default function FeedControls({ currentQuery }: FeedControlsProps) {
           </select>
         </label>
 
-        <div className="flex min-h-11 gap-2">
+        <div className="order-2 flex min-h-11 gap-2 md:order-3">
           <button
             type="submit"
             disabled={isPending}
