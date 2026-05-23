@@ -5,16 +5,9 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { RotateCcw, Search } from 'lucide-react';
 import {
   DEFAULT_FEED_SORT,
-  FEED_SORTS,
   type FeedQuery,
   type FeedSort,
 } from '@/lib/posts/feed-query';
-
-const sortLabels: Record<FeedSort, string> = {
-  newest: 'Newest',
-  oldest: 'Oldest',
-  'most-commented': 'Most commented',
-};
 
 type FeedControlsProps = {
   currentQuery: FeedQuery;
@@ -68,10 +61,6 @@ export default function FeedControls({ currentQuery }: FeedControlsProps) {
     );
   }
 
-  function changeSort(nextSort: FeedSort) {
-    navigate(searchInputRef.current?.value ?? currentQuery.search, nextSort);
-  }
-
   function resetFeed() {
     if (searchInputRef.current) {
       searchInputRef.current.value = '';
@@ -82,10 +71,7 @@ export default function FeedControls({ currentQuery }: FeedControlsProps) {
 
   return (
     <section className="mb-4 rounded-md bg-white p-4 text-gray-900">
-      <form
-        onSubmit={submitSearch}
-        className="grid gap-3 md:grid-cols-[minmax(0,1fr)_180px_auto] md:items-end"
-      >
+      <form onSubmit={submitSearch} className="grid gap-3">
         <label className="order-1 flex flex-col gap-1 text-sm font-bold text-gray-700">
           Search posts
           <input
@@ -100,23 +86,7 @@ export default function FeedControls({ currentQuery }: FeedControlsProps) {
           />
         </label>
 
-        <label className="order-3 flex flex-col gap-1 text-sm font-bold text-gray-700 md:order-2">
-          Sort by
-          <select
-            value={currentQuery.sort}
-            onChange={(event) => changeSort(event.target.value as FeedSort)}
-            className="min-h-11 rounded-md bg-gray-200 px-3 py-2 text-base font-normal text-black outline-teal-600"
-            disabled={isPending}
-          >
-            {FEED_SORTS.map((sort) => (
-              <option key={sort} value={sort}>
-                {sortLabels[sort]}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <div className="order-2 flex min-h-11 gap-2 md:order-3">
+        <div className="order-2 flex min-h-11 gap-2">
           <button
             type="submit"
             disabled={isPending}

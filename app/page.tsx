@@ -7,6 +7,7 @@ import { auth } from '@/auth';
 import type { Post as PrismaPost, User, Comment, Heart } from '@prisma/client';
 import { Suspense } from 'react';
 import FeedControls from '@/components/posts/FeedControls';
+import FeedSortControl from '@/components/posts/FeedSortControl';
 import {
   normalizeFeedSearchParams,
   type FeedQuery,
@@ -119,7 +120,14 @@ async function CachedHome({
       <Suspense fallback={<div className="mb-4 h-28 rounded-md bg-white" />}>
         <FeedControls currentQuery={feedQuery} />
       </Suspense>
-      <Counter count={data.length} />
+      <div className="mb-2 flex flex-col justify-between md:flex-row md:items-center">
+        <Counter count={data.length} />
+        <Suspense
+          fallback={<div className="m-2 h-11 w-56 rounded-md bg-white" />}
+        >
+          <FeedSortControl currentQuery={feedQuery} />
+        </Suspense>
+      </div>
 
       {data.map((post) => (
         <Post
