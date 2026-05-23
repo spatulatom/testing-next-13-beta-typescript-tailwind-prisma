@@ -2,21 +2,27 @@
 
 import { cacheTag } from 'next/cache';
 import prisma from '@/prisma/client';
+import {
+  buildPostOrderBy,
+  buildPostWhere,
+  DEFAULT_FEED_SORT,
+  type FeedQuery,
+} from '@/lib/posts/feed-query';
 
-const allPosts = async () => {
-  
+const allPosts = async (
+  feedQuery: FeedQuery = { search: '', sort: DEFAULT_FEED_SORT }
+) => {
   cacheTag('posts');
 
   console.log('DATA FETCH - ALL POSTS');
   const data = await prisma.post.findMany({
+    where: buildPostWhere(feedQuery.search),
     include: {
       user: true,
       comments: true,
       hearts: true,
     },
-    orderBy: {
-      createdAt: 'desc', //When it does that, it sees Prisma returning createdAt Date objects, which Next considers "current time" access
-    },
+    orderBy: buildPostOrderBy(feedQuery.sort),
   });
 
   return data;
