@@ -6,21 +6,46 @@ import { cacheTag } from 'next/cache';
 import { auth } from '@/auth';
 import type { Post as PrismaPost, User, Comment, Heart } from '@prisma/client';
 import { Suspense } from 'react';
+import FeedControls from '@/components/posts/FeedControls';
+import FeedSortControl from '@/components/posts/FeedSortControl';
+import {
+  normalizeFeedSearchParams,
+  type FeedQuery,
+  type FeedSearchParams,
+} from '@/lib/posts/feed-query';
 
-export default async function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<FeedSearchParams>;
+}) {
   return (
     <Suspense fallback={<div className="py-6">Loading posts...</div>}>
-      <HomeWithSession />
+      <HomeWithSession searchParams={searchParams} />
     </Suspense>
   );
 }
 
-async function HomeWithSession() {
-  const session = await auth();
-  return <CachedHome userId={session?.user?.id ?? null} />;
+async function HomeWithSession({
+  searchParams,
+}: {
+  searchParams: Promise<FeedSearchParams>;
+}) {
+  const [session, params] = await Promise.all([auth(), searchParams]);
+  const feedQuery = normalizeFeedSearchParams(params);
+
+  return (
+    <CachedHome userId={session?.user?.id ?? null} feedQuery={feedQuery} />
+  );
 }
 
-async function CachedHome({ userId }: { userId: string | null }) {
+async function CachedHome({
+  userId,
+  feedQuery,
+}: {
+  userId: string | null;
+  feedQuery: FeedQuery;
+}) {
   'use cache';
   cacheTag('posts');
 
@@ -32,7 +57,10 @@ async function CachedHome({ userId }: { userId: string | null }) {
 
   console.log('DATA FETCH HOME PAGE1');
 
-  const data: PostWithRelations[] = await allPosts();
+  const data: PostWithRelations[] = await allPosts(feedQuery);
+  const hasActiveFilters = Boolean(
+    feedQuery.search || feedQuery.sort !== 'newest'
+  );
 
   if (!data || data.length === 0) {
     return (
@@ -42,10 +70,17 @@ async function CachedHome({ userId }: { userId: string | null }) {
         </h1>
 
         <AddPost />
+        <Suspense fallback={<div className="mb-4 h-28 rounded-md bg-white" />}>
+          <FeedControls currentQuery={feedQuery} />
+        </Suspense>
         <div className="flex flex-col items-center justify-center">
-          <h2 className="text-xl font-bold">No Posts Yet</h2>
+          <h2 className="text-xl font-bold">
+            {hasActiveFilters ? 'No posts match your search' : 'No Posts Yet'}
+          </h2>
           <p className="mt-2 text-gray-600">
-            You haven't created any posts yet.
+            {hasActiveFilters
+              ? 'Try a different search, switch sorting, or reset the feed.'
+              : "You haven't created any posts yet."}
           </p>
         </div>
       </div>
@@ -82,7 +117,17 @@ async function CachedHome({ userId }: { userId: string | null }) {
       </p>
 
       <AddPost />
-      <Counter count={data.length} />
+      <Suspense fallback={<div className="mb-4 h-28 rounded-md bg-white" />}>
+        <FeedControls currentQuery={feedQuery} />
+      </Suspense>
+      <div className="mb-2 flex flex-col justify-between md:flex-row md:items-center">
+        <Counter count={data.length} />
+        <Suspense
+          fallback={<div className="m-2 h-11 w-56 rounded-md bg-white" />}
+        >
+          <FeedSortControl currentQuery={feedQuery} />
+        </Suspense>
+      </div>
 
       {data.map((post) => (
         <Post
