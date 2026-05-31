@@ -36,7 +36,7 @@ export default function HeartButton({
   };
 
   return (
-    <div className="bg-white px-4 pb-3" aria-live="polite">
+    <div className="border-t border-border px-4 py-3" aria-live="polite">
       <button
         type="button"
         onClick={onToggleHeart}
@@ -49,10 +49,16 @@ export default function HeartButton({
             : 'Sign in to heart posts'
         }
         aria-pressed={hearted}
-        className="rounded-md border border-gray-300 px-3 py-1 text-sm text-black disabled:cursor-not-allowed disabled:opacity-50"
+        className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${
+          hearted
+            ? 'border-transparent bg-accent text-accent-foreground'
+            : 'border-border bg-surface text-foreground hover:bg-surface-2'
+        }`}
       >
-        <span aria-hidden="true">{hearted ? '♥' : '♡'}</span> {count}{' '}
-        {count === 1 ? 'heart' : 'hearts'}{' '}
+        <span aria-hidden="true" className="text-base leading-none">
+          {hearted ? '♥' : '♡'}
+        </span>{' '}
+        {count} {count === 1 ? 'heart' : 'hearts'}{' '}
         {isPending ? (
           <>
             <span aria-hidden="true">...</span>
@@ -61,7 +67,9 @@ export default function HeartButton({
         ) : null}
       </button>
       {!canHeart ? (
-        <p className="mt-1 text-xs text-gray-500">Sign in to add hearts.</p>
+        <p className="mt-1.5 text-xs text-muted-foreground">
+          Sign in to add hearts.
+        </p>
       ) : null}
     </div>
   );

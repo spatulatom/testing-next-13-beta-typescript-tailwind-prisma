@@ -72,9 +72,9 @@ export default function FeedControls({ currentQuery }: FeedControlsProps) {
   }
 
   return (
-    <section className="mb-4 rounded-md bg-white p-4 text-gray-900">
+    <section className="mb-4 rounded-xl border border-border bg-surface p-4 shadow-sm">
       <form onSubmit={submitSearch} className="grid gap-3">
-        <label className="order-1 flex flex-col gap-1 text-sm font-bold text-gray-700">
+        <label className="order-1 flex flex-col gap-1 text-sm font-semibold text-foreground">
           Search posts
           <input
             key={currentQuery.search}
@@ -84,7 +84,7 @@ export default function FeedControls({ currentQuery }: FeedControlsProps) {
             name="search"
             type="search"
             placeholder="Post title or author"
-            className="min-h-11 rounded-md bg-gray-200 px-3 py-2 text-base font-normal text-black outline-teal-600"
+            className="min-h-11 rounded-lg border border-border bg-surface-2 px-3 py-2 text-base font-normal text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none focus:ring-2 focus:ring-ring"
           />
         </label>
 
@@ -92,7 +92,7 @@ export default function FeedControls({ currentQuery }: FeedControlsProps) {
           <button
             type="submit"
             disabled={isPending}
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-teal-600 px-4 py-2 text-sm font-bold text-white hover:bg-teal-700 focus:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-50"
           >
             <Search aria-hidden="true" size={18} />
             Search
@@ -103,7 +103,7 @@ export default function FeedControls({ currentQuery }: FeedControlsProps) {
               type="button"
               onClick={resetFeed}
               disabled={isPending}
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-gray-200 px-4 py-2 text-sm font-bold text-gray-900 hover:bg-gray-300 focus:bg-gray-300 disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-border bg-surface px-4 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-surface-2 disabled:cursor-not-allowed disabled:opacity-50"
             >
               <RotateCcw aria-hidden="true" size={18} />
               Reset
@@ -113,7 +113,7 @@ export default function FeedControls({ currentQuery }: FeedControlsProps) {
       </form>
 
       {isPending ? (
-        <p className="mt-3 text-sm font-medium text-teal-700">
+        <p className="mt-3 text-sm font-medium text-accent">
           Updating feed...
         </p>
       ) : null}
