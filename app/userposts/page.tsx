@@ -24,9 +24,7 @@ async function AuthCheckLayer() {
     redirect('/api/auth/signin');
   }
 
-  return (
-    <CachedDashboard userName={session.user?.name} />
-  );
+  return <CachedDashboard userName={session.user?.name} />;
 }
 
 // Receives runtime auth data after the redirect check.
