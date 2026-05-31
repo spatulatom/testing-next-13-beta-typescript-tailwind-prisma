@@ -15,11 +15,11 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="text-center">
-      <h2>{error.message}</h2>
+    <div className="mx-auto max-w-md rounded-xl border border-border bg-surface p-8 text-center">
+      <h2 className="text-lg font-semibold text-foreground">{error.message}</h2>
 
       <button
-        className="my-2 rounded-lg bg-red-500 p-6 py-3 transition-none hover:bg-red-800"
+        className="mt-4 rounded-lg bg-danger px-6 py-3 text-sm font-semibold text-danger-foreground transition-colors hover:opacity-90"
         onClick={
           // Attempt to recover by trying to re-render the segment
           () => reset()
