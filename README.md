@@ -41,6 +41,11 @@
 - `app/globals.css` is the CSS-first source of truth for Tailwind imports, shared tokens, base styles, and custom utilities.
 - The repo no longer relies on `tailwind.config.js` for theme extension or content scanning.
 
+## Cache Components Navigation Audit
+
+- Route caching, prefetch policy, mutation tag coverage, and production navigation checks are tracked in [CACHE_COMPONENTS_NAVIGATION_READINESS_AUDIT.md](CACHE_COMPONENTS_NAVIGATION_READINESS_AUDIT.md).
+- Run `npm run audit:cache-navigation` after changing cached readers, Server Actions, or mutation-sensitive links.
+
 ## New Features in Next.js 15
 
 - **Enhanced Server Actions**: Further improvements in data mutation and server-side logic.

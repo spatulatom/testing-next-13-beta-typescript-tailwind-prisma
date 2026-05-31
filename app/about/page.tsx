@@ -9,19 +9,65 @@ export const metadata: Metadata = {
 };
 
 const techStack = [
-  { name: 'Next.js (App Router)', description: 'Server components, streaming, caching, and server actions across versions 13 → 16+.' },
-  { name: 'TypeScript', description: 'Fully typed codebase for safer refactoring and better IDE support.' },
-  { name: 'Tailwind CSS', description: 'Utility-first styling, migrated from v3 config to the v4 CSS-first approach.' },
-  { name: 'Prisma + PostgreSQL', description: 'ORM for type-safe database access against a hosted PostgreSQL instance.' },
-  { name: 'NextAuth.js / Auth.js v5', description: 'OAuth authentication (Google) integrated with the App Router.' },
-  { name: 'TanStack Query v5', description: 'Client-side data fetching and cache invalidation alongside React Server Components.' },
+  {
+    name: 'Next.js (App Router)',
+    description:
+      'Server components, streaming, caching, and server actions across versions 13 → 16+.',
+  },
+  {
+    name: 'TypeScript',
+    description:
+      'Fully typed codebase for safer refactoring and better IDE support.',
+  },
+  {
+    name: 'Tailwind CSS',
+    description:
+      'Utility-first styling, migrated from v3 config to the v4 CSS-first approach.',
+  },
+  {
+    name: 'Prisma + PostgreSQL',
+    description:
+      'ORM for type-safe database access against a hosted PostgreSQL instance.',
+  },
+  {
+    name: 'NextAuth.js / Auth.js v5',
+    description:
+      'OAuth authentication (Google) integrated with the App Router.',
+  },
+  {
+    name: 'TanStack Query v5',
+    description:
+      'Client-side data fetching and cache invalidation alongside React Server Components.',
+  },
 ];
 
 const milestones: { version: string; highlight: ReactNode }[] = [
-  { version: 'Next.js 13 Beta', highlight: 'First exploration of the App Router and React Server Components (RSC).' },
-  { version: 'Next.js 14', highlight: 'Adopted server actions for mutations and removed the old pages-based API routes.' },
-  { version: 'Next.js 15', highlight: <>Leveraged the new <code className="rounded bg-gray-700 px-1 text-xs">unstable_cache</code> / <code className="rounded bg-gray-700 px-1 text-xs">use cache</code> directive and improved streaming.</> },
-  { version: 'Next.js 16+', highlight: 'Testing Cached Components, updated caching APIs, and Turbopack dev server.' },
+  {
+    version: 'Next.js 13 Beta',
+    highlight:
+      'First exploration of the App Router and React Server Components (RSC).',
+  },
+  {
+    version: 'Next.js 14',
+    highlight:
+      'Adopted server actions for mutations and removed the old pages-based API routes.',
+  },
+  {
+    version: 'Next.js 15',
+    highlight: (
+      <>
+        Leveraged the new{' '}
+        <code className="rounded bg-gray-700 px-1 text-xs">unstable_cache</code>{' '}
+        / <code className="rounded bg-gray-700 px-1 text-xs">use cache</code>{' '}
+        directive and improved streaming.
+      </>
+    ),
+  },
+  {
+    version: 'Next.js 16+',
+    highlight:
+      'Testing Cached Components, updated caching APIs, and Turbopack dev server.',
+  },
 ];
 
 export default function AboutPage() {
@@ -40,11 +86,13 @@ export default function AboutPage() {
 
       {/* What is this project */}
       <section className="space-y-3 rounded-xl border border-gray-700 p-6">
-        <h2 className="text-xl font-semibold text-teal-500">What is this project?</h2>
+        <h2 className="text-xl font-semibold text-teal-500">
+          What is this project?
+        </h2>
         <p className="leading-relaxed text-gray-300">
           <strong>Chat Room</strong> is a full-stack CRUD application that was
-          born in <strong>2023</strong> as a test-bed for the Next.js 13 Beta App
-          Router. Users can sign in with Google, create posts, and leave
+          born in <strong>2023</strong> as a test-bed for the Next.js 13 Beta
+          App Router. Users can sign in with Google, create posts, and leave
           comments — a simple enough domain to keep the focus on the{' '}
           <em>framework</em> rather than the business logic.
         </p>
@@ -60,10 +108,7 @@ export default function AboutPage() {
         <h2 className="text-xl font-semibold text-teal-500">Tech Stack</h2>
         <ul className="grid gap-3 sm:grid-cols-2">
           {techStack.map(({ name, description }) => (
-            <li
-              key={name}
-              className="rounded-xl border border-gray-700 p-4"
-            >
+            <li key={name} className="rounded-xl border border-gray-700 p-4">
               <div className="space-y-1">
                 <span className="font-medium text-white">{name}</span>
                 <p className="text-sm text-gray-400">{description}</p>
@@ -75,7 +120,9 @@ export default function AboutPage() {
 
       {/* Version milestones */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold text-teal-500">Version Milestones</h2>
+        <h2 className="text-xl font-semibold text-teal-500">
+          Version Milestones
+        </h2>
         <ol className="space-y-0">
           {milestones.map(({ version, highlight }, i) => (
             <li key={version} className="flex gap-4">

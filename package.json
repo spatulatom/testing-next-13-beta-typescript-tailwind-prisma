@@ -10,6 +10,7 @@
     "build": "next build",
     "start": "next start",
     "test": "vitest run",
+    "audit:cache-navigation": "node scripts/cache-navigation-readiness-audit.mjs",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "debug": "next build --debug"
