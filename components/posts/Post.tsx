@@ -17,13 +17,17 @@ export default function Post({
 }: PostCardProps) {
   let whenNull;
   if (avatar === null) {
-    whenNull = '';
+    whenNull = (
+      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-surface-2 text-sm font-semibold text-muted-foreground">
+        {name?.charAt(0)?.toUpperCase() ?? '?'}
+      </div>
+    );
   } else {
     whenNull = (
       <Image
         className="rounded-full"
-        width={32}
-        height={32}
+        width={36}
+        height={36}
         src={avatar}
         alt="avatar"
       />
@@ -40,31 +44,28 @@ export default function Post({
     // d.toLocaleString()
   );
   return (
-    // <motion.div
-    //   animate={{ opacity: 1, scale: 1 }}
-    //   initial={{ opacity: 0, scale: 0.8 }}
-    //   transition={{ ease: 'easeOut' }}
-    //   className="bg-white my-8 p-8 rounded-lg "
-    // >
-    // </motion.div>
-    <div className="mb-4">
+    <div className="mb-4 overflow-hidden rounded-xl border border-border bg-surface shadow-sm transition hover:border-accent/40 hover:shadow-md">
       <Link
         href={{
           pathname: `/${id}`,
         }}
         prefetch={false}
+        className="block"
       >
-        <div className="flex items-center rounded-t-lg bg-white p-4">
+        <div className="flex items-center gap-3 px-4 pt-4">
           {whenNull}
-          <div className="">
-            {' '}
-            <h3 className="pl-2 font-bold text-gray-700">{name}</h3>
-            <h4 className="pl-2 text-sm text-gray-600">posted on: {d}</h4>
+          <div>
+            <h3 className="font-semibold text-foreground">{name}</h3>
+            <h4 className="text-xs text-muted-foreground">posted on {d}</h4>
           </div>
         </div>
-        <div className="rounded-b-lg bg-teal-600 py-6">
-          <p className="px-4 text-white">{postTitle}</p>
-          <p className="px-4 pt-6 text-sm text-white">Comments: {comments}</p>
+        <p className="px-4 py-4 text-base leading-relaxed text-foreground">
+          {postTitle}
+        </p>
+        <div className="flex items-center gap-2 border-t border-border px-4 py-2 text-sm text-muted-foreground">
+          <span>
+            {comments} {comments === 1 ? 'comment' : 'comments'}
+          </span>
         </div>
       </Link>
       <HeartButton
