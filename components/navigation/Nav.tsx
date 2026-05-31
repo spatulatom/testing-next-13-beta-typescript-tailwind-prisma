@@ -23,46 +23,73 @@ export default async function Nav() {
   }
 
   return (
-    <nav className="flex items-center justify-between">
+    <nav className="flex items-center justify-between gap-4">
       <Suspense>
         <HamburgerMenu isLoggedIn={!!session} />
       </Suspense>
-      <ul className="relative z-10 hidden flex-wrap items-center gap-4 text-sm md:flex">
+      <ul className="relative z-10 hidden flex-wrap items-center gap-1 text-sm font-medium md:flex">
         <li>
-          <Link href={'/'} prefetch={false}>
+          <Link
+            href={'/'}
+            prefetch={false}
+            className="rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-surface-2 hover:text-foreground"
+          >
             Home
           </Link>
         </li>
         {session && (
           <li>
-            <Link href={'/userposts'} prefetch={false}>
-              <h2 className="transition-all hover:text-teal-600">
-                User's Posts
-              </h2>
+            <Link
+              href={'/userposts'}
+              prefetch={false}
+              className="rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-surface-2 hover:text-foreground"
+            >
+              User&apos;s Posts
             </Link>
           </li>
         )}
 
         <li>
-          <Link href={'/halftone-waves'}>Waves</Link>
+          <Link
+            href={'/halftone-waves'}
+            className="rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-surface-2 hover:text-foreground"
+          >
+            Waves
+          </Link>
         </li>
         <li>
-          <Link href={'/deep-galaxy'}>Galaxy</Link>
+          <Link
+            href={'/deep-galaxy'}
+            className="rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-surface-2 hover:text-foreground"
+          >
+            Galaxy
+          </Link>
         </li>
         <li>
-          <Link href={'/edit-suggestions'}>Edit Suggestions</Link>
+          <Link
+            href={'/edit-suggestions'}
+            className="rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-surface-2 hover:text-foreground"
+          >
+            Edit Suggestions
+          </Link>
         </li>
         <li>
-          <Link href={'/about'}>About</Link>
+          <Link
+            href={'/about'}
+            className="rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-surface-2 hover:text-foreground"
+          >
+            About
+          </Link>
         </li>
       </ul>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         <a
           href="https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma#readme"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-app-inverse"
+          aria-label="View this project on GitHub"
+          className="rounded-md p-2 text-foreground transition-colors hover:bg-surface-2 hover:text-accent"
         >
           <FontAwesomeIcon icon={faGithub} className="size-6" />
         </a>
