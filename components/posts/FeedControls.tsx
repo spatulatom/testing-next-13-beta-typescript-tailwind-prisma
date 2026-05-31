@@ -40,6 +40,8 @@ export default function FeedControls({ currentQuery }: FeedControlsProps) {
       params.set('sort', nextSort);
     }
 
+    params.delete('page');
+
     const queryString = params.toString();
     return queryString ? `${pathname}?${queryString}` : pathname;
   }
