@@ -42,6 +42,8 @@ export default function FeedSortControl({
       params.set('sort', nextSort);
     }
 
+    params.delete('page');
+
     const nextUrl = params.toString()
       ? `${pathname}?${params.toString()}`
       : pathname;

@@ -2,17 +2,31 @@ import Post from '@/components/posts/Post';
 import AddPost from '@/components/posts/AddPost';
 import Counter from '@/components/posts/Counter';
 import allPosts from '@/app/allPosts';
-import { cacheTag } from 'next/cache';
 import { auth } from '@/auth';
-import type { Post as PrismaPost, User, Comment, Heart } from '@prisma/client';
+import type { Comment, Heart, Post as PrismaPost, User } from '@prisma/client';
 import { Suspense } from 'react';
 import FeedControls from '@/components/posts/FeedControls';
+import FeedPagination from '@/components/posts/FeedPagination';
 import FeedSortControl from '@/components/posts/FeedSortControl';
+import { redirect } from 'next/navigation';
 import {
+  buildFeedHref,
   normalizeFeedSearchParams,
+  type FeedPaginationMeta,
   type FeedQuery,
   type FeedSearchParams,
 } from '@/lib/posts/feed-query';
+
+type PostWithRelations = PrismaPost & {
+  user: User;
+  comments: Comment[];
+  hearts: Heart[];
+};
+
+type FeedResult = {
+  posts: PostWithRelations[];
+  pagination: FeedPaginationMeta;
+};
 
 export default async function Home({
   searchParams,
@@ -33,36 +47,47 @@ async function HomeWithSession({
 }) {
   const [session, params] = await Promise.all([auth(), searchParams]);
   const feedQuery = normalizeFeedSearchParams(params);
+  const rawPage = Array.isArray(params.page) ? params.page[0] : params.page;
+  const hasPageParam = rawPage !== undefined;
+  const shouldNormalizePageParam =
+    hasPageParam && rawPage !== String(feedQuery.page);
+  const feedResult: FeedResult = await allPosts(feedQuery);
+  const { pagination } = feedResult;
+
+  if (
+    pagination.currentPage !== feedQuery.page ||
+    shouldNormalizePageParam ||
+    (hasPageParam && pagination.currentPage === 1)
+  ) {
+    redirect(buildFeedHref(feedQuery, pagination.currentPage));
+  }
 
   return (
-    <CachedHome userId={session?.user?.id ?? null} feedQuery={feedQuery} />
+    <HomeContent
+      userId={session?.user?.id ?? null}
+      feedQuery={feedQuery}
+      feedResult={feedResult}
+    />
   );
 }
 
-async function CachedHome({
+function HomeContent({
   userId,
   feedQuery,
+  feedResult,
 }: {
   userId: string | null;
   feedQuery: FeedQuery;
+  feedResult: FeedResult;
 }) {
-  'use cache';
-  cacheTag('posts');
-
-  type PostWithRelations = PrismaPost & {
-    user: User;
-    comments: Comment[];
-    hearts: Heart[];
-  };
-
   console.log('DATA FETCH HOME PAGE1');
 
-  const data: PostWithRelations[] = await allPosts(feedQuery);
+  const { posts, pagination } = feedResult;
   const hasActiveFilters = Boolean(
     feedQuery.search || feedQuery.sort !== 'newest'
   );
 
-  if (!data || data.length === 0) {
+  if (pagination.totalCount === 0) {
     return (
       <div className="mb-20">
         <h1 className="mt-1 mb-2 bg-linear-to-r from-teal-600 via-black to-white bg-clip-text text-center text-xl font-bold md:text-5xl">
@@ -121,15 +146,18 @@ async function CachedHome({
         <FeedControls currentQuery={feedQuery} />
       </Suspense>
       <div className="mb-2 flex flex-col justify-between md:flex-row md:items-center">
-        <Counter count={data.length} />
+        <Counter count={pagination.totalCount} />
         <Suspense
           fallback={<div className="m-2 h-11 w-56 rounded-md bg-white" />}
         >
           <FeedSortControl currentQuery={feedQuery} />
         </Suspense>
       </div>
+      <p className="m-2 text-sm text-gray-600 dark:text-gray-300">
+        Showing page {pagination.currentPage} of {pagination.totalPages}
+      </p>
 
-      {data.map((post) => (
+      {posts.map((post) => (
         <Post
           key={post.id}
           id={post.id}
@@ -145,6 +173,7 @@ async function CachedHome({
           canToggleHeart={Boolean(userId)}
         />
       ))}
+      <FeedPagination currentQuery={feedQuery} pagination={pagination} />
     </div>
   );
 }
