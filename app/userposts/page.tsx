@@ -3,7 +3,6 @@ import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import UserOwnPosts from './UserOwnPosts';
 import type { Metadata } from 'next';
-import { cacheTag } from 'next/cache';
 
 export const metadata: Metadata = {
   title: 'Your Posts',
@@ -26,14 +25,12 @@ async function AuthCheckLayer() {
   }
 
   return (
-    <CachedDashboard userName={session.user?.name} userId={session.user?.id} />
+    <CachedDashboard userName={session.user?.name} />
   );
 }
 
-// Receives username as prop — cacheable per-user
-async function CachedDashboard({ userName, userId }: { userName?: string | null; userId?: string }) {
-
- 
+// Receives runtime auth data after the redirect check.
+async function CachedDashboard({ userName }: { userName?: string | null }) {
   return (
     <main>
       <h1 className="mx-2 text-2xl font-bold">
