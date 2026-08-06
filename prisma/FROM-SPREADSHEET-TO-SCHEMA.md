@@ -26,6 +26,12 @@ The point is to make the thinking visible. Every table below is something you co
 - [**Chapter 6** — Sheets → Prisma](#chapter-6--sheets--prisma)
 - [**Chapter 7** — Where the flat table comes back](#chapter-7--where-the-flat-table-comes-back)
 - [**Chapter 8** — is this really how it's done?](#chapter-8--is-this-really-how-its-done)
+- [**Chapter 9** — Junction tables vs. many-to-many relationships (a clarification)](#chapter-9--junction-tables-vs-many-to-many-relationships-a-clarification)
+  - [The misconception](#the-misconception)
+  - [What's actually happening](#whats-actually-happening)
+  - [Why it's confusing](#why-its-confusing)
+  - [The rule](#the-rule)
+  - [The takeaway](#the-takeaway)
 - [The three documents](#the-three-documents)
 
 ---
@@ -470,6 +476,91 @@ But two things make the long way genuinely worth walking:
 2. **It's how you find your own mistakes.** The row-explosion in Chapter 1 is a real bug, in a real query, in this repo's [RAW-SQL.md](RAW-SQL.md) — and the spreadsheet exposed it before any code existed.
 
 What's less realistic in this document: a real ticket would also cover soft deletes, pagination strategy, an audit trail, and probably a `slug` column for URLs. Those get skipped here to keep the normalization thread clean.
+
+---
+
+## Chapter 9 — Junction tables vs. many-to-many relationships (a clarification)
+
+> **The trap:** looking at the `Heart` table can give the false impression that Heart itself *is* a many-to-many entity. It's not.
+
+### The misconception
+
+When you see:
+
+```
+Heart — key: (PostID, UserID)
+```
+
+It's easy to think: "Hearts are many-to-many." But that's mixing up two things:
+
+1. The **relationship** (between Post and User): many-to-many ✅
+2. The **entity** (Heart): one-to-many, appearing twice
+
+### What's actually happening
+
+Heart is an entity, just like Comment. It has its own identity (HeartID) and two foreign keys:
+
+| HeartID | PostID | UserID |
+| --- | --- | --- |
+| H1 | P1 | U2 |
+
+Read this row as:
+- One **post** (P1) has many **hearts** — one-to-many
+- One **user** (U2) has many **hearts** — one-to-many
+- The many-to-many *emerges* from these two relationships existing together
+
+### Why it's confusing
+
+The junction table format strips Heart down to pure keys because currently it has **no other attributes**. If we gave Heart data — say, `createdAt` to track when someone hearted something:
+
+```
+Heart:
+| HeartID | PostID | UserID | CreatedAt |
+| H1 | P1 | U2 | 2026-03-01 |
+```
+
+Suddenly it looks obviously like an entity (just like Comment), and the one-to-many pattern becomes crystal clear.
+
+### Side-by-side: Heart vs Comment — and what happens if Heart gained data
+
+| Aspect | Heart (now) | Comment (now) | Heart (if it had data) |
+| --- | --- | --- | --- |
+| **Table structure** | HeartID, PostID, UserID | CommentID, PostID, UserID, Title, CreatedAt | HeartID, PostID, UserID, CreatedAt |
+| **Entity type** | Pure junction table | Full entity with content | Full entity with metadata |
+| **Primary purpose** | Implement User ↔ Post many-to-many | Store comment text | Store heart event/metadata |
+| **Conceptual role** | "The mechanism of the M2M" | "An entity that happens to exist in two contexts" | "An entity that happens to exist in two contexts" |
+| **Many-to-many relationship exists?** | YES — User ↔ Post directly | YES — User ↔ Post (via Comment) | YES — User ↔ Post (via Heart) |
+| **Is the M2M "leveraged" through this table?** | **YES** — that's the whole point of Heart | NOT REALLY — it's a side effect of Comment's structure | NOT REALLY — it becomes a side effect |
+
+**The key insight:** the many-to-many relationship between User and Post **always exists** structurally. But how it's *leveraged* (how it's expressed in the table design) changes:
+
+- **Heart as pure junction** = the table is *designed for* the many-to-many; that relationship is the entire reason the table exists
+- **Heart with data** = the table is designed for its own reasons (storing heart events), and the many-to-many is just a *consequence* of having two foreign keys
+
+In SQL, you'd query it the same way either way:
+
+```sql
+-- "Show me all users who hearted post P1"
+SELECT DISTINCT u.* FROM "User" u
+JOIN "Heart" h ON u."id" = h."userId"
+WHERE h."postId" = 'P1';
+```
+
+The query doesn't change. The table's *purpose* does.
+
+### The rule
+
+**A junction table is not a special kind of entity. It's an ordinary entity that happens to have no attributes beyond its two foreign keys.**
+
+If Heart later gained a `reactionType` column (to support emoji reactions) or a `createdAt`, you wouldn't redesign the table. You'd just add columns. The structure stays the same.
+
+The distinction is **implementation-focused, not conceptual**: we call it a "junction table" to signal "this table's sole purpose is bridging two other tables." But structurally, it's just a one-to-many entity appearing twice.
+
+### The takeaway
+
+When designing a schema and you see a table with two foreign keys and a composite unique constraint, **don't assume the data will stay minimal.** Heart could stay a pure junction table forever, or it could grow attributes next quarter. The architecture doesn't change either way.
+
+What changes is the *story* you tell: from "the mechanism of a many-to-many relationship" to "an entity with its own lifecycle that happens to connect two other entities."
 
 ---
 
