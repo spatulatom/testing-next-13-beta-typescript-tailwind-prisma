@@ -57,8 +57,8 @@ const milestones: { version: string; highlight: ReactNode }[] = [
     highlight: (
       <>
         Leveraged the new{' '}
-        <code className="rounded bg-gray-700 px-1 text-xs">unstable_cache</code>{' '}
-        / <code className="rounded bg-gray-700 px-1 text-xs">use cache</code>{' '}
+        <code className="rounded bg-surface-2 px-1 text-xs">unstable_cache</code>{' '}
+        / <code className="rounded bg-surface-2 px-1 text-xs">use cache</code>{' '}
         directive and improved streaming.
       </>
     ),
@@ -75,28 +75,28 @@ export default function AboutPage() {
     <div className="mx-auto max-w-3xl space-y-10 py-10">
       {/* Hero */}
       <section className="space-y-3 text-center">
-        <h1 className="bg-linear-to-r from-teal-600 via-black to-white bg-clip-text text-4xl font-bold">
+        <h1 className="gradient-heading text-4xl font-extrabold tracking-tight">
           About Chat Room
         </h1>
-        <p className="text-lg text-gray-400">
+        <p className="text-lg text-muted-foreground">
           A living lab for Next.js — from the very first App Router beta to the
           latest cutting-edge releases.
         </p>
       </section>
 
       {/* What is this project */}
-      <section className="space-y-3 rounded-xl border border-gray-700 p-6">
-        <h2 className="text-xl font-semibold text-teal-500">
+      <section className="space-y-3 rounded-xl border border-border bg-surface p-6">
+        <h2 className="text-xl font-semibold text-accent">
           What is this project?
         </h2>
-        <p className="leading-relaxed text-gray-300">
-          <strong>Chat Room</strong> is a full-stack CRUD application that was
-          born in <strong>2023</strong> as a test-bed for the Next.js 13 Beta
-          App Router. Users can sign in with Google, create posts, and leave
-          comments — a simple enough domain to keep the focus on the{' '}
-          <em>framework</em> rather than the business logic.
+        <p className="leading-relaxed text-muted-foreground">
+          <strong className="text-foreground">Chat Room</strong> is a full-stack
+          CRUD application that was born in <strong>2023</strong> as a test-bed
+          for the Next.js 13 Beta App Router. Users can sign in with Google,
+          create posts, and leave comments — a simple enough domain to keep the
+          focus on the <em>framework</em> rather than the business logic.
         </p>
-        <p className="leading-relaxed text-gray-300">
+        <p className="leading-relaxed text-muted-foreground">
           Every time Next.js ships a major version, this project is upgraded and
           the new APIs are exercised — making it a hands-on changelog of
           real-world Next.js evolution.
@@ -105,13 +105,16 @@ export default function AboutPage() {
 
       {/* Tech stack */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold text-teal-500">Tech Stack</h2>
+        <h2 className="text-xl font-semibold text-accent">Tech Stack</h2>
         <ul className="grid gap-3 sm:grid-cols-2">
           {techStack.map(({ name, description }) => (
-            <li key={name} className="rounded-xl border border-gray-700 p-4">
+            <li
+              key={name}
+              className="rounded-xl border border-border bg-surface p-4"
+            >
               <div className="space-y-1">
-                <span className="font-medium text-white">{name}</span>
-                <p className="text-sm text-gray-400">{description}</p>
+                <span className="font-medium text-foreground">{name}</span>
+                <p className="text-sm text-muted-foreground">{description}</p>
               </div>
             </li>
           ))}
@@ -120,21 +123,23 @@ export default function AboutPage() {
 
       {/* Version milestones */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold text-teal-500">
+        <h2 className="text-xl font-semibold text-accent">
           Version Milestones
         </h2>
         <ol className="space-y-0">
           {milestones.map(({ version, highlight }, i) => (
             <li key={version} className="flex gap-4">
               <div className="flex flex-col items-center">
-                <span className="mt-1.25 h-3 w-3 shrink-0 rounded-full bg-teal-500" />
+                <span className="mt-1.25 h-3 w-3 shrink-0 rounded-full bg-accent" />
                 {i < milestones.length - 1 && (
-                  <span className="my-1 w-px flex-1 bg-gray-700" />
+                  <span className="my-1 w-px flex-1 bg-border" />
                 )}
               </div>
               <div className="pb-6">
-                <p className="font-medium text-white">{version}</p>
-                <p className="mt-1 text-sm text-gray-400">{highlight}</p>
+                <p className="font-medium text-foreground">{version}</p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {highlight}
+                </p>
               </div>
             </li>
           ))}
@@ -145,7 +150,7 @@ export default function AboutPage() {
       <section className="flex flex-wrap gap-4">
         <Link
           href="/"
-          className="rounded-lg bg-teal-600 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-700"
+          className="rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground transition-colors hover:bg-accent-hover"
         >
           ← Back to Chat Room
         </Link>
@@ -153,7 +158,7 @@ export default function AboutPage() {
           href="https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma#readme"
           target="_blank"
           rel="noopener noreferrer"
-          className="rounded-lg border border-gray-600 px-5 py-2.5 text-sm font-medium text-gray-300 transition-colors hover:border-teal-500 hover:text-teal-400"
+          className="rounded-lg border border-border px-5 py-2.5 text-sm font-semibold text-muted-foreground transition-colors hover:border-accent hover:text-accent"
         >
           View README on GitHub ↗
         </a>
