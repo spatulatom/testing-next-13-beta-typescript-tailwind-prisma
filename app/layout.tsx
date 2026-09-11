@@ -27,36 +27,45 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.className} m-4 pb-2 pt-2 antialiased md:m-auto md:p-8`}
+        className={`${inter.className} flex min-h-screen flex-col antialiased`}
       >
-   
-
         <QueryWrapper>
-          <header>
-            <Suspense
-              fallback={
-                <nav className="mb-4 flex w-screen items-center gap-6 p-3 font-medium">
-                  <Link href="/" className="text-white hover:underline">
-                    Home
-                  </Link>
-                  <Link
-                    href="/deep-galaxy"
-                    className="text-white hover:underline"
-                  >
-                    Galaxy
-                  </Link>
-                  <span className="text-white">Menu loading...</span>
-                </nav>
-              }
-            >
-              <Nav />
-            </Suspense>
+          <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-md">
+            <div className="mx-auto w-full max-w-5xl px-4 py-3 sm:px-6">
+              <Suspense
+                fallback={
+                  <nav className="flex items-center gap-6 text-sm font-medium">
+                    <Link
+                      href="/"
+                      className="text-foreground hover:text-accent"
+                    >
+                      Home
+                    </Link>
+                    <Link
+                      href="/deep-galaxy"
+                      className="text-foreground hover:text-accent"
+                    >
+                      Galaxy
+                    </Link>
+                    <span className="text-muted-foreground">
+                      Menu loading...
+                    </span>
+                  </nav>
+                }
+              >
+                <Nav />
+              </Suspense>
+            </div>
           </header>
 
-          <main className="m-auto md:w-4/6">{children}</main>
+          <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-6">
+            {children}
+          </main>
 
-          <footer className="mt-8 border-t border-gray-700 pt-4 text-center text-gray-400">
-            <p>&copy; 2025 Chat Room. All rights reserved.</p>
+          <footer className="mt-8 border-t border-border">
+            <div className="mx-auto w-full max-w-5xl px-4 py-6 text-center text-sm text-muted-foreground sm:px-6">
+              <p>&copy; 2026 Chat Room. All rights reserved.</p>
+            </div>
           </footer>
         </QueryWrapper>
       </body>

@@ -50,25 +50,29 @@ export default function CreatePost() {
   };
 
   return (
-    <form onSubmit={submitPost} className="my-8 rounded-md bg-white p-8">
-      <div className="my-4 flex flex-col">
+    <form
+      onSubmit={submitPost}
+      className="my-8 rounded-xl border border-border bg-surface p-6 shadow-sm"
+    >
+      <div className="my-2 flex flex-col">
         <textarea
           onChange={(e) => setTitle(e.target.value)}
           value={title}
           name="title"
           placeholder="Write your post here..."
-          className="my-2 rounded-md bg-gray-200 p-4 text-base text-black"
+          rows={3}
+          className="resize-y rounded-lg border border-border bg-surface-2 p-4 text-base text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none focus:ring-2 focus:ring-ring"
         />
       </div>
-      <div className="flex items-center justify-between gap-2">
+      <div className="mt-4 flex items-center justify-between gap-2">
         <p
-          className={`text-sm font-bold ${
-            title.length > 50 ? 'text-red-700' : 'text-gray-700'
+          className={`text-sm font-semibold ${
+            title.length > 50 ? 'text-danger' : 'text-muted-foreground'
           } `}
         >{`${title.length}/50`}</p>
         <button
           disabled={isDisabled}
-          className="rounded-xl bg-teal-600 px-6 py-2 text-sm text-white disabled:opacity-25"
+          className="inline-flex min-h-10 items-center justify-center rounded-lg bg-accent px-6 py-2 text-sm font-semibold text-accent-foreground transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-50"
           type="submit"
         >
           Create a post

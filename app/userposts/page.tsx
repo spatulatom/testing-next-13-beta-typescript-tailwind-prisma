@@ -31,7 +31,7 @@ async function AuthCheckLayer() {
 async function CachedDashboard({ userName }: { userName?: string | null }) {
   return (
     <main>
-      <h1 className="mx-2 text-2xl font-bold">
+      <h1 className="mx-2 mb-4 text-2xl font-bold text-foreground">
         Check out your posts {userName}!
       </h1>
       <UserOwnPosts />

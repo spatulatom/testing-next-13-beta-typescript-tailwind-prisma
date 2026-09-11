@@ -23,9 +23,9 @@ export default function FeedPagination({
   const previousHref = buildFeedHref(currentQuery, pagination.currentPage - 1);
   const nextHref = buildFeedHref(currentQuery, pagination.currentPage + 1);
   const controlClassName =
-    'inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-bold';
-  const enabledClassName = `${controlClassName} bg-teal-600 text-white hover:bg-teal-700 focus:bg-teal-700`;
-  const disabledClassName = `${controlClassName} cursor-not-allowed bg-gray-200 text-gray-500`;
+    'inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition-colors';
+  const enabledClassName = `${controlClassName} bg-accent text-accent-foreground hover:bg-accent-hover`;
+  const disabledClassName = `${controlClassName} cursor-not-allowed border border-border bg-surface text-muted-foreground`;
 
   return (
     <nav
@@ -44,7 +44,7 @@ export default function FeedPagination({
         </span>
       )}
 
-      <span className="min-h-11 rounded-md bg-white px-4 py-2 text-sm font-bold text-gray-800">
+      <span className="min-h-11 rounded-lg border border-border bg-surface px-4 py-2 text-sm font-semibold text-foreground">
         Page {pagination.currentPage} of {pagination.totalPages}
       </span>
 

@@ -36,17 +36,17 @@ export default function DeletePost({
         animate={{ opacity: 1, scale: 1 }}
         initial={{ opacity: 0, scale: 0.8 }}
         transition={{ ease: 'easeOut' }}
-        className="my-8 mb-1 rounded-lg bg-white p-8"
+        className="my-8 mb-1 rounded-xl border border-border bg-surface p-6"
       >
         <div className="flex items-center gap-2">
           {avatar && <Image width={32} height={32} src={avatar} alt="avatar" />}
-          <h3 className="font-bold text-gray-700">{name || 'Anonymous'}</h3>
+          <h3 className="font-bold text-foreground">{name || 'Anonymous'}</h3>
         </div>
-        <div className="my-8">
-          <p className="break-all text-black">{title}</p>
+        <div className="my-6">
+          <p className="break-all text-foreground">{title}</p>
         </div>
         <div className="flex justify-between gap-4">
-          <p className="text-sm font-bold text-gray-700">
+          <p className="text-sm font-semibold text-muted-foreground">
             {comments?.length} Comments:
           </p>
           <button
@@ -54,7 +54,7 @@ export default function DeletePost({
               e.stopPropagation();
               setToggle(true);
             }}
-            className="text-sm font-bold text-red-500 uppercase"
+            className="text-sm font-bold text-danger uppercase transition-opacity hover:opacity-80"
           >
             Delete
           </button>

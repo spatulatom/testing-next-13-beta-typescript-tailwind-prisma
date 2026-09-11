@@ -34,7 +34,9 @@ export default async function Home({
   searchParams: Promise<FeedSearchParams>;
 }) {
   return (
-    <Suspense fallback={<div className="py-6">Loading posts...</div>}>
+    <Suspense
+      fallback={<div className="py-6 text-muted-foreground">Loading posts...</div>}
+    >
       <HomeWithSession searchParams={searchParams} />
     </Suspense>
   );
@@ -90,19 +92,23 @@ function HomeContent({
   if (pagination.totalCount === 0) {
     return (
       <div className="mb-20">
-        <h1 className="mt-1 mb-2 bg-linear-to-r from-teal-600 via-black to-white bg-clip-text text-center text-xl font-bold md:text-5xl">
+        <h1 className="gradient-heading mt-1 mb-6 text-center text-3xl font-extrabold tracking-tight md:text-5xl">
           Chat Room
         </h1>
 
         <AddPost />
-        <Suspense fallback={<div className="mb-4 h-28 rounded-md bg-white" />}>
+        <Suspense
+          fallback={
+            <div className="mb-4 h-28 animate-pulse rounded-xl bg-surface-2" />
+          }
+        >
           <FeedControls currentQuery={feedQuery} />
         </Suspense>
-        <div className="flex flex-col items-center justify-center">
-          <h2 className="text-xl font-bold">
+        <div className="flex flex-col items-center justify-center rounded-xl border border-border bg-surface px-6 py-12 text-center">
+          <h2 className="text-xl font-bold text-foreground">
             {hasActiveFilters ? 'No posts match your search' : 'No Posts Yet'}
           </h2>
-          <p className="mt-2 text-gray-600">
+          <p className="mt-2 text-muted-foreground">
             {hasActiveFilters
               ? 'Try a different search, switch sorting, or reset the feed.'
               : "You haven't created any posts yet."}
@@ -114,46 +120,53 @@ function HomeContent({
 
   return (
     <div className="">
-      {/* <h1 className="text-center text-2xl font-bold  mt-10 animate-shimmer bg-gradient-to-r from-teal-600 via-black to-white text-transparent bg-clip-text capitalize">chat Room</h1> */}
-      <h1 className="mt-10 mb-2 bg-linear-to-r from-teal-600 via-black to-white bg-clip-text text-center text-xl font-bold">
-        Chat Room - crud app with{' '}
+      <h1 className="gradient-heading mt-2 mb-3 text-center text-3xl font-extrabold tracking-tight md:text-4xl">
+        Chat Room
+      </h1>
+      <p className="mb-6 text-center text-sm text-muted-foreground">
+        A CRUD app built with{' '}
         <a
-          className="text-teal-600 hover:underline focus:underline"
+          className="font-medium text-accent hover:underline focus:underline"
           target="_blank"
           href="https://nextjs.org/docs/app/getting-started/cache-components"
         >
           Cached Components
         </a>
-      </h1>
-      <p className="ml-6 list-disc space-y-1">
-        {' '}
+      </p>
+      <p className="mb-2 leading-relaxed text-muted-foreground">
         This project tested App Router and React Server Components (RSC) when
-        they were first introduced in Next.js 13 Beta (in 2023). <br />
-        Since then the project was migrated to every major Next.js version
-        trying some new features at every release, from version 13 to 16+ (see{' '}
+        they were first introduced in Next.js 13 Beta (in 2023). Since then the
+        project was migrated to every major Next.js version trying some new
+        features at every release, from version 13 to 16+ (see{' '}
         <a
-          className="text-teal-600 hover:underline focus:underline"
+          className="font-medium text-accent hover:underline focus:underline"
           target="_blank"
           href="https://github.com/spatulatom/testing-next-13-beta-typescript-tailwind-prisma#readme"
         >
           readme
         </a>{' '}
-        for more details).{' '}
+        for more details).
       </p>
 
       <AddPost />
-      <Suspense fallback={<div className="mb-4 h-28 rounded-md bg-white" />}>
+      <Suspense
+        fallback={
+          <div className="mb-4 h-28 animate-pulse rounded-xl bg-surface-2" />
+        }
+      >
         <FeedControls currentQuery={feedQuery} />
       </Suspense>
-      <div className="mb-2 flex flex-col justify-between md:flex-row md:items-center">
+      <div className="mb-2 flex flex-col justify-between gap-2 md:flex-row md:items-center">
         <Counter count={pagination.totalCount} />
         <Suspense
-          fallback={<div className="m-2 h-11 w-56 rounded-md bg-white" />}
+          fallback={
+            <div className="m-2 h-11 w-56 animate-pulse rounded-lg bg-surface-2" />
+          }
         >
           <FeedSortControl currentQuery={feedQuery} />
         </Suspense>
       </div>
-      <p className="m-2 text-sm text-gray-600 dark:text-gray-300">
+      <p className="m-2 text-sm text-muted-foreground">
         Showing page {pagination.currentPage} of {pagination.totalPages}
       </p>
 

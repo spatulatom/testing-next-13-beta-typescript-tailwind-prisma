@@ -14,14 +14,19 @@ export default async function UserOwnPosts() {
 
   return (
     <div>
-      <h2 className="m-3">You have {response.posts.length} posts.</h2>
+      <h2 className="m-3 text-sm font-semibold text-muted-foreground">
+        You have {response.posts.length} posts.
+      </h2>
       {response.posts.length === 0 && (
-        <h1 className="m-3">
+        <h1 className="m-3 text-muted-foreground">
           Go back to the &apos;Chat Room&apos; and create you first post!
         </h1>
       )}
       {response.posts.map((post) => (
-        <div key={post.id} className="mt-2 rounded-md bg-gray-200 p-2">
+        <div
+          key={post.id}
+          className="mt-2 rounded-xl border border-border bg-surface p-3"
+        >
           <DeletePost
             id={post.id}
             avatar={response.image}
@@ -32,7 +37,7 @@ export default async function UserOwnPosts() {
           {post.comments?.map((comment) => (
             <div
               key={comment.id}
-              className="mt-2 rounded-md bg-gray-300 p-2 text-black"
+              className="mt-2 rounded-lg border border-border bg-surface-2 p-3 text-foreground"
             >
               <div className="flex items-center gap-2">
                 {comment.user?.image && (
@@ -47,7 +52,7 @@ export default async function UserOwnPosts() {
                 <h3 className="font-bold">
                   {comment.user.name || 'Anonymous'}
                 </h3>
-                <h2 className="text-sm">
+                <h2 className="text-sm text-muted-foreground">
                   {typeof comment.createdAt === 'string'
                     ? comment.createdAt
                     : comment.createdAt?.toLocaleDateString()}

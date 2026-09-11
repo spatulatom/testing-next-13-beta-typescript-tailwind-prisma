@@ -54,7 +54,7 @@ export default function AddComment({ id }: AddCommentProps) {
 
   return (
     <form onSubmit={submitComment} className="my-8">
-      <h3 className="text-xl">Add a comment</h3>
+      <h3 className="text-xl font-semibold text-foreground">Add a comment</h3>
 
       <div className="my-2 flex flex-col">
         <input
@@ -62,7 +62,7 @@ export default function AddComment({ id }: AddCommentProps) {
           value={title}
           type="text"
           name="title"
-          className="my-2 rounded-md bg-white p-4 text-base text-black"
+          className="my-2 rounded-lg border border-border bg-surface p-4 text-base text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none focus:ring-2 focus:ring-ring"
           placeholder="your comment..."
           maxLength={30}
           minLength={1}
@@ -71,14 +71,14 @@ export default function AddComment({ id }: AddCommentProps) {
       <div className="flex items-center gap-2">
         <button
           disabled={isDisabled}
-          className="rounded-xl bg-teal-600 px-6 py-2 text-sm text-white disabled:opacity-25"
+          className="inline-flex min-h-10 items-center justify-center rounded-lg bg-accent px-6 py-2 text-sm font-semibold text-accent-foreground transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-50"
           type="submit"
         >
           Add a comment
         </button>
         <p
-          className={`font-bold text-white ${
-            title.length > 30 ? 'text-red-700' : 'text-gray-700'
+          className={`font-semibold ${
+            title.length > 30 ? 'text-danger' : 'text-muted-foreground'
           } `}
         >{`${title.length}/30`}</p>
       </div>

@@ -54,12 +54,12 @@ export default function FeedSortControl({
   }
 
   return (
-    <label className="m-2 flex items-center gap-2 text-sm font-bold text-gray-700 dark:text-gray-300">
+    <label className="m-2 flex items-center gap-2 text-sm font-semibold text-foreground">
       Sort by:
       <select
         value={currentQuery.sort}
         onChange={(event) => changeSort(event.target.value as FeedSort)}
-        className="min-h-11 rounded-md bg-gray-200 px-3 py-2 text-base font-normal text-black outline-teal-600"
+        className="min-h-11 rounded-lg border border-border bg-surface-2 px-3 py-2 text-base font-normal text-foreground focus:border-accent focus:outline-none focus:ring-2 focus:ring-ring"
         disabled={isPending}
       >
         {FEED_SORTS.map((sort) => (

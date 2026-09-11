@@ -5,7 +5,7 @@ import { signIn } from 'next-auth/react';
 export default function Login() {
   return (
     <button
-      className="whitespace-nowrap rounded-md bg-slate-600 p-2 px-4 font-bold text-white transition-all hover:bg-slate-700"
+      className="inline-flex min-h-10 items-center justify-center rounded-lg bg-accent px-4 py-2 text-sm font-semibold whitespace-nowrap text-accent-foreground transition-colors hover:bg-accent-hover"
       onClick={() => signIn()}
     >
       Sign In

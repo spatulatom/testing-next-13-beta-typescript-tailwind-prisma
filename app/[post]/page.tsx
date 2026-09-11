@@ -85,11 +85,13 @@ async function CachedPostDetail({
         canToggleHeart={Boolean(userId)}
       />
       <AddComment id={response.id} />
-      <h2>Comments:</h2>
+      <h2 className="mt-6 mb-2 text-xl font-semibold text-foreground">
+        Comments:
+      </h2>
       {response.comments.map((comment) => (
         <div
           key={comment.id}
-          className="mt-2 rounded-md bg-gray-300 p-2 text-black"
+          className="mt-2 rounded-lg border border-border bg-surface-2 p-3 text-foreground"
         >
           <div className="flex items-center gap-2">
             <Image

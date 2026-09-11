@@ -1,32 +1,66 @@
 @import 'tailwindcss';
 
+/*
+  Semantic design tokens.
+  Colors are driven by CSS variables defined in :root and overridden for dark
+  mode via prefers-color-scheme, so every utility below adapts to the system
+  theme automatically (system-only dark mode, no manual toggle).
+*/
 @theme {
-  --color-app-foreground: #000000;
-  --color-app-foreground-dark: #ffffff;
-  --color-app-background-start: #d6dbdc;
-  --color-app-background-end: #ffffff;
-  --color-app-background-start-dark: #000000;
-  --color-app-background-end-dark: #000000;
-  --color-app-inverse: #ffffff;
-  --color-brand-accent: #0d9488;
-  --color-brand-accent-strong: #0f766e;
-  --color-nature-primary: #536942;
-  --color-nature-primary-soft: #526840;
-  --color-nature-copy: #536942e3;
-  --color-nature-copy-muted: #536942b3;
-  --color-nature-surface: #f6f8f5;
-  --color-nature-highlight: #ffd936;
-  --color-nature-overlay: rgb(0 0 0 / 30%);
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-soft: var(--accent-soft);
+  --color-ring: var(--ring);
+  --color-danger: var(--danger);
+  --color-danger-foreground: var(--danger-foreground);
+}
 
-  --font-nature: 'DM Sans', system-ui, sans-serif;
-  --font-nature-display: 'Forum', Georgia, serif;
+:root {
+  /* Light theme */
+  --background: #f1f5f9;
+  --background-end: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #f1f5f9;
+  --foreground: #0f172a;
+  --muted: #f8fafc;
+  --muted-foreground: #64748b;
+  --border: #e2e8f0;
+  --accent: #0d9488;
+  --accent-hover: #0f766e;
+  --accent-foreground: #ffffff;
+  --accent-soft: #ccfbf1;
+  --ring: #14b8a6;
+  --danger: #dc2626;
+  --danger-foreground: #ffffff;
+}
 
-  --spacing-nature-hero: 655px;
-  --spacing-nature-cta: 480px;
-  --spacing-nature-avatar: 50px;
-
-  --radius-nature-frame: 2px;
-  --radius-nature-button: 4px;
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --background: #0b1120;
+    --background-end: #0f172a;
+    --surface: #1e293b;
+    --surface-2: #334155;
+    --foreground: #e2e8f0;
+    --muted: #1e293b;
+    --muted-foreground: #94a3b8;
+    --border: #334155;
+    --accent: #14b8a6;
+    --accent-hover: #2dd4bf;
+    --accent-foreground: #042f2e;
+    --accent-soft: #134e4a;
+    --ring: #2dd4bf;
+    --danger: #f87171;
+    --danger-foreground: #1a0000;
+  }
 }
 
 @layer base {
@@ -43,13 +77,14 @@
   }
 
   body {
-    background: linear-gradient(
-        to bottom,
-        transparent,
-        var(--color-app-background-end)
-      )
-      var(--color-app-background-start);
-    color: var(--color-app-foreground);
+    background: radial-gradient(
+      120% 120% at 50% 0%,
+      var(--background-end),
+      var(--background) 65%
+    );
+    background-attachment: fixed;
+    color: var(--foreground);
+    min-height: 100vh;
     @apply antialiased;
   }
 
@@ -57,37 +92,22 @@
     color: inherit;
     text-decoration: none;
   }
-}
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-
-  body {
-    background: linear-gradient(
-        to bottom,
-        transparent,
-        var(--color-app-background-end-dark)
-      )
-      var(--color-app-background-start-dark);
-    color: var(--color-app-foreground-dark);
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
   }
 }
 
 @layer utilities {
-  @keyframes shimmer {
-    0% {
-      background-position: 200% center;
-    }
-
-    100% {
-      background-position: -200% center;
-    }
-  }
-
-  .animate-shimmer {
-    animation: shimmer 94s linear infinite;
-    background-size: 200% auto;
+  .gradient-heading {
+    background-image: linear-gradient(
+      120deg,
+      var(--accent),
+      var(--accent-hover)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 }
